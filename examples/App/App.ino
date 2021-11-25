@@ -3,7 +3,7 @@
 */
 
 #include "Arduino.h"
-#include "Edge_ML.h"
+#include "EdgeML-Arduino.h"
 
 // Set DEBUG to true in order to enable debug print
 #define DEBUG false
