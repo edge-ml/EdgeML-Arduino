@@ -26,7 +26,7 @@ This project targets the Arduino Arduino Nano 33 BLE Sense and Nicla Sense ME. B
 <img src="https://user-images.githubusercontent.com/11386075/143424987-a3ec925c-97e2-4a3b-bdf5-9425324a5603.png" alt="alt text" width="500">
 
 7. Flash it onto your Arduino board by hitting the upload button (this may take a while).
-<img src="https://user-images.githubusercontent.com/11386075/143425338-2db4c4f1-b4d1-455f-850a-fac7556417ef.png" alt="alt text" width="500">
+<img src="https://user-images.githubusercontent.com/11386075/143425338-2db4c4f1-b4d1-455f-850a-fac7556417ef.png" alt="alt text" width="200">
 
 8. You can now connect to your Arduino from edge-ml.
 
