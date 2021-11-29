@@ -3,6 +3,8 @@
 ## Pre-requistes
 This project targets the Arduino Arduino Nano 33 BLE Sense and Nicla Sense ME. Before your start, please download the required support libraries in your Arduino IDE. Also, please make sure you have the latest Arduino IDE version installed before your start.
 
+⚠️ If you have installed the standalone edge-ml ZIP library manually for your Nicla or Nano, make sure to delete it before you install the library using the steps described here (Hint: `Documents > Arduino > libraries` and delete the folder)
+
 ## How to install
 1. Open the Arduino library manager
 <img src="https://user-images.githubusercontent.com/11386075/143419661-5aa339dd-e5c2-4891-a28e-72831c764fa2.png" alt="alt text" width="500">
