@@ -1,5 +1,5 @@
 # EdgeML-Arduino
-❗️❗️❗️ **Please note: If you are using Windows to connect to your Arduino, we recommend you install the standalone ZIP library for your Arduino following the instructions here:** 
+❗️❗️❗️ **Please note: If you are having trouble connecting to your Arduino from your browser, we recommend you install the standalone ZIP library for your Arduino following the instructions here:** 
 - [Nicla](https://github.com/edge-ml/nicla-sense-me-fw#installe-firmware-on-nicla-sense-me)
 - [Nano](https://github.com/edge-ml/nano-33-ble-fw#install-firmware-on-arduino-nano-33-ble)
 
