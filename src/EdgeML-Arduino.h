@@ -1,16 +1,3 @@
-/*#ifndef Edge_ML_BASE_H_
-#define Edge_ML_BASE_H_
-
-#if defined(ARDUINO_NICLA)
-    #warning "Using Nicla Sense ME"
-    #include<nicla/Edge_ML.h>
-#else 
-    #warning "Using Ble33Nano"
-    #include<ble33nano/Edge_ML_Nano.h>
-//#else
-//  #error “This library only supports the BLE33Nano and the Nicla Sense ME.”
-#endif
-#endif*/
 
 #ifndef Edge_ML_BASE_H_
 #define Edge_ML_BASE_H_

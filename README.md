@@ -1,12 +1,7 @@
 # EdgeML-Arduino
-❗️❗️❗️ **Please note: If you are having trouble connecting to your Arduino from your browser, try installing the standalone ZIP library for your Arduino following the instructions here:** 
-- [Nicla](https://github.com/edge-ml/nicla-sense-me-fw#installe-firmware-on-nicla-sense-me)
-- [Nano](https://github.com/edge-ml/nano-33-ble-fw#install-firmware-on-arduino-nano-33-ble)
 
 ## Pre-requistes
 This project targets the Arduino Arduino Nano 33 BLE Sense and Nicla Sense ME. Before your start, please download the required support libraries in your Arduino IDE. Also, please make sure you have the latest Arduino IDE version installed before your start.
-
-⚠️ If you have installed the standalone edge-ml ZIP library manually for your Nicla or Nano, make sure to delete it (*Hint*: `Documents > Arduino > libraries` and delete the folder) before you install the library from the Arduino repository as described in this tutorial.
 
 ## How to install
 1. Open the Arduino library manager

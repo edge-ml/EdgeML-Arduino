@@ -76,7 +76,6 @@ void Arduino_BHY2::setLDOTimeout(int time) {
 bool Arduino_BHY2::begin(NiclaConfig config, NiclaWiring niclaConnection)
 {
   #if defined(ARDUINO_NICLA)
-  if (_debug) _debug->println("Starting this library");
   _niclaConfig = config;
 
   if (niclaConnection == NICLA_AS_SHIELD) {
@@ -106,7 +105,6 @@ bool Arduino_BHY2::begin(NiclaConfig config, NiclaWiring niclaConnection)
     _debug->print("Eslov int pin: ");
     _debug->println(_eslovIntPin);
   }
-
   return true;
   #endif
 }
@@ -134,6 +132,7 @@ bool Arduino_BHY2::begin(NiclaSettings& settings)
 
 void Arduino_BHY2::update()
 {
+  if (_debug) _debug->println("Begin update");
   #if defined(ARDUINO_NICLA)
   pingI2C();
 
@@ -173,6 +172,7 @@ void Arduino_BHY2::update()
     if (_debug) _debug->println("DFU procedure terminated. Rebooting.");
     NVIC_SystemReset();
   }
+  if (_debug) _debug->println("Update ended");
   #endif
 }
 

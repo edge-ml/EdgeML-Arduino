@@ -88,7 +88,6 @@ bool BLEHandler::begin()
   bleActive = true;
   BLE.setLocalName("NICLA");
   BLE.setDeviceName("NICLA");
-
   // DFU channel
   BLE.setAdvertisedService(dfuService);
   dfuService.addCharacteristic(dfuInternalCharacteristic);
@@ -111,9 +110,6 @@ bool BLEHandler::begin()
   BLE.addService(deviceInfoService);
   deviceIdentifierCharacteristic.writeValue(deviceIdentifier);
   deviceGenerationCharacteristic.writeValue(deviceGeneration);
-
-
-  //
   BLE.advertise();
   return true;
 }
