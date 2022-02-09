@@ -3,9 +3,9 @@
 
 #include "Arduino.h"
 #include "mbed.h"
+#include "ArduinoBLE.h"
 
 #include "nicla/bosch/common/common.h"
-#include "nicla/sensors/SensorTypes.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -18,17 +18,15 @@ extern "C"
 
 class BoschParser {
 public:
-  static void convertTime(uint64_t time_ticks, uint32_t *s, uint32_t *ns);
-  static void convertTimeMillis(uint64_t time_ticks, uint32_t *millis);
+  static void setSensorDataCharacteristic(BLECharacteristic *sensorDataCharacteristic);
+  static void convertTime(uint64_t time_ticks, uint32_t *millis);
   static void parseData(const struct bhy2_fifo_parse_data_info *fifoData, void *arg);
-  static void parseMetaEvent(const struct bhy2_fifo_parse_data_info *callback_info, void *callback_ref);
-  static void parseGeneric(const struct bhy2_fifo_parse_data_info *callback_info, void *callback_ref);
-  static void parseDebugMessage(const struct bhy2_fifo_parse_data_info *callback_info, void *callback_ref);
 
 private:
   friend class Arduino_BHY2;
   static void debug(Stream &stream);
   static Stream *_debug;
+  static BLECharacteristic *_sensorDataCharacteristic;
 };
 
 #endif

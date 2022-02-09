@@ -2,22 +2,27 @@
 #define BOSCH_SENSORTEC_H_
 
 #include "Arduino.h"
-#include "mbed.h"
+//#include "mbed.h"
 
 #include "bosch/common/common.h"
 #include "nicla/sensors/SensorTypes.h"
+
+
+#define ARM_CM_DEMCR (*(uint32_t *)0xE000EDFC)
+#define ARM_CM_DWT_CTRL (*(uint32_t *)0xE0001000)
+#define ARM_CM_DWT_CYCCNT (*(uint32_t *)0xE0001004)
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-#include "nicla/bosch/bhy2.h"
+#include "bosch/bhy2.h"
 #ifdef __cplusplus
 }
 #endif
 
-#define SENSOR_QUEUE_SIZE   150
-#define WORK_BUFFER_SIZE    1500
+//#define SENSOR_QUEUE_SIZE   10
+#define WORK_BUFFER_SIZE    1024
 
 #define MAX_READ_WRITE_LEN 256
 
@@ -36,19 +41,16 @@ public:
   void update();
   void configureSensor(SensorConfigurationPacket& config);
 
-  void printSensors();
-  bool hasSensor(uint8_t sensorId);
-
-  uint8_t availableSensorData();
-  bool readSensorData(SensorDataPacket &data);
+  //uint8_t availableSensorData();
+  //bool readSensorData(SensorDataPacket &data);
 
   // ANNA <-> BOSCH interface
-  void addSensorData(SensorDataPacket &sensorData);
+  //void addSensorData(SensorDataPacket &sensorData);
 
   uint8_t acknowledgment();
 
 private:
-  mbed::CircularBuffer<SensorDataPacket, SENSOR_QUEUE_SIZE, uint8_t> _sensorQueue;
+  //mbed::CircularBuffer<SensorDataPacket, SENSOR_QUEUE_SIZE, uint8_t> _sensorQueue;
 
   uint8_t _workBuffer[WORK_BUFFER_SIZE];
   uint8_t _acknowledgment;

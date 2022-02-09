@@ -4,7 +4,7 @@
 
 #if defined(ARDUINO_NICLA)
     #warning "Using Nicla Sense ME"
-    #include<nicla/Edge_ML_Nicla.h>>
+    #include<nicla/Edge_ML_Nicla.h>
 #else 
     #warning "Using Ble33Nano"
     #include<ble33nano/Edge_ML_Nano.h>

@@ -10,7 +10,7 @@ Edge_ML_Nicla::~Edge_ML_Nicla() {
 }
 
 bool Edge_ML_Nicla::begin() {
-    return bhy->begin(NICLA_BLE);
+    return bhy->begin();
 }
 
 void Edge_ML_Nicla::update() {

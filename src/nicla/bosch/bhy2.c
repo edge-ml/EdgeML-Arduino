@@ -130,7 +130,8 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         return rslt;
     }
 
-    /* Get and process the Wake up FIFO */
+    
+    // Get and process the Wake up FIFO
     fifos.read_length = 0;
     int_status = int_status_bak;
     while ((int_status || fifos.remain_length) && (rslt == BHY2_OK))
@@ -139,10 +140,10 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
             ((BHY2_IS_INT_FIFO_W(int_status)) == BHY2_IST_FIFO_W_LTCY) ||
             ((BHY2_IS_INT_FIFO_W(int_status)) == BHY2_IST_FIFO_W_WM) || (fifos.remain_length))
         {
-            /* Reset read_pos to the start of the buffer */
+            // Reset read_pos to the start of the buffer
             fifos.read_pos = 0;
 
-            /* Append data into the work_buffer linked through fifos */
+            // Append data into the work_buffer linked through fifos
             rslt = bhy2_hif_get_wakeup_fifo(&fifos.buffer[fifos.read_length],
                                             (fifos.buffer_size - fifos.read_length),
                                             &bytes_read,
@@ -158,8 +159,10 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         rslt = parse_fifo(BHY2_FIFO_TYPE_WAKEUP, &fifos, dev);
         int_status = 0;
     }
+       
 
-    /* Get and process the Non Wake-up FIFO */
+    
+    //Get and process the Non Wake-up FIFO
     fifos.read_length = 0;
     int_status = int_status_bak;
     while ((int_status || fifos.remain_length) && (rslt == BHY2_OK))
@@ -168,10 +171,10 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
             ((BHY2_IS_INT_FIFO_NW(int_status)) == BHY2_IST_FIFO_NW_LTCY) ||
             ((BHY2_IS_INT_FIFO_NW(int_status)) == BHY2_IST_FIFO_NW_WM) || (fifos.remain_length))
         {
-            /* Reset read_pos to the start of the buffer */
+            // Reset read_pos to the start of the buffer
             fifos.read_pos = 0;
 
-            /* Append data into the work_buffer linked through fifos */
+            // Append data into the work_buffer linked through fifos
             rslt = bhy2_hif_get_nonwakeup_fifo(&fifos.buffer[fifos.read_length],
                                                (fifos.buffer_size - fifos.read_length),
                                                &bytes_read,
@@ -187,8 +190,10 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         rslt = parse_fifo(BHY2_FIFO_TYPE_NON_WAKEUP, &fifos, dev);
         int_status = 0;
     }
+    
 
-    /* Get and process the Status fifo */
+    /*
+    // Get and process the Status fifo
     fifos.read_length = 0;
     int_status = int_status_bak;
     while ((int_status || fifos.remain_length) && (rslt == BHY2_OK))
@@ -212,6 +217,7 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         rslt = parse_fifo(BHY2_FIFO_TYPE_STATUS, &fifos, dev);
         int_status = 0;
     }
+    */
 
     return rslt;
 }

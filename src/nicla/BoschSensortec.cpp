@@ -1,7 +1,5 @@
 #include "BoschSensortec.h"
 #include "BoschParser.h"
-#include "nicla/sensors/SensorManager.h"
-#include "Arduino.h"
 
 BoschSensortec::BoschSensortec() : _acknowledgment(SensorNack),
                                    _debug(NULL)
@@ -63,10 +61,6 @@ bool BoschSensortec::begin()
     _debug->println(stat, HEX);
   }
 
-  bhy2_register_fifo_parse_callback(BHY2_SYS_ID_META_EVENT, BoschParser::parseMetaEvent, NULL, &_bhy2);
-  bhy2_register_fifo_parse_callback(BHY2_SYS_ID_META_EVENT_WU, BoschParser::parseMetaEvent, NULL, &_bhy2);
-  bhy2_register_fifo_parse_callback(BHY2_SYS_ID_DEBUG_MSG, BoschParser::parseDebugMessage, NULL, &_bhy2);
-
   ret = bhy2_get_and_process_fifo(_workBuffer, WORK_BUFFER_SIZE, &_bhy2);
   if (_debug)
     _debug->println(get_api_error(ret));
@@ -80,46 +74,7 @@ bool BoschSensortec::begin()
   bhy2_update_virtual_sensor_list(&_bhy2);
   bhy2_get_virt_sensor_list(_sensorsPresent, &_bhy2);
 
-  printSensors();
-  if (_debug)
-    _debug->println("Printed all sensors");
-
   return true;
-}
-
-void BoschSensortec::printSensors()
-{
-  bool presentBuff[256];
-
-  for (uint16_t i = 0; i < sizeof(_sensorsPresent); i++)
-  {
-    for (uint8_t j = 0; j < 8; j++)
-    {
-      presentBuff[i * 8 + j] = ((_sensorsPresent[i] >> j) & 0x01);
-    }
-  }
-
-  if (_debug)
-  {
-    _debug->println("Present sensors: ");
-    for (int i = 0; i < sizeof(presentBuff); i++)
-    {
-      if (presentBuff[i])
-      {
-        _debug->print(i);
-        _debug->print(" - ");
-        _debug->print(get_sensor_name(i));
-        _debug->println();
-      }
-    }
-  }
-}
-
-bool BoschSensortec::hasSensor(uint8_t sensorId)
-{
-  int i = sensorId / 8;
-  int j = sensorId % 8;
-  return ((_sensorsPresent[i] >> j) & 0x01) == 1;
 }
 
 void BoschSensortec::configureSensor(SensorConfigurationPacket &config)
@@ -137,6 +92,7 @@ void BoschSensortec::configureSensor(SensorConfigurationPacket &config)
   }
 }
 
+/*
 uint8_t BoschSensortec::availableSensorData()
 {
   return _sensorQueue.size();
@@ -151,11 +107,7 @@ void BoschSensortec::addSensorData(SensorDataPacket &sensorData)
 {
   // Overwrites oldest data when fifo is full
   _sensorQueue.push(sensorData);
-  if (_sensorQueue.full() && _debug)
-  {
-    _debug->println("-------- SENSOR QUEUE OVERFLOW ---------");
-  }
-}
+}*/
 
 // acknowledgment flag is reset when read
 uint8_t BoschSensortec::acknowledgment()
@@ -168,12 +120,31 @@ uint8_t BoschSensortec::acknowledgment()
 
 void BoschSensortec::update()
 {
+  // Setup timing
+  /*
+  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT->CYCCNT = 0;
+  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+  if (ARM_CM_DWT_CTRL != 0)
+  {
+    ARM_CM_DEMCR |= 1 << 24; // Set bit 24
+    ARM_CM_DWT_CYCCNT = 0;
+    ARM_CM_DWT_CTRL |= 1 << 0; // Set bit 0
+  }
+  */
+
+  // Measure time
+  //uint32_t startTime = ARM_CM_DWT_CYCCNT;
+
   if (get_interrupt_status())
   {
     auto ret = bhy2_get_and_process_fifo(_workBuffer, WORK_BUFFER_SIZE, &_bhy2);
     if (_debug)
       _debug->println(get_api_error(ret));
   }
+
+  //uint32_t endTime = ARM_CM_DWT_CYCCNT;
+  //Serial.println(endTime - startTime);
 }
 
 void BoschSensortec::debug(Stream &stream)
@@ -198,18 +169,7 @@ extern "C"
     }
     else
     {
-      switch (sensor_id)
-      {
-      case BHY2_SYS_ID_META_EVENT:
-      case BHY2_SYS_ID_META_EVENT_WU:
-        info->callback = BoschParser::parseMetaEvent;
-        break;
-      case BHY2_SYS_ID_DEBUG_MSG:
-        info->callback = BoschParser::parseDebugMessage;
-        break;
-      default:
-        info->callback = NULL;
-      }
+      info->callback = NULL;
     }
   }
 #endif
