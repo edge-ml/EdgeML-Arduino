@@ -1,5 +1,3 @@
-#include "Edge_ML_Seeed.h"
-
 #ifndef Edge_ML_BASE_H_
 #define Edge_ML_BASE_H_
 
