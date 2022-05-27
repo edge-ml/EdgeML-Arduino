@@ -24,20 +24,6 @@ void Edge_ML_Seeed::update() {
     bleHandler.update();
 }
 
-void Edge_ML_Seeed::update(unsigned long ms) {
-    update();
-    delay(ms);
-}
-
-void Edge_ML_Seeed::delay(unsigned long ms) {
-    unsigned long start = millis();
-    unsigned long elapsed = 0;
-    while (elapsed < ms) {
-        bleHandler.poll(ms - elapsed);
-        elapsed = millis() - start;
-    }
-}
-
 void Edge_ML_Seeed::debug(Stream &stream)
 {
     _debug = &stream;
@@ -47,4 +33,4 @@ void Edge_ML_Seeed::debug(Stream &stream)
     _debug->println("Debugger Active");
 }
 
-Edge_ML_Seeed Sens;
+Edge_ML_Seeed edge_ml_seeed;
