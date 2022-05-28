@@ -92,11 +92,11 @@ void Sensor_Provider_Seeed::send_sensor_data(int ID) {
 
     if (type == TYPE_INT) {
         int_data = sensorManager.get_int_data(ID);
-        bleHandler.send(ID, int_data);
+        bleHandler_seeed.send(ID, int_data);
         delete[] int_data;
     } else if (type == TYPE_FLOAT) {
         float_data = sensorManager.get_float_data(ID);
-        bleHandler.send(ID, float_data);
+        bleHandler_seeed.send(ID, float_data);
         delete[] float_data;
     }
 }
@@ -119,4 +119,4 @@ void Sensor_Provider_Seeed::debug(Stream &stream) {
     sensorManager.debug(stream);
 }
 
-Sensor_Provider_Seeed sensortec;
+Sensor_Provider_Seeed sensor_provider_seeed;

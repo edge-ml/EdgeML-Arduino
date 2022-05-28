@@ -9,22 +9,22 @@
 #include "Sensor_Provider_Seeed.h"
 #include <cstdint>
 
-const char* deviceIdentifier = "Seeed XIAO";
-const char* deviceGeneration = "1.0.0";
+const char* deviceIdentifier_seeed = "Seeed XIAO";
+const char* deviceGeneration_seeed = "1.0.0";
 
 // Sensor Data channels
-BLEService sensorService("34c2e3bb-34aa-11eb-adc1-0242ac120002");
-auto sensorDataUuid = "34c2e3bc-34aa-11eb-adc1-0242ac120002";
-auto sensorConfigUuid = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
-BLECharacteristic sensorDataCharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
-BLECharacteristic sensorConfigCharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
+BLEService sensorService_seeed("34c2e3bb-34aa-11eb-adc1-0242ac120002");
+auto sensorDataUuid_seeed = "34c2e3bc-34aa-11eb-adc1-0242ac120002";
+auto sensorConfigUuid_seeed = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
+BLECharacteristic sensorDataCharacteristic_seeed(sensorDataUuid_seeed, (BLERead | BLENotify), sizeof(SensorDataPacket));
+BLECharacteristic sensorConfigCharacteristic_seeed(sensorConfigUuid_seeed, BLEWrite, sizeof(SensorConfigurationPacket));
 
 // Device information channels
-BLEService deviceInfoService("45622510-6468-465a-b141-0b9b0f96b468");
-auto deviceIdentifierUuid = "45622511-6468-465a-b141-0b9b0f96b468";
-auto deviceGenerationUuid = "45622512-6468-465a-b141-0b9b0f96b468";
-BLECharacteristic deviceIdentifierCharacteristic(deviceIdentifierUuid, BLERead, sizeof(deviceIdentifier) + 1);
-BLECharacteristic deviceGenerationCharacteristic(deviceGenerationUuid, BLERead, sizeof(deviceGeneration) + 1);
+BLEService deviceInfoService_seeed("45622510-6468-465a-b141-0b9b0f96b468");
+auto deviceIdentifierUuid_seeed = "45622511-6468-465a-b141-0b9b0f96b468";
+auto deviceGenerationUuid_seeed = "45622512-6468-465a-b141-0b9b0f96b468";
+BLECharacteristic deviceIdentifierCharacteristic_seeed(deviceIdentifierUuid_seeed, BLERead, sizeof(deviceIdentifier_seeed) + 1);
+BLECharacteristic deviceGenerationCharacteristic_seeed(deviceGenerationUuid_seeed, BLERead, sizeof(deviceGeneration_seeed) + 1);
 
 Stream* BLEHandler_Seeed::_debug = nullptr;
 
@@ -44,7 +44,7 @@ void BLEHandler_Seeed::receivedSensorConfig(BLEDevice central, BLECharacteristic
         _debug->println(data.latency);
     }
 
-    sensortec.configureSensor(data);
+    sensor_provider_seeed.configureSensor(data);
 }
 
 
@@ -64,7 +64,7 @@ bool BLEHandler_Seeed::begin() {
     address.toUpperCase();
     length = address.length();
 
-    name = (String)deviceIdentifier + "-";
+    name = (String)deviceIdentifier_seeed + "-";
     name += address[length - 5];
     name += address[length - 4];
     name += address[length - 2];
@@ -82,19 +82,19 @@ bool BLEHandler_Seeed::begin() {
     }
 
     // Sensor channel
-    BLE.setAdvertisedService(sensorService);
-    sensorService.addCharacteristic(sensorConfigCharacteristic);
-    sensorService.addCharacteristic(sensorDataCharacteristic);
-    BLE.addService(sensorService);
-    sensorConfigCharacteristic.setEventHandler(BLEWritten, receivedSensorConfig);
+    BLE.setAdvertisedService(sensorService_seeed);
+    sensorService_seeed.addCharacteristic(sensorConfigCharacteristic_seeed);
+    sensorService_seeed.addCharacteristic(sensorDataCharacteristic_seeed);
+    BLE.addService(sensorService_seeed);
+    sensorConfigCharacteristic_seeed.setEventHandler(BLEWritten, receivedSensorConfig);
 
     // Device information
-    BLE.setAdvertisedService(deviceInfoService);
-    deviceInfoService.addCharacteristic(deviceIdentifierCharacteristic);
-    deviceInfoService.addCharacteristic(deviceGenerationCharacteristic);
-    BLE.addService(deviceInfoService);
-    deviceIdentifierCharacteristic.writeValue(deviceIdentifier);
-    deviceGenerationCharacteristic.writeValue(deviceGeneration);
+    BLE.setAdvertisedService(deviceInfoService_seeed);
+    deviceInfoService_seeed.addCharacteristic(deviceIdentifierCharacteristic_seeed);
+    deviceInfoService_seeed.addCharacteristic(deviceGenerationCharacteristic_seeed);
+    BLE.addService(deviceInfoService_seeed);
+    deviceIdentifierCharacteristic_seeed.writeValue(deviceIdentifier_seeed);
+    deviceGenerationCharacteristic_seeed.writeValue(deviceGeneration_seeed);
 
     //
     BLE.advertise();
@@ -114,7 +114,7 @@ void BLEHandler_Seeed::update() {
 void BLEHandler_Seeed::send(int ID, int *data) {
     // send list of int data as in int16 2 bytes each
     // first element is length of array
-    if (sensorDataCharacteristic.subscribed()) {
+    if (sensorDataCharacteristic_seeed.subscribed()) {
         SensorDataPacket package{};
         int16_t value;
         int length = data[0];
@@ -127,14 +127,14 @@ void BLEHandler_Seeed::send(int ID, int *data) {
             write_int16_at_pos(value, package.data, i * 2);
         }
 
-        sensorDataCharacteristic.writeValue(&package, sizeof(SensorDataPacket));
+        sensorDataCharacteristic_seeed.writeValue(&package, sizeof(SensorDataPacket));
     }
 }
 
 void BLEHandler_Seeed::send(int ID, float *data) {
     // send list of float data floats 4 bytes each
     // first element is length of array (just convert to int)
-    if (sensorDataCharacteristic.subscribed()) {
+    if (sensorDataCharacteristic_seeed.subscribed()) {
         SensorDataPacket package{};
         int length = (int)data[0];
         package.sensorId = ID;
@@ -145,7 +145,7 @@ void BLEHandler_Seeed::send(int ID, float *data) {
             write_float_at_pos(data[i + 1], package.data, i * 4);
         }
 
-        sensorDataCharacteristic.writeValue(&package, sizeof(SensorDataPacket));
+        sensorDataCharacteristic_seeed.writeValue(&package, sizeof(SensorDataPacket));
     }
 }
 
@@ -170,4 +170,4 @@ void BLEHandler_Seeed::debug(Stream &stream) {
     //BLE.debug(stream); // Problems with Debug
 }
 
-BLEHandler_Seeed bleHandler;
+BLEHandler_Seeed bleHandler_seeed;

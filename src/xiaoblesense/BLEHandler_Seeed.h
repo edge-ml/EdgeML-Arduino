@@ -34,6 +34,6 @@ private:
     void write_float_at_pos(float value, uint8_t *data, int pos);
 };
 
-extern BLEHandler_Seeed bleHandler;
+extern BLEHandler_Seeed bleHandler_seeed;
 
 #endif //BLEHANDLER_SEEED_H

@@ -31,10 +31,7 @@
 
 #include "Wire.h"
 #include "SPI.h"
-
-#ifdef TARGET_SEEED_XIAO_NRF52840_SENSE
 #define Wire Wire1
-#endif
 //****************************************************************************//
 //
 //  LSM6DS3Core functions.
@@ -51,6 +48,9 @@
 //  Default construction is I2C mode, address 0x6B.
 //
 //****************************************************************************//
+
+// ALWAYS I2C MODE!!!!
+
 LSM6DS3Core::LSM6DS3Core(uint8_t busType, uint8_t inputArg) : commInterface(I2C_MODE), I2CAddress(0x6B),
     chipSelectPin(10) {
     commInterface = busType;
@@ -75,48 +75,7 @@ status_t LSM6DS3Core::beginCore(void) {
 	digitalWrite(PIN_LSM6DS3TR_C_POWER, HIGH);
 	delay(10);
 #endif
-    switch (commInterface) {
-
-        case I2C_MODE:
-            Wire.begin();
-            break;
-
-        case SPI_MODE:
-#ifndef TARGET_SEEED_XIAO_NRF52840_SENSE
-            // start the SPI library:
-            SPI.begin();
-            // Maximum SPI frequency is 10MHz, could divide by 2 here:
-            SPI.setClockDivider(SPI_CLOCK_DIV4);
-            // Data is read and written MSb first.
-#ifdef ESP32
-            SPI.setBitOrder(SPI_MSBFIRST);
-#else
-            SPI.setBitOrder(MSBFIRST);
-#endif
-            // Data is captured on rising edge of clock (CPHA = 0)
-            // Base value of the clock is HIGH (CPOL = 1)
-
-            // MODE3 for 328p operation
-            #ifdef __AVR__
-            SPI.setDataMode(SPI_MODE3);
-            #else
-            #endif
-
-            // MODE0 for Teensy 3.1 operation
-            #ifdef __MK20DX256__
-            SPI.setDataMode(SPI_MODE0);
-            #else
-            #endif
-
-            // initalize the  data ready and chip select pins:
-            pinMode(chipSelectPin, OUTPUT);
-            digitalWrite(chipSelectPin, HIGH);
-#endif
-            break;
-        default:
-            break;
-    }
-
+    Wire.begin();
     //Spin for a few ms
     volatile uint8_t temp = 0;
     for (uint16_t i = 0; i < 10000; i++) {
@@ -159,52 +118,19 @@ status_t LSM6DS3Core::readRegisterRegion(uint8_t* outputPointer, uint8_t offset,
     uint8_t c = 0;
     uint8_t tempFFCounter = 0;
 
-    switch (commInterface) {
-
-        case I2C_MODE:
-            Wire.beginTransmission(I2CAddress);
-            Wire.write(offset);
-            if (Wire.endTransmission() != 0) {
-                returnError = IMU_HW_ERROR;
-            } else { //OK, all worked, keep going
-                // request 6 bytes from slave device
-                Wire.requestFrom(I2CAddress, length);
-                while ((Wire.available()) && (i < length)) { // slave may send less than requested
-                    c = Wire.read(); // receive a byte as character
-                    *outputPointer = c;
-                    outputPointer++;
-                    i++;
-                }
-            }
-            break;
-
-        case SPI_MODE:
-#ifndef TARGET_SEEED_XIAO_NRF52840_SENSE
-            // take the chip select low to select the device:
-            digitalWrite(chipSelectPin, LOW);
-            // send the device the register you want to read:
-            SPI.transfer(offset | 0x80);  //Ored with "read request" bit
-            while (i < length) { // slave may send less than requested
-                c = SPI.transfer(0x00); // receive a byte as character
-                if (c == 0xFF) {
-                    //May have problem
-                    tempFFCounter++;
-                }
-                *outputPointer = c;
-                outputPointer++;
-                i++;
-            }
-            if (tempFFCounter == i) {
-                //Ok, we've recieved all ones, report
-                returnError = IMU_ALL_ONES_WARNING;
-            }
-            // take the chip select high to de-select:
-            digitalWrite(chipSelectPin, HIGH);
-#endif
-            break;
-
-        default:
-            break;
+    Wire.beginTransmission(I2CAddress);
+    Wire.write(offset);
+    if (Wire.endTransmission() != 0) {
+        returnError = IMU_HW_ERROR;
+    } else { //OK, all worked, keep going
+        // request 6 bytes from slave device
+        Wire.requestFrom(I2CAddress, length);
+        while ((Wire.available()) && (i < length)) { // slave may send less than requested
+            c = Wire.read(); // receive a byte as character
+            *outputPointer = c;
+            outputPointer++;
+            i++;
+        }
     }
 
     return returnError;
@@ -225,40 +151,14 @@ status_t LSM6DS3Core::readRegister(uint8_t* outputPointer, uint8_t offset) {
     uint8_t numBytes = 1;
     status_t returnError = IMU_SUCCESS;
 
-    switch (commInterface) {
-
-        case I2C_MODE:
-            Wire.beginTransmission(I2CAddress);
-            Wire.write(offset);
-            if (Wire.endTransmission() != 0) {
-                returnError = IMU_HW_ERROR;
-            }
-            Wire.requestFrom(I2CAddress, numBytes);
-            while (Wire.available()) { // slave may send less than requested
-                result = Wire.read(); // receive a byte as a proper uint8_t
-            }
-            break;
-
-        case SPI_MODE:
-#ifndef TARGET_SEEED_XIAO_NRF52840_SENSE
-            // take the chip select low to select the device:
-            digitalWrite(chipSelectPin, LOW);
-            // send the device the register you want to read:
-            SPI.transfer(offset | 0x80);  //Ored with "read request" bit
-            // send a value of 0 to read the first byte returned:
-            result = SPI.transfer(0x00);
-            // take the chip select high to de-select:
-            digitalWrite(chipSelectPin, HIGH);
-
-            if (result == 0xFF) {
-                //we've recieved all ones, report
-                returnError = IMU_ALL_ONES_WARNING;
-            }
-#endif
-            break;
-
-        default:
-            break;
+    Wire.beginTransmission(I2CAddress);
+    Wire.write(offset);
+    if (Wire.endTransmission() != 0) {
+        returnError = IMU_HW_ERROR;
+    }
+    Wire.requestFrom(I2CAddress, numBytes);
+    while (Wire.available()) { // slave may send less than requested
+        result = Wire.read(); // receive a byte as a proper uint8_t
     }
 
     *outputPointer = result;
@@ -294,37 +194,14 @@ status_t LSM6DS3Core::readRegisterInt16(int16_t* outputPointer, uint8_t offset) 
 //****************************************************************************//
 status_t LSM6DS3Core::writeRegister(uint8_t offset, uint8_t dataToWrite) {
     status_t returnError = IMU_SUCCESS;
-    switch (commInterface) {
-        case I2C_MODE:
-            //Write the byte
-            Wire.beginTransmission(I2CAddress);
-            Wire.write(offset);
-            Wire.write(dataToWrite);
-            if (Wire.endTransmission() != 0) {
-                returnError = IMU_HW_ERROR;
-            }
-            break;
 
-        case SPI_MODE:
-#ifndef TARGET_SEEED_XIAO_NRF52840_SENSE
-            // take the chip select low to select the device:
-            digitalWrite(chipSelectPin, LOW);
-            // send the device the register you want to read:
-            SPI.transfer(offset);
-            // send a value of 0 to read the first byte returned:
-            SPI.transfer(dataToWrite);
-            // decrement the number of bytes left to read:
-            // take the chip select high to de-select:
-            digitalWrite(chipSelectPin, HIGH);
-#endif
-            break;
-
-        //No way to check error on this write (Except to read back but that's not reliable)
-
-        default:
-            break;
+    //Write the byte
+    Wire.beginTransmission(I2CAddress);
+    Wire.write(offset);
+    Wire.write(dataToWrite);
+    if (Wire.endTransmission() != 0) {
+        returnError = IMU_HW_ERROR;
     }
-
     return returnError;
 }
 

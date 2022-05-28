@@ -4,7 +4,7 @@
 
 #include "SensorManager_Seeed.h"
 
-IMU_Sensor_Seeed imu_sensor;
+IMU_Sensor_Seeed imu_sensor_seeed;
 
 
 SensorManager_Seeed::SensorManager_Seeed() {
@@ -20,7 +20,7 @@ SensorManager_Seeed::SensorManager_Seeed() {
 
         switch (i) {
             case MODULE_IMU : {
-                act.count = imu_sensor.sensor_count;
+                act.count = imu_sensor_seeed.sensor_count;
                 init_act_map(act, IMU_MAP);
                 init_sensor_module_pos(act.count, IMU_MAP);
                 break;
@@ -44,17 +44,17 @@ void SensorManager_Seeed::start_sensor(int ID) {
     switch(ID) {
         case IMU_ACCELERATION : {
             activate_pos(module, pos);
-            imu_sensor.start();
+            imu_sensor_seeed.start();
             break;
         }
         case IMU_GYROSCOPE : {
             activate_pos(module, pos);
-            imu_sensor.start();
+            imu_sensor_seeed.start();
             break;
         }
         case IMU_TEMP : {
             activate_pos(module, pos);
-            imu_sensor.start();
+            imu_sensor_seeed.start();
             break;
         }
         default:
@@ -71,21 +71,21 @@ void SensorManager_Seeed::end_sensor(int ID) {
         case IMU_ACCELERATION : {
             deactivate_pos(module, pos);
             if (all_inactive(module, pos)) {
-                imu_sensor.end();
+                imu_sensor_seeed.end();
             }
             break;
         }
         case IMU_GYROSCOPE : {
             deactivate_pos(module, pos);
             if (all_inactive(module, pos)) {
-                imu_sensor.end();
+                imu_sensor_seeed.end();
             }
             break;
         }
         case IMU_TEMP : {
             deactivate_pos(module, pos);
             if (all_inactive(module, pos)) {
-                imu_sensor.end();
+                imu_sensor_seeed.end();
             }
             break;
         }
@@ -110,7 +110,7 @@ float * SensorManager_Seeed::get_float_data(int ID){
         case IMU_ACCELERATION : {
             data[0] = 3;
             float x,y,z;
-            imu_sensor.get_acc(x,y,z);
+            imu_sensor_seeed.get_acc(x, y, z);
             data[1] = x;
             data[2] = y;
             data[3] = z;
@@ -119,7 +119,7 @@ float * SensorManager_Seeed::get_float_data(int ID){
         case IMU_GYROSCOPE : {
             data[0] = 3;
             float x,y,z;
-            imu_sensor.get_gyro(x,y,z);
+            imu_sensor_seeed.get_gyro(x, y, z);
             data[1] = x;
             data[2] = y;
             data[3] = z;
@@ -128,7 +128,7 @@ float * SensorManager_Seeed::get_float_data(int ID){
         case IMU_TEMP : {
             data[0] = 1;
             float C;
-            imu_sensor.get_temp(C);
+            imu_sensor_seeed.get_temp(C);
             data[1] = C;
             break;
         }

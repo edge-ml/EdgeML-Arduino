@@ -11,8 +11,8 @@ bool Edge_ML_Seeed::begin() {
     if (_debug) _debug->println("Begin Ard_Sense");
 
     // Begin sensors
-    bleHandler.begin();
-    sensortec.begin();
+    bleHandler_seeed.begin();
+    sensor_provider_seeed.begin();
 
     if (_debug) _debug->println("End Begin \n");
     return true;
@@ -20,15 +20,15 @@ bool Edge_ML_Seeed::begin() {
 
 void Edge_ML_Seeed::update() {
     // Update logic
-    sensortec.update();
-    bleHandler.update();
+    sensor_provider_seeed.update();
+    bleHandler_seeed.update();
 }
 
 void Edge_ML_Seeed::debug(Stream &stream)
 {
     _debug = &stream;
-    bleHandler.debug(stream);
-    sensortec.debug(stream);
+    bleHandler_seeed.debug(stream);
+    sensor_provider_seeed.debug(stream);
 
     _debug->println("Debugger Active");
 }

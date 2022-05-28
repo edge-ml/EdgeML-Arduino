@@ -31,6 +31,6 @@ private:
     void send_sensor_data(int ID);
 };
 
-extern Sensor_Provider_Seeed sensortec;
+extern Sensor_Provider_Seeed sensor_provider_seeed;
 
 #endif //SENSORTEC_SEEED_H
