@@ -9,8 +9,8 @@
 #include "Sensor_Provider_Seeed.h"
 #include <cstdint>
 
-const char* deviceIdentifier_seeed = "Seeed XIAO";
-const char* deviceGeneration_seeed = "1.0.0";
+const char deviceIdentifier_seeed[] = "Seeed XIAO";
+const char deviceGeneration_seeed[] = "1.0.0";
 
 // Sensor Data channels
 BLEService sensorService_seeed("34c2e3bb-34aa-11eb-adc1-0242ac120002");
@@ -23,8 +23,8 @@ BLECharacteristic sensorConfigCharacteristic_seeed(sensorConfigUuid_seeed, BLEWr
 BLEService deviceInfoService_seeed("45622510-6468-465a-b141-0b9b0f96b468");
 auto deviceIdentifierUuid_seeed = "45622511-6468-465a-b141-0b9b0f96b468";
 auto deviceGenerationUuid_seeed = "45622512-6468-465a-b141-0b9b0f96b468";
-BLECharacteristic deviceIdentifierCharacteristic_seeed(deviceIdentifierUuid_seeed, BLERead, sizeof(deviceIdentifier_seeed) + 1);
-BLECharacteristic deviceGenerationCharacteristic_seeed(deviceGenerationUuid_seeed, BLERead, sizeof(deviceGeneration_seeed) + 1);
+BLECharacteristic deviceIdentifierCharacteristic_seeed(deviceIdentifierUuid_seeed, BLERead, sizeof(deviceIdentifier_seeed));
+BLECharacteristic deviceGenerationCharacteristic_seeed(deviceGenerationUuid_seeed, BLERead, sizeof(deviceGeneration_seeed));
 
 Stream* BLEHandler_Seeed::_debug = nullptr;
 
