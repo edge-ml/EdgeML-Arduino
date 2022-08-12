@@ -9,7 +9,7 @@ jobs:
         with:
           path: "EdgeML-Arduino"
       - name: Install arduino cli
-        uses: arduino/setup-arduino-cli@v1.0.0
+        uses: arduino/setup-arduino-cli@v1.1.1
       - name: Install python
         uses: actions/setup-python@v4
         with:
