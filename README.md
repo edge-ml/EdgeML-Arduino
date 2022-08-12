@@ -30,6 +30,14 @@ This project targets the Arduino Arduino Nano 33 BLE Sense and Nicla Sense ME. B
 
 8. You can now connect to your Arduino from edge-ml.
 
+## Github actions firmware compilation
+Currently, the firmware for the Nicla Sense ME, the Nano 33 BLE and the Seeed Xiao nRF52840 Sense is compiled using GitHub actions and are provided as build artifacts. Artifacts can be downloaded through the following links:
+
+| Board                     | Firmware                                                                       |
+|---------------------------|--------------------------------------------------------------------------------|
+| Nicla Sense ME            | https://nightly.link/edge-ml/EdgeML-Arduino/workflows/build/main/nicla.bin.zip |
+| Nano 33 BLE               | https://nightly.link/edge-ml/EdgeML-Arduino/workflows/build/main/nano.bin.zip  |
+| Seeed Xiao nRF52840 Sense | https://nightly.link/edge-ml/EdgeML-Arduino/workflows/build/main/xiao.bin.zip  |
 
 ## Attribution
 This repository contains code from https://github.com/arduino-libraries/Arduino_BHY2
