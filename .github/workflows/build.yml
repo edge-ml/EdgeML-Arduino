@@ -70,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: xiao.bin
-          path: build/sexiaoeed.bin
+          path: build/xiao.bin
