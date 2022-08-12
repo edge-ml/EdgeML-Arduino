@@ -1,0 +1,73 @@
+name: Build examples
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: "EdgeML-Arduino"
+      - name: Install arduino cli
+        uses: arduino/setup-arduino-cli@v1.0.0
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+      - name: Intall adafruit-nrfutil
+        uses: BSFishy/pip-action@v1
+        with:
+          packages: |
+            adafruit-nrfutil
+      - run: adafruit-nrfutil
+
+      - name: Compile boards
+        run: |
+          mkdir build
+          cp EdgeML-Arduino/arduino-cli.yaml arduino-cli.yaml
+          arduino-cli core update-index
+
+          arduino-cli core install arduino:mbed_nicla
+          arduino-cli core install arduino:mbed_nano
+          arduino-cli core install Seeeduino:mbed
+
+          arduino-cli lib install ArduinoBLE
+          arduino-cli lib install Arduino_APDS9960 
+          arduino-cli lib install Arduino_LPS22HB
+          arduino-cli lib install Arduino_HTS221
+          arduino-cli lib install Arduino_LSM9DS1
+
+          arduino-cli lib install EdgeML-Arduino
+
+          # Build for Nicla
+          arduino-cli compile -b arduino:mbed_nicla:nicla_sense --export-binaries --output-dir output EdgeML-Arduino/examples/App
+          cp output/App.ino.bin build/nicla.bin
+          rm -r output
+
+          # Build for Nano33 Sense
+          arduino-cli compile -b arduino:mbed_nano:nano33ble --export-binaries --output-dir output EdgeML-Arduino/examples/App
+          cp output/App.ino.bin build/nano.bin
+          rm -r output
+
+          # Build for Seeed Xiao nrf52840 Sense
+          arduino-cli compile -b Seeeduino:mbed:xiaonRF52840Sense --export-binaries --output-dir output EdgeML-Arduino/examples/App
+          cp output/App.ino.bin build/xiao.bin
+          rm -r output
+
+      - name: 'Upload Nicla-Artefact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: nicla.bin
+          path: build/nicla.bin
+
+      - name: 'Upload Nano-Artefact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: nano.bin
+          path: build/nano.bin
+
+      - name: 'Upload Xiao-Artefact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: xiao.bin
+          path: build/sexiaoeed.bin
