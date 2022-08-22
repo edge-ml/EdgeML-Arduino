@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef IMU_SENSOR_SEEED_H
 #define IMU_SENSOR_SEEED_H
 
@@ -25,3 +25,4 @@ private:
 };
 
 #endif //IMU_SENSOR_SEEED_H
+#endif

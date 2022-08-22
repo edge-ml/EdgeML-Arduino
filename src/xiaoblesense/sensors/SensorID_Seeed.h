@@ -8,7 +8,7 @@ IMU:
  - Acceleration
  - Gyroscope
  */
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef SENSORID_Seeed_H
 #define SENSORID_Seeed_H
 
@@ -33,3 +33,4 @@ const int RETURN_TYPE_INT[] = {};
 const int RETURN_TYPE_FLOAT[] = {IMU_ACCELERATION, IMU_GYROSCOPE, IMU_TEMP};
 
 #endif //SENSORID_Seeed_H
+#endif

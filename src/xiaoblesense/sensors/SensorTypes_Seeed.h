@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef SENSORTYPES_SEEED_H
 #define SENSORTYPES_SEEED_H
 
@@ -57,3 +57,4 @@ struct ModuleActive {
 };
 
 #endif //SENSORTYPES_SEEED_H
+#endif

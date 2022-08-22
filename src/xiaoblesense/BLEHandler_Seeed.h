@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef BLEHANDLER_SEEED_H
 #define BLEHANDLER_SEEED_H
 
@@ -37,3 +37,4 @@ private:
 extern BLEHandler_Seeed bleHandler_seeed;
 
 #endif //BLEHANDLER_SEEED_H
+#endif

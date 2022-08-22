@@ -1,3 +1,5 @@
+#if defined(ARDUINO_NICLA)
+
 #ifndef BOSCH_PARSER_H_
 #define BOSCH_PARSER_H_
 
@@ -28,5 +30,7 @@ private:
   static Stream *_debug;
   static BLECharacteristic *_sensorDataCharacteristic;
 };
+
+#endif
 
 #endif

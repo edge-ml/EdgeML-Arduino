@@ -1,3 +1,5 @@
+#if defined(ARDUINO_NICLA)
+
 #include "BoschSensortec.h"
 #include "BoschParser.h"
 
@@ -92,23 +94,6 @@ void BoschSensortec::configureSensor(SensorConfigurationPacket &config)
   }
 }
 
-/*
-uint8_t BoschSensortec::availableSensorData()
-{
-  return _sensorQueue.size();
-}
-
-bool BoschSensortec::readSensorData(SensorDataPacket &data)
-{
-  return _sensorQueue.pop(data);
-}
-
-void BoschSensortec::addSensorData(SensorDataPacket &sensorData)
-{
-  // Overwrites oldest data when fifo is full
-  _sensorQueue.push(sensorData);
-}*/
-
 // acknowledgment flag is reset when read
 uint8_t BoschSensortec::acknowledgment()
 {
@@ -120,31 +105,12 @@ uint8_t BoschSensortec::acknowledgment()
 
 void BoschSensortec::update()
 {
-  // Setup timing
-  /*
-  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-  DWT->CYCCNT = 0;
-  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-  if (ARM_CM_DWT_CTRL != 0)
-  {
-    ARM_CM_DEMCR |= 1 << 24; // Set bit 24
-    ARM_CM_DWT_CYCCNT = 0;
-    ARM_CM_DWT_CTRL |= 1 << 0; // Set bit 0
-  }
-  */
-
-  // Measure time
-  //uint32_t startTime = ARM_CM_DWT_CYCCNT;
-
   if (get_interrupt_status())
   {
     auto ret = bhy2_get_and_process_fifo(_workBuffer, WORK_BUFFER_SIZE, &_bhy2);
     if (_debug)
       _debug->println(get_api_error(ret));
   }
-
-  //uint32_t endTime = ARM_CM_DWT_CYCCNT;
-  //Serial.println(endTime - startTime);
 }
 
 void BoschSensortec::debug(Stream &stream)
@@ -179,3 +145,5 @@ extern "C"
 #endif /*__cplusplus */
 
 BoschSensortec sensortec;
+
+#endif

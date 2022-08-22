@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef EDGE_ML_SEEED_H
 #define EDGE_ML_SEEED_H
 
@@ -23,3 +23,4 @@ private:
 extern Edge_ML_Seeed edge_ml_seeed;
 
 #endif //EDGE_ML_SEEED_H
+#endif

@@ -1,3 +1,5 @@
+#if defined(ARDUINO_NICLA)
+
 #include "BLEHandler.h"
 #include "DeviceInfo.h"
 
@@ -9,6 +11,13 @@ auto sensorDataUuid = "34c2e3bc-34aa-11eb-adc1-0242ac120002";
 auto sensorConfigUuid = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
 BLECharacteristic sensorDataCharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
 BLECharacteristic sensorConfigCharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
+
+// DFU channels
+BLEService dfuService("34c2e3b8-34aa-11eb-adc1-0242ac120002");
+auto dfuInternalUuid = "34c2e3b9-34aa-11eb-adc1-0242ac120002";
+auto dfuExternalUuid = "34c2e3ba-34aa-11eb-adc1-0242ac120002";
+BLECharacteristic dfuInternalCharacteristic(dfuInternalUuid, BLEWrite, sizeof(DFUPacket), true);
+BLECharacteristic dfuExternalCharacteristic(dfuExternalUuid, BLEWrite, sizeof(DFUPacket), true);
 
 // Device information channel
 BLEService deviceInfoService("45622510-6468-465a-b141-0b9b0f96b468");
@@ -67,9 +76,48 @@ bool BLEHandler::begin()
   deviceIdentifierCharacteristic.writeValue(deviceIdentifier);
   deviceGenerationCharacteristic.writeValue(deviceGeneration);
 
-  //
+  // DFU channel
+  BLE.setAdvertisedService(dfuService);
+  dfuService.addCharacteristic(dfuInternalCharacteristic);
+  dfuService.addCharacteristic(dfuExternalCharacteristic);
+  BLE.addService(dfuService);
+  dfuInternalCharacteristic.setEventHandler(BLEWritten, receivedInternalDFU);
+  dfuExternalCharacteristic.setEventHandler(BLEWritten, receivedExternalDFU);
+
+
   BLE.advertise();
   return true;
+}
+
+// DFU channel
+void BLEHandler::processDFUPacket(DFUType dfuType, BLECharacteristic characteristic) 
+{
+  uint8_t data[sizeof(DFUPacket)];
+  characteristic.readValue(data, sizeof(data));
+  if (_debug) {
+    _debug->print("Size of data: ");
+    _debug->println(sizeof(data));
+  }
+  dfuManager.processPacket(bleDFU, dfuType, data);
+
+  if (data[0]) {
+    //Last packet
+    _lastDfuPack = true;
+    dfuManager.closeDfu();
+  }
+}
+
+void BLEHandler::receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic)
+{
+  if (_debug) {
+    _debug->println("receivedInternalDFU");
+  }
+  bleHandler.processDFUPacket(DFU_INTERNAL, characteristic);
+}
+
+void BLEHandler::receivedExternalDFU(BLEDevice central, BLECharacteristic characteristic)
+{
+  bleHandler.processDFUPacket(DFU_EXTERNAL, characteristic);
 }
 
 BLECharacteristic *BLEHandler::getSensorDataCharacteristic()
@@ -103,3 +151,5 @@ void BLEHandler::debug(Stream &stream)
 }
 
 BLEHandler bleHandler;
+
+#endif

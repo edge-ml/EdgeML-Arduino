@@ -1,6 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #include "Edge_ML_Seeed.h"
 
 Edge_ML_Seeed::Edge_ML_Seeed() {
@@ -34,3 +35,5 @@ void Edge_ML_Seeed::debug(Stream &stream)
 }
 
 Edge_ML_Seeed edge_ml_seeed;
+
+#endif
