@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #include "BLEHandler_Seeed.h"
 
 #include "Arduino.h"
@@ -171,3 +171,5 @@ void BLEHandler_Seeed::debug(Stream &stream) {
 }
 
 BLEHandler_Seeed bleHandler_seeed;
+
+#endif

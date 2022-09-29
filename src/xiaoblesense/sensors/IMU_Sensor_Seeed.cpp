@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #include "IMU_Sensor_Seeed.h"
 
 IMU_Sensor_Seeed::IMU_Sensor_Seeed() {
@@ -53,3 +53,4 @@ void IMU_Sensor_Seeed::get_temp(float &C) {
 
     C = IMU->readTempC();
 }
+#endif

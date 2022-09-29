@@ -23,7 +23,7 @@
 
     Distributed as-is; no warranty is given.
 ******************************************************************************/
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef __LSM6DS3IMU_H__
 #define __LSM6DS3IMU_H__
 
@@ -2085,3 +2085,4 @@ typedef enum {
 } LSM6DS3_ACC_GYRO_INT2_SLEEP_t;
 
 #endif  // End of __LSM6DS3IMU_H__ definition check
+#endif

@@ -1,3 +1,5 @@
+#if defined(ARDUINO_NICLA)
+
 #include "BoschParser.h"
 #include "BoschSensortec.h"
 
@@ -51,3 +53,5 @@ void BoschParser::parseData(const struct bhy2_fifo_parse_data_info *fifoData, vo
 
   _sensorDataCharacteristic->writeValue(&sensorData, sizeof(SensorDataPacket));
 }
+
+#endif

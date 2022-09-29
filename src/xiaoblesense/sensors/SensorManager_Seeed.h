@@ -1,7 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #ifndef SENSORMANAGER_SEEED_H
 #define SENSORMANAGER_SEEED_H
 
@@ -40,3 +40,5 @@ private:
 };
 
 #endif //SENSORMANAGER_SEEED_H
+
+#endif

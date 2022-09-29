@@ -1,3 +1,5 @@
+#if defined(ARDUINO_NICLA)
+
 #ifndef BOSCH_SENSORTEC_H_
 #define BOSCH_SENSORTEC_H_
 
@@ -21,7 +23,6 @@ extern "C"
 }
 #endif
 
-//#define SENSOR_QUEUE_SIZE   10
 #define WORK_BUFFER_SIZE    1024
 
 #define MAX_READ_WRITE_LEN 256
@@ -65,5 +66,7 @@ private:
 };
 
 extern BoschSensortec sensortec;
+
+#endif
 
 #endif

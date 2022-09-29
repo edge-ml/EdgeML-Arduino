@@ -1,6 +1,7 @@
 //
 // Created by Dylan Ray Roodt on 23.05.2022.
 //
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 
 #include "SensorManager_Seeed.h"
 
@@ -182,3 +183,5 @@ void SensorManager_Seeed::debug(Stream &stream)
 {
     _debug = &stream;
 }
+
+#endif

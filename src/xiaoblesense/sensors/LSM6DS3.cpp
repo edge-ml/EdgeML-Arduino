@@ -25,7 +25,7 @@
 ******************************************************************************/
 
 //See SparkFunLSM6DS3.h for additional topology notes.
-
+#if defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
 #include "LSM6DS3.h"
 #include "stdint.h"
 
@@ -711,3 +711,4 @@ void LSM6DS3::fifoEnd(void) {
     writeRegister(LSM6DS3_ACC_GYRO_FIFO_STATUS1, 0x00);  //Disable
 }
 
+#endif
