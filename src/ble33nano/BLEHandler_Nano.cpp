@@ -10,7 +10,7 @@
 #include <cstdint>
 
 const char deviceIdentifier_Nano[] = "NANO";
-const char deviceGeneration_Nano[] = "1.0.0";
+const char deviceGeneration_Nano[] = "1.2.1";
 
 // Sensor Data channels
 BLEService sensorService_Nano("34c2e3bb-34aa-11eb-adc1-0242ac120002");

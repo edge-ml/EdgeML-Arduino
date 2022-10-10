@@ -3,7 +3,7 @@
 #define DEVICEINFO_H
 
 const char deviceIdentifier[] = "NICLA";
-const char deviceGeneration[] = "1.2.0";
+const char deviceGeneration[] = "1.2.1";
 
 #endif
 
