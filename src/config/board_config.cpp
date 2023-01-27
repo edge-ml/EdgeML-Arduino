@@ -7,6 +7,8 @@ SensorManagerInterface * get_manager() {
     sensorManager = reinterpret_cast<SensorManagerInterface *>(new SensorManager_Seeed());
 #elif defined BLE33NANO_FLAG
     sensorManager = reinterpret_cast<SensorManagerInterface *>(new SensorManager_Nano());
+#elif defined NICLA_FLAG
+
 #else
 #error Invalid board flag"
 #endif

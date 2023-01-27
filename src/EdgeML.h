@@ -3,10 +3,11 @@
 
 #include <config/flags.h>
 
+#include <generic/Generic.h>
 #ifdef NICLA_FLAG
 #include <boards/special_boards/nicla/Edge_ML_Nicla.h>
 #else
-#include <generic/Generic.h>
+
 #endif
 
 class Edge_ML {
@@ -35,6 +36,7 @@ public:
     String get_name() {
 #ifdef NICLA_FLAG
         // Do SOMETHING? with nicla
+        return "something nicla";
 #else
         return edge_ml_generic.get_name();
 #endif

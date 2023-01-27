@@ -11,6 +11,8 @@
 #elif defined BLE33NANO_FLAG
 #include <boards/generic_boards/ble33nano/SensorManager_Nano.h>
 #include <boards/generic_boards/ble33nano/SensorID_Nano.h>
+#elif defined NICLA_FLAG
+
 #else
 #error Invalid board flag"
 #endif

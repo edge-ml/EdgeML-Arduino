@@ -1,7 +1,6 @@
 #ifndef SENSOR_TYPES_H_
 #define SENSOR_TYPES_H_
 
-#include "nicla/sensors/SensorTypes.h"
 #include "stdint.h"
 
 #define SENSOR_DATA_FIXED_LENGTH (10)

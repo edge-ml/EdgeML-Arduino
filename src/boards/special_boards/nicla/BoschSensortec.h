@@ -7,7 +7,7 @@
 //#include "mbed.h"
 
 #include "bosch/common/common.h"
-#include "nicla/sensors/SensorTypes.h"
+#include "sensors/SensorTypes.h"
 
 
 #define ARM_CM_DEMCR (*(uint32_t *)0xE000EDFC)

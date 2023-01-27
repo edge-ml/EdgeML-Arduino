@@ -7,13 +7,13 @@
 #include "mbed.h"
 #include "ArduinoBLE.h"
 
-#include "nicla/bosch/common/common.h"
+#include "bosch/common/common.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-#include "nicla/bosch/bhy2.h"
+#include "bosch/bhy2.h"
 #ifdef __cplusplus
 }
 #endif
