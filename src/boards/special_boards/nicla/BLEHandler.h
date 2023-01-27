@@ -18,14 +18,18 @@ public:
   void poll(unsigned long timeout);
   void end();
   BLECharacteristic* getSensorDataCharacteristic();
+  String get_name();
+
   static void debug(Stream &stream);
 
   bool bleActive = false;
+
 
 private:
   static Stream *_debug;
 
   bool _lastDfuPack;
+  String device_name;
 
   void processDFUPacket(DFUType dfuType, BLECharacteristic characteristic);
   static void receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic);

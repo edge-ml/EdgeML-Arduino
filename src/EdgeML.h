@@ -36,7 +36,7 @@ public:
     String get_name() {
 #ifdef NICLA_FLAG
         // Do SOMETHING? with nicla
-        return "something nicla";
+        return edge_ml_nicla.get_name();
 #else
         return edge_ml_generic.get_name();
 #endif

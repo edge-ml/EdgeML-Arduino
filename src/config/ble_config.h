@@ -8,6 +8,9 @@
 #elif defined BLE33NANO_FLAG
     #define DEVICE_IDENTIFER "NANO"
 	#define DEVICE_GENERATION "1.2.1"
+#elif defined NICLA_FLAG
+    #define DEVICE_IDENTIFER "NICLA"
+    #define DEVICE_GENERATION "1.2.1"
 #else 
 	#warning "Default BLE config"
     #define DEVICE_IDENTIFER "Generic"

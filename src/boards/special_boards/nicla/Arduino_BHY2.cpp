@@ -109,6 +109,12 @@ void Arduino_BHY2::delay(unsigned long ms)
   #endif
 }
 
+String Arduino_BHY2::get_name() {
+#if defined(ARDUINO_NICLA)
+    return bleHandler.get_name();
+#endif
+}
+
 void Arduino_BHY2::debug(Stream &stream)
 {
   #if defined(ARDUINO_NICLA)

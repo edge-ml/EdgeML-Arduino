@@ -21,4 +21,8 @@ void Edge_ML_Nicla::debug(Stream &stream) {
     bhy->debug(stream);
 }
 
+String Edge_ML_Nicla::get_name() {
+    return bhy->get_name();
+}
+
 Edge_ML_Nicla edge_ml_nicla;

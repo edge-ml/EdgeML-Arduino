@@ -11,6 +11,7 @@ class Edge_ML_Nicla {
         
         bool begin();
         void update();
+        String get_name();
         void debug(Stream &stream);
     private:
         Arduino_BHY2 *bhy;

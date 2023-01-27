@@ -21,6 +21,8 @@ public:
   void update(unsigned long ms); // Update and then sleep
   void delay(unsigned long ms); // to be used instead of arduino delay()
 
+  String get_name();
+
   void debug(Stream &stream);
 
 private:
