@@ -44,9 +44,10 @@ void IMU_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
             break;
     }
 
-    floatArray[0] = x;
-    floatArray[1] = y;
-    floatArray[2] = z;
+    floatArray[0] = 3; // 3 Values
+    floatArray[1] = x;
+    floatArray[2] = y;
+    floatArray[3] = z;
 }
 
 void IMU_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
@@ -58,7 +59,6 @@ void IMU_Sensor_Nano::get_acc(float &x, float &y, float &z) {
     if (!available) {
         return;
     }
-
     IMU.readAcceleration(x, y, z);
 }
 

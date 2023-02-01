@@ -6,11 +6,7 @@ IMU_Sensor_Seeed imu_sensor_seeed;
 SensorManager_Seeed::SensorManager_Seeed() {
     setup_sensors(SENSOR_COUNT); // Important
 
-    SensorInterface * sensor_array[] = {
-            reinterpret_cast<SensorInterface *>(&imu_sensor_seeed)
-    };
-
-    sensors = sensor_array;
+    sensors = new SensorInterface * [MODULE_COUNT_PHYSICAL_SEEED] {(&imu_sensor_seeed)};
 
     for (int module_id=0; module_id < MODULE_COUNT_PHYSICAL_SEEED; module_id++) {
         SensorInterface * sensor = sensors[module_id];
@@ -109,10 +105,10 @@ SensorInterface * SensorManager_Seeed::get_sensor(int ID) {
 
 void SensorManager_Seeed::setup_sensors(int count) {
     _provider_sensor_count = count;
-    Sensor * sensor_array[count];
+    Sensor ** sensor_array = new Sensor * [count];
     Sensor * sensor;
     for (int i=0; i<count; i++) {
-        sensor = new Sensor[count];
+        sensor = new Sensor();
         sensor->ID = i;
         sensor->state = false;
         sensor->active = false;

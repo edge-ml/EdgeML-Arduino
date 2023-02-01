@@ -9,14 +9,7 @@ APDS_Sensor_Nano apds_sensor;
 SensorManager_Nano::SensorManager_Nano() {
     setup_sensors(SENSOR_COUNT); // Important
 
-    SensorInterface * sensor_array[] = {
-            reinterpret_cast<SensorInterface *>(&imu_sensor),
-            reinterpret_cast<SensorInterface *>(&hts_sensor),
-            reinterpret_cast<SensorInterface *>(&baro_sensor),
-            reinterpret_cast<SensorInterface *>(&apds_sensor)
-    };
-
-    sensors = sensor_array;
+    sensors = new SensorInterface * [MODULE_COUNT_PHYSICAL_NANO] {(&imu_sensor),(&hts_sensor),(&baro_sensor),(&apds_sensor)};
 
     for (int module_id=0; module_id < MODULE_COUNT_PHYSICAL_NANO; module_id++) {
         SensorInterface * sensor = sensors[module_id];
@@ -60,6 +53,7 @@ void SensorManager_Nano::end_sensor(int ID) {
 
 int * SensorManager_Nano::get_int_data(int ID) {
     int* data = new int[4];
+    // Index 0 is length
     SensorInterface * sensor = get_sensor(ID);
     sensor->get_int_data(data, ID);
     return data;
@@ -67,11 +61,11 @@ int * SensorManager_Nano::get_int_data(int ID) {
 
 float * SensorManager_Nano::get_float_data(int ID){
     float* data = new float[4];
+    // Index 0 is length
     SensorInterface * sensor = get_sensor(ID);
     sensor->get_float_data(data, ID);
     return data;
 }
-
 
 void SensorManager_Nano::assign_id_maps(SensorInterface * sensor) {
     int sensor_id;
@@ -115,10 +109,10 @@ SensorInterface * SensorManager_Nano::get_sensor(int ID) {
 
 void SensorManager_Nano::setup_sensors(int count) {
     _provider_sensor_count = count;
-    Sensor * sensor_array[count];
+    Sensor ** sensor_array = new Sensor * [count];
     Sensor * sensor;
     for (int i=0; i<count; i++) {
-        sensor = new Sensor[count];
+        sensor = new Sensor();
         sensor->ID = i;
         sensor->state = false;
         sensor->active = false;

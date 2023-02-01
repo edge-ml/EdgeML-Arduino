@@ -23,20 +23,8 @@ void SensorProvider::update() {
         sensor = _sensor_array[i];
 
         if (sensor->state) {
-            // REMOVE
-            if (debugging) {
-                print("State true of ID:");
-                println(sensor->ID);
-                print("Active?:");
-                println(sensor->active);
-            }
-
             update_sensor(sensor);
         } else if (sensor->active) {
-            if (debugging) {
-                print("Sensor deactivate:  ");
-                println(sensor->ID);
-            }
             sensor->active = false;
         }
     }
@@ -52,20 +40,15 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
         println(String(config.latency));
     }
 
-    int ID = config.sensorId; // test if valid (in _sensorManager)
+    int ID = config.sensorId;
     if (!check_valid_id(ID)) {
         if (debugging) {
             print("Invalid ID: ");
             println(ID);
-            return;
         }
+        return;
     }
     Sensor * sensor = _sensor_array[ID];
-
-    if (debugging) {
-        print("ID: ");
-        println(ID);
-    }
 
     if (config.sampleRate == 0.0) {
         sensor->state = false;
@@ -106,6 +89,7 @@ void SensorProvider::send_sensor_data(int ID) {
             int_data = _sensorManager->get_int_data(ID);
             bleHandler_G.send(ID, int_data);
             delete[] int_data;
+            break;
         }
         case TYPE_FLOAT: {
             float_data = _sensorManager->get_float_data(ID);
@@ -115,6 +99,9 @@ void SensorProvider::send_sensor_data(int ID) {
         }
         default:
             if (debugging) {
+                if (_sensorManager->get_return_type(ID) == TYPE_ERROR) {
+                    print("TYPE ERROR");
+                }
                 print("Type error data ID:  ");
                 _debug->println(ID);
             }

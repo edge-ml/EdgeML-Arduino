@@ -19,12 +19,11 @@ public:
     virtual int * get_int_data(int ID);
     virtual float * get_float_data(int ID);
 
-    virtual int get_return_type(int ID) {return 0;};
+    virtual int get_return_type(int ID) {return -1;};
 
 protected:
-    Stream *_debug{};
-    int _provider_sensor_count;
-    Sensor ** _provider_sensors;
+    int _provider_sensor_count = -1;
+    Sensor ** _provider_sensors = nullptr;
 };
 
 

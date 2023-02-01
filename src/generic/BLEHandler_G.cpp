@@ -102,6 +102,8 @@ void BLEHandler_G::update() {
 void BLEHandler_G::send(int ID, int *data) {
     // send list of int data as in int16 2 bytes each
     // first element is length of array
+    println("Sending int data");
+
     if (sensorDataCharacteristic_G.subscribed()) {
         SensorDataPacket package{};
         int16_t value;
@@ -122,6 +124,8 @@ void BLEHandler_G::send(int ID, int *data) {
 void BLEHandler_G::send(int ID, float *data) {
     // send list of float data floats 4 bytes each
     // first element is length of array (just convert to int)
+    println("Sending float data");
+
     if (sensorDataCharacteristic_G.subscribed()) {
         SensorDataPacket package{};
         int length = (int)data[0];

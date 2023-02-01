@@ -5,6 +5,8 @@
 
 #define MAX_MODULES 5
 
+#include <generic/Debug.h>
+
 class SensorInterface {
 public:
     virtual void start() {};
