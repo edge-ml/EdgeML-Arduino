@@ -10,7 +10,7 @@ SensorManagerInterface * get_manager() {
 #elif defined NICLA_FLAG
 
 #else
-#error Invalid board flag"
+#error "Invalid board flag"
 #endif
     return sensorManager;
 }

@@ -14,7 +14,7 @@
 #elif defined NICLA_FLAG
 
 #else
-#error Invalid board flag"
+#error "Invalid board flag"
 #endif
 
 SensorManagerInterface * get_manager();
