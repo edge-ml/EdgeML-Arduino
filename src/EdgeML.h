@@ -4,6 +4,7 @@
 #include <config/flags.h>
 
 #include <generic/Generic.h>
+
 #ifdef NICLA_FLAG
 #include <boards/special_boards/nicla/Edge_ML_Nicla.h>
 #else
@@ -47,6 +48,14 @@ public:
         return edge_ml_nicla.get_name();
 #else
         return edge_ml_generic.get_name();
+#endif
+    }
+
+    void set_ble_config(String name, String gen = "0.0.0") {
+#ifdef NICLA_FLAG
+        // Not defined yet
+#else
+        edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
 #endif
     }
 

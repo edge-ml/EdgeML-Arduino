@@ -39,11 +39,24 @@ public:
     void end();
 
     String get_name();
+    void set_name(String name);
+    void set_generation(String gen);
 
     bool bleActive = false;
 
 private:
+    String device_id;
     String device_name;
+    String device_gen;
+
+    BLEService * sensorService_G;
+    BLEService * deviceInfoService_G;
+
+    BLECharacteristic * sensorDataC_G;
+    BLECharacteristic * sensorConfigC_G;
+    BLECharacteristic * deviceIdentifierC_G;
+    BLECharacteristic * deviceGenerationC_G;
+
     void static receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
 };
 
