@@ -16,6 +16,4 @@ SensorManager_Nano::SensorManager_Nano() {
 
     SensorManagerInterface::set_type_int(RETURN_TYPE_INT_NANO, INT_TYPE_COUNT_NANO);
     SensorManagerInterface::set_type_float(RETURN_TYPE_FLOAT_NANO, FLOAT_TYPE_COUNT_NANO);
-
-    SensorManagerInterface::setup();
 }

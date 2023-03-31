@@ -14,6 +14,8 @@ Edge_ML_Generic::~Edge_ML_Generic() {
 bool Edge_ML_Generic::begin() {
     println("Begin");
 
+    _sensorManager->setup();
+
     // Begin sensors
     bleHandler_G.begin();
     sensorProvider.begin();

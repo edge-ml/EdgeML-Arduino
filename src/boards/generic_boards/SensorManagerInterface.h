@@ -13,6 +13,8 @@ public:
     SensorManagerInterface();
     ~SensorManagerInterface();
 
+    void setup();
+
     int get_sensor_count();
     Sensor ** get_sensors();
 
@@ -25,8 +27,6 @@ public:
     int get_return_type(int ID);
 
 protected:
-    void setup();
-
     void set_sensors(SensorInterface ** sensors);
     void set_sensor_counts(int sensor_count, int module_count);
     void set_type_int(const int * type_int, int length);
