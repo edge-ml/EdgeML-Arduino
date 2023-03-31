@@ -5,10 +5,20 @@ SensorManagerInterface::SensorManagerInterface() {
 }
 
 SensorManagerInterface::~SensorManagerInterface() {
-    delete _sensors;
     delete _module_assignment;
     delete _sensor_module_pos;
     delete _sensor_return_type;
+
+
+    for (int i=0; i<_sensor_count; i++) {
+        delete _provider_sensors[i];
+    }
+
+    for (int i=0; i<_module_count; i++) {
+        delete _sensors[i];
+    }
+
+    delete _sensors;
     delete _provider_sensors;
 }
 

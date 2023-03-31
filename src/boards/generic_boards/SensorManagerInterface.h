@@ -11,7 +11,7 @@
 class SensorManagerInterface : public Debug {
 public:
     SensorManagerInterface();
-    ~SensorManagerInterface();
+    virtual ~SensorManagerInterface();
 
     void setup();
 
@@ -42,10 +42,10 @@ private:
     int * _sensor_module_pos;  // ID -> Module Position
     int * _sensor_return_type;  // ID -> Return Type
 
-    int _type_int_length;
-    const int * _type_int;
-    int _type_float_length;
-    const int * _type_float;
+    int _type_int_length = 0;
+    const int * _type_int = nullptr;
+    int _type_float_length = 0;
+    const int * _type_float = nullptr;
 
     void setup_ID_arrays();
     void setup_sensors();

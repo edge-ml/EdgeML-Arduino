@@ -9,6 +9,8 @@
 
 class SensorInterface {
 public:
+    virtual ~SensorInterface() = default;
+
     virtual void start() {};
     virtual void end() {};
 
