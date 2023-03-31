@@ -53,7 +53,7 @@ const int APDS_BRIGHT_NANO = 7;
 const int APDS_PROX_NANO = 8;
 const int ADPS_GEST_NANO = 9;
 
-const int SENSOR_COUNT_SEEED = 10;
+const int SENSOR_COUNT_NANO = 10;
 
 const int MODULE_COUNT_PHYSICAL_NANO = 4;
 
