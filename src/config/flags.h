@@ -1,8 +1,5 @@
 #define MASTERFLAG
 
-// Uncomment to use custom sensor manager
-// #define CUSTOM_SENSOR_MANAGER
-
 #if defined(ARDUINO_NICLA)
 #define NICLA_FLAG
     #warning "Using Nicla Sense ME"
