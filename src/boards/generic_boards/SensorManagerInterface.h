@@ -12,8 +12,7 @@ class SensorManagerInterface : public Debug {
 public:
     SensorManagerInterface();
     virtual ~SensorManagerInterface();
-
-    void setup();
+    virtual void setup() {};
 
     int get_sensor_count();
     Sensor ** get_sensors();
@@ -31,6 +30,8 @@ protected:
     void set_sensor_counts(int sensor_count, int module_count);
     void set_type_int(const int * type_int, int length);
     void set_type_float(const int * type_int, int length);
+
+    void init();
 
 private:
     int _sensor_count = -1;

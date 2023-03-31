@@ -20,9 +20,8 @@ class Edge_ML_Generic: public Debug {
         void set_custom(SensorManagerInterface * sensorManager);
 
         String get_name();
-
     private:
-        SensorManagerInterface * _sensorManager;
+        SensorManagerInterface * _sensorManager = nullptr;
 };
 
 extern Edge_ML_Generic edge_ml_generic;

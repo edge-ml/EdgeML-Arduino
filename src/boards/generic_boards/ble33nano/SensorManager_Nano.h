@@ -15,7 +15,7 @@
 
 class SensorManager_Nano : public SensorManagerInterface {
 public:
-    SensorManager_Nano();
+    void setup() override;
 };
 
 #endif //SENSORMANAGER_H_NANO

@@ -22,7 +22,7 @@ SensorManagerInterface::~SensorManagerInterface() {
     delete _provider_sensors;
 }
 
-void SensorManagerInterface::setup() {
+void SensorManagerInterface::init() {
     setup_ID_arrays();
     setup_sensors();
 
