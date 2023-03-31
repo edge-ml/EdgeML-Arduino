@@ -11,7 +11,7 @@
 class Edge_ML_Generic: public Debug {
     public:
         Edge_ML_Generic();
-        virtual ~Edge_ML_Generic();
+        ~Edge_ML_Generic();
         
         bool begin();
         void update();
