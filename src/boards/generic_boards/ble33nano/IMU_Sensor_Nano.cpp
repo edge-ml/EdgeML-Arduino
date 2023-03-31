@@ -10,7 +10,6 @@ IMU_Sensor_Nano::IMU_Sensor_Nano() {
     }
 }
 
-
 void IMU_Sensor_Nano::start() {
     if (available) {
         return;

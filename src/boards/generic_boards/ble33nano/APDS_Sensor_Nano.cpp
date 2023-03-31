@@ -51,7 +51,6 @@ void APDS_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
     }
 }
 
-
 void APDS_Sensor_Nano::get_color(int& r, int& g, int& b) {
     if (!available) {
         return;
@@ -63,6 +62,7 @@ void APDS_Sensor_Nano::get_color(int& r, int& g, int& b) {
     APDS.readColor(r, g, b);
 
 }
+
 int APDS_Sensor_Nano::get_light() {
     if (!available) {
         return 0;
