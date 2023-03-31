@@ -99,62 +99,21 @@ void BLEHandler_G::update() {
     BLE.poll();
 }
 
-void BLEHandler_G::send(int ID, int *data) {
-    // send list of int data as in int16 2 bytes each
-    // first element is length of array
-    println("Sending int data");
+void BLEHandler_G::send(int ID, byte *data, int length, int size) {
+    println("Sending data");
+    if (!sensorDataCharacteristic_G.subscribed()) return;
+    SensorDataPacket package{};
+    package.sensorId = ID;
+    package.size = 2 + 4 + length * size;
+    package.millis = millis();
 
-    if (sensorDataCharacteristic_G.subscribed()) {
-        SensorDataPacket package{};
-        int16_t value;
-        int length = data[0];
-        package.sensorId = ID;
-        package.size = 2 + 4 + length * 2;
-        package.millis = millis();
+    memcpy(package.data, data, size * 3);
 
-        for (int i=0; i<length; i++) {
-            value = (int16_t)data[i + 1];
-            write_int16_at_pos(value, package.data, i * 2);
-        }
-
-        sensorDataCharacteristic_G.writeValue(&package, sizeof(SensorDataPacket));
-    }
-}
-
-void BLEHandler_G::send(int ID, float *data) {
-    // send list of float data floats 4 bytes each
-    // first element is length of array (just convert to int)
-    println("Sending float data");
-
-    if (sensorDataCharacteristic_G.subscribed()) {
-        SensorDataPacket package{};
-        int length = (int)data[0];
-        package.sensorId = ID;
-        package.size = 2 + 4 + length * 4;
-        package.millis = millis();
-
-        for (int i=0; i<length; i++) {
-            write_float_at_pos(data[i + 1], package.data, i * 4);
-        }
-
-        sensorDataCharacteristic_G.writeValue(&package, sizeof(SensorDataPacket));
-    }
+    sensorDataCharacteristic_G.writeValue(&package, package.size);
 }
 
 void BLEHandler_G::poll(unsigned long timeout) {
     BLE.poll(timeout);
-}
-
-void BLEHandler_G::write_int16_at_pos(int16_t value, uint8_t *data, int pos) {
-    data[pos] = value & 0x000000ff;
-    data[pos+1] = (value & 0x0000ff00) >> 8;
-}
-
-void BLEHandler_G::write_float_at_pos(float value, uint8_t *data, int pos) {
-    int length = sizeof(float);
-    for(int i = 0; i < length; i++){
-        data[pos+i] = ((uint8_t*)&value)[i];
-    }
 }
 
 String BLEHandler_G::get_name() {

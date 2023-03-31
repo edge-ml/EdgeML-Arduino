@@ -33,8 +33,7 @@ public:
     bool begin();
     void update();
 
-    void send(int ID, int *data);
-    void send(int ID, float *data);
+    void send(int ID, byte *data, int length, int size);
 
     void poll(unsigned long timeout);
     void end();
@@ -46,8 +45,6 @@ public:
 private:
     String device_name;
     void static receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
-    void write_int16_at_pos(int16_t value, uint8_t *data, int pos);
-    void write_float_at_pos(float value, uint8_t *data, int pos);
 };
 
 extern BLEHandler_G bleHandler_G;

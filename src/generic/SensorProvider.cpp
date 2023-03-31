@@ -83,17 +83,26 @@ void SensorProvider::send_sensor_data(int ID) {
 
     int *int_data;
     float *float_data;
+    int length;
 
     switch (_sensorManager->get_return_type(ID)) {
         case TYPE_INT: {
             int_data = _sensorManager->get_int_data(ID);
-            bleHandler_G.send(ID, int_data);
+            length = int(int_data[0]);
+            short int_temp[3];
+            int max_ints = 3;
+            for (int i = 0; i < max_ints; ++i) {
+                if (i < length) int_temp[i] = (short)int_data[i+1];
+                else int_temp[i] = 0;
+            }
+            bleHandler_G.send(ID, (byte*)&int_temp, length, sizeof(short));
             delete[] int_data;
             break;
         }
         case TYPE_FLOAT: {
             float_data = _sensorManager->get_float_data(ID);
-            bleHandler_G.send(ID, float_data);
+            length = int(float_data[0]);
+            bleHandler_G.send(ID, (byte*)&float_data[1], length, sizeof(float));
             delete[] float_data;
             break;
         }
