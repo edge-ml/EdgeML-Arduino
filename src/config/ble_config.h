@@ -2,6 +2,8 @@
 	#include "flags.h"
 #endif
 
+// when using custom board don't forget to change DEVICE_IDENTIFER and DEVICE_GENERATION
+
 #ifdef XIAO_SEEED_FLAG
     #define DEVICE_IDENTIFER "Seeed XIAO"
 	#define DEVICE_GENERATION "1.2.1"

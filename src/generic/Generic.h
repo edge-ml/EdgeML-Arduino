@@ -17,6 +17,8 @@ class Edge_ML_Generic: public Debug {
         void update();
         void debug(Stream &stream);
 
+        void set_custom(SensorManagerInterface * sensorManager);
+
         String get_name();
 
     private:

@@ -19,6 +19,14 @@ public:
         Edge_ML_Generic();
 #endif
     }
+
+    void set_custom(SensorManagerInterface * sensorManager) {
+        // Currently does not support NICLA!
+#ifndef NICLA_FLAG
+        edge_ml_generic.set_custom(sensorManager);
+#endif
+    }
+
     bool begin() {
 #ifdef NICLA_FLAG
         edge_ml_nicla.begin();
