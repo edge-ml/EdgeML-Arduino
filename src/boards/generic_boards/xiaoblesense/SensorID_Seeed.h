@@ -13,7 +13,7 @@ const int IMU_ACCELERATION_SEEED = 0;
 const int IMU_GYROSCOPE_SEEED = 1;
 const int IMU_TEMP_SEEED = 2;
 
-#define SENSOR_COUNT 3
+const int SENSOR_COUNT_SEEED = 3;
 
 const int MODULE_COUNT_PHYSICAL_SEEED = 1;
 
