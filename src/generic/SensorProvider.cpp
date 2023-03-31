@@ -95,12 +95,22 @@ void SensorProvider::send_sensor_data(int ID) {
                 if (i < length) int_temp[i] = (short)int_data[i+1];
                 else int_temp[i] = 0;
             }
+
+            if (debugging) {
+                println("Float Data: " + String(int_data[1]) + " " + String(int_data[2]) + " " + String(int_data[3]));
+            }
+
             bleHandler_G.send(ID, (byte*)&int_temp, length, sizeof(short));
             delete[] int_data;
             break;
         }
         case TYPE_FLOAT: {
             float_data = _sensorManager->get_float_data(ID);
+
+            if (debugging) {
+                println("Float Data: " + String(float_data[1]) + " " + String(float_data[2]) + " " + String(float_data[3]));
+            }
+
             length = int(float_data[0]);
             bleHandler_G.send(ID, (byte*)&float_data[1], length, sizeof(float));
             delete[] float_data;
