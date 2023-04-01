@@ -12,7 +12,7 @@
 
 class SensorManager_Seeed : public SensorManagerInterface {
 public:
-    SensorManager_Seeed();
+    void setup() override;
 };
 
 #endif //SENSORMANAGER_SEEED_H
