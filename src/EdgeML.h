@@ -8,36 +8,34 @@
 #ifdef NICLA_FLAG
 #include <boards/special_boards/nicla/Edge_ML_Nicla.h>
 #else
-
+// Nothing
 #endif
 
 class Edge_ML {
 public:
     Edge_ML() {
-#ifdef NICLA_FLAG
-        Edge_ML_Nicla();
-#else
-        Edge_ML_Generic();
-#endif
+        // Nothing
     }
 
     void set_custom(SensorManagerInterface * sensorManager) {
-        // Currently does not support NICLA!
-#ifndef NICLA_FLAG
-        edge_ml_generic.set_custom(sensorManager);
+#ifdef NICLA_FLAG
+        _custom = true;
 #endif
+        edge_ml_generic.set_custom(sensorManager);
     }
 
     bool begin() {
 #ifdef NICLA_FLAG
-        edge_ml_nicla.begin();
+        if (!_custom) edge_ml_nicla.begin();
+        else edge_ml_generic.begin();
 #else
         edge_ml_generic.begin();
 #endif
     }
     void update() {
 #ifdef NICLA_FLAG
-        edge_ml_nicla.update();
+        if (!_custom) edge_ml_nicla.update();
+        else edge_ml_generic.update();
 #else
         edge_ml_generic.update();
 #endif
@@ -53,7 +51,8 @@ public:
 
     void set_ble_config(String name, String gen = "0.0.0") {
 #ifdef NICLA_FLAG
-        // Not defined yet
+        if (!_custom) return;
+        else edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
 #else
         edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
 #endif
@@ -61,13 +60,18 @@ public:
 
     void debug(Stream &stream) {
 #ifdef NICLA_FLAG
-        edge_ml_nicla.debug(stream);
+        if (!_custom) edge_ml_nicla.debug(stream);
+        else edge_ml_generic.debug(stream);
 #else
         edge_ml_generic.debug(stream);
 #endif
     }
+private:
+#ifdef NICLA_FLAG
+    bool _custom = false;
+#endif
 };
 
 extern Edge_ML edge_ml;
 
-#endif
+#endif //Edge_ML_BASE_H_
