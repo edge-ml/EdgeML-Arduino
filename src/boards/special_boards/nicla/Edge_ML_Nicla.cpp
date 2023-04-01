@@ -2,7 +2,6 @@
 
 
 Edge_ML_Nicla::Edge_ML_Nicla() {
-    bhy = new Arduino_BHY2();
 }
 
 Edge_ML_Nicla::~Edge_ML_Nicla() {
@@ -10,6 +9,7 @@ Edge_ML_Nicla::~Edge_ML_Nicla() {
 }
 
 bool Edge_ML_Nicla::begin() {
+    bhy = new Arduino_BHY2();
     return bhy->begin();
 }
 
