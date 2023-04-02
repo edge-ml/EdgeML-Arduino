@@ -25,6 +25,11 @@ bool Edge_ML_Generic::begin() {
         sensorProvider.set_sensorManager(_sensorManager);
     }
 
+    // Get parsing scheme
+    int length;
+    byte * buffer = _sensorManager->get_parse_scheme(length);
+    bleHandler_G.set_parse_scheme(buffer, length);
+
     println("Begin");
 
     // Begin sensors

@@ -41,6 +41,7 @@ public:
     String get_name();
     void set_name(String name);
     void set_generation(String gen);
+    void set_parse_scheme(byte *data, int length);
 
     bool bleActive = false;
 
@@ -56,8 +57,13 @@ private:
     BLECharacteristic * sensorConfigC_G;
     BLECharacteristic * deviceIdentifierC_G;
     BLECharacteristic * deviceGenerationC_G;
+    BLECharacteristic * deviceParseSchemeC_G;
+
+    int _scheme_length = 0;
+    byte * _scheme_buffer = nullptr;
 
     void static receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
+    void check_scheme();
 };
 
 extern BLEHandler_G bleHandler_G;

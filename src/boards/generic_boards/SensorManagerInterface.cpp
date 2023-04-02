@@ -160,6 +160,24 @@ SensorInterface * SensorManagerInterface::get_sensor(int ID) {
     return _sensors[module_id];
 }
 
+void SensorManagerInterface::set_parse_scheme(const int *parse_scheme, const int *parse_type, int sensor_count) {
+    delete _scheme_buffer;  // Deallocate to be sure
+
+    _scheme_length = 1 + sensor_count * 2;
+    _scheme_buffer = new byte[_scheme_length];
+
+    _scheme_buffer[0] = (uint8_t)sensor_count;
+    for (int i = 0; i < sensor_count; ++i) {
+        _scheme_buffer[2*i + 1] = parse_scheme[i];
+        _scheme_buffer[2*i + 2] = parse_type[i];
+    }
+}
+
+byte * SensorManagerInterface::get_parse_scheme(int &length) {
+    length = _scheme_length;
+    return _scheme_buffer;
+}
+
 bool SensorManagerInterface::all_inactive(SensorInterface * sensor) {
     for (int i=0; i < sensor->get_sensor_count(); i++) {
         if (sensor->_active[i]) {
@@ -168,3 +186,7 @@ bool SensorManagerInterface::all_inactive(SensorInterface * sensor) {
     }
     return true;
 }
+
+
+
+

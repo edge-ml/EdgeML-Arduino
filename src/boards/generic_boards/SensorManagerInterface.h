@@ -24,12 +24,14 @@ public:
     float * get_float_data(int ID);
 
     int get_return_type(int ID);
+    byte * get_parse_scheme(int &length);
 
 protected:
     void set_sensors(SensorInterface ** sensors);
     void set_sensor_counts(int sensor_count, int module_count);
     void set_type_int(const int * type_int, int length);
     void set_type_float(const int * type_int, int length);
+    void set_parse_scheme(const int * parse_scheme, const int * parse_type, int sensor_count);
 
     void init();
 
@@ -47,6 +49,9 @@ private:
     const int * _type_int = nullptr;
     int _type_float_length = 0;
     const int * _type_float = nullptr;
+
+    int _scheme_length = 0;
+    byte * _scheme_buffer = nullptr;
 
     void setup_ID_arrays();
     void setup_sensors();
