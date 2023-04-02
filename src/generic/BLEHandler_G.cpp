@@ -18,6 +18,7 @@ auto sensorConfigUuid_G = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
 auto deviceInfoServiceUuid_G = ("45622510-6468-465a-b141-0b9b0f96b468");
 auto deviceIdentifierUuid_G = "45622511-6468-465a-b141-0b9b0f96b468";
 auto deviceGenerationUuid_G = "45622512-6468-465a-b141-0b9b0f96b468";
+auto deviceParseSchemeUuid_G = "45622513-6468-465a-b141-0b9b0f96b468";
 
 BLEHandler_G::BLEHandler_G() {
     device_name = DEVICE_IDENTIFER;
@@ -41,6 +42,8 @@ bool BLEHandler_G::begin() {
         return false;
     }
     bleActive = true;
+
+    check_scheme();
 
     // Code for name
     String address = BLE.address();
@@ -77,6 +80,7 @@ bool BLEHandler_G::begin() {
 
     deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid_G, BLERead, (int)device_id.length());
     deviceGenerationC_G = new BLECharacteristic(deviceGenerationUuid_G, BLERead, (int)device_gen.length());
+    deviceParseSchemeC_G = new BLECharacteristic(deviceParseSchemeUuid_G, BLERead, _scheme_length);
 
     // Sensor channel
     BLE.setAdvertisedService(*sensorService_G);
@@ -89,9 +93,11 @@ bool BLEHandler_G::begin() {
     BLE.setAdvertisedService(*deviceInfoService_G);
     deviceInfoService_G->addCharacteristic(*deviceIdentifierC_G);
     deviceInfoService_G->addCharacteristic(*deviceGenerationC_G);
+    deviceInfoService_G->addCharacteristic(*deviceParseSchemeC_G);
     BLE.addService(*deviceInfoService_G);
     deviceIdentifierC_G->writeValue(device_name.c_str());
     deviceGenerationC_G->writeValue(device_gen.c_str());
+    deviceParseSchemeC_G->writeValue((char*)_scheme_buffer);
 
     // Advertise
     BLE.advertise();
@@ -136,6 +142,17 @@ void BLEHandler_G::set_name(String name) {
 
 void BLEHandler_G::set_generation(String gen) {
     device_gen = std::move(gen);
+}
+
+void BLEHandler_G::set_parse_scheme(byte *data, int length) {
+    _scheme_buffer = data;
+    _scheme_length = length;
+}
+
+void BLEHandler_G::check_scheme() {
+    if (_scheme_buffer != nullptr) return;
+    _scheme_buffer = new byte[2] {0, 1};
+    _scheme_length = 2;
 }
 
 BLEHandler_G bleHandler_G;

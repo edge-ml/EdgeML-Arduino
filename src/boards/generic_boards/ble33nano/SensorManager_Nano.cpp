@@ -1,6 +1,5 @@
 #include "SensorManager_Nano.h"
 
-
 void SensorManager_Nano::setup() {
     IMU_Sensor_Nano * imu_sensor = new IMU_Sensor_Nano();
     HTS_Sensor_Nano * hts_sensor = new HTS_Sensor_Nano();
@@ -14,6 +13,8 @@ void SensorManager_Nano::setup() {
 
     SensorManagerInterface::set_type_int(RETURN_TYPE_INT_NANO, INT_TYPE_COUNT_NANO);
     SensorManagerInterface::set_type_float(RETURN_TYPE_FLOAT_NANO, FLOAT_TYPE_COUNT_NANO);
+
+    SensorManagerInterface::set_parse_scheme(PARSE_SCHEME_NANO, PARSE_TYPE_NANO, SENSOR_COUNT_NANO);
 
     SensorManagerInterface::init();
 }

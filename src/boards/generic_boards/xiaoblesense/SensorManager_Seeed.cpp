@@ -11,5 +11,7 @@ void SensorManager_Seeed::setup() {
     SensorManagerInterface::set_type_int(RETURN_TYPE_INT_SEEED, INT_TYPE_COUNT_SEEED);
     SensorManagerInterface::set_type_float(RETURN_TYPE_FLOAT_SEEED, FLOAT_TYPE_COUNT_SEEED);
 
+    SensorManagerInterface::set_parse_scheme(PARSE_SCHEME_SEEED, PARSE_TYPE_SEEED, SENSOR_COUNT_SEEED);
+
     SensorManagerInterface::init();
 }
