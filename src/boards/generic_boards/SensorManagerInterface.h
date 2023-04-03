@@ -12,7 +12,8 @@ class SensorManagerInterface : public Debug {
 public:
     SensorManagerInterface();
     virtual ~SensorManagerInterface();
-    virtual void setup() {};
+
+    void init();
 
     int get_sensor_count();
     Sensor ** get_sensors();
@@ -25,40 +26,38 @@ public:
 
     int get_return_type(int ID);
     byte * get_parse_scheme(int &length);
+    byte * get_sensor_names(int &length);
 
 protected:
-    void set_sensors(SensorInterface ** sensors);
-    void set_sensor_counts(int sensor_count, int module_count);
-    void set_type_int(const int * type_int, int length);
-    void set_type_float(const int * type_int, int length);
-    void set_parse_scheme(const int * parse_scheme, const int * parse_type, int sensor_count);
+    virtual void setup() {};
 
-    void init();
+    void set_modules(SensorInterface ** modules);
+    void set_sensor_counts(int sensor_count, int module_count);
+    void set_sensor_configs(const SensorConfig * configurations);
 
 private:
     int _sensor_count = -1;
     int _module_count = -1;
 
-    Sensor ** _provider_sensors;
-    SensorInterface ** _sensors; // Module ID -> SensorInterface (Pointer to array of pointers)
-    int * _module_assignment;  // ID -> Module ID
-    int * _sensor_module_pos;  // ID -> Module Position
-    int * _sensor_return_type;  // ID -> Return Type
+    const SensorConfig * _configs;
+    Sensor ** _sensors;
+    SensorInterface ** _sensor_modules; // Module ID -> SensorInterface (Pointer to array of pointers)
 
-    int _type_int_length = 0;
-    const int * _type_int = nullptr;
-    int _type_float_length = 0;
-    const int * _type_float = nullptr;
+    int * _sensor_module_pos;  // ID -> Module Position
+    const SensorConfig ** _config_id_index; // Index -> SensorConfig pointer (ID ascending)
 
     int _scheme_length = 0;
     byte * _scheme_buffer = nullptr;
 
+    int _names_length = 0;
+    byte * _names_buffer = nullptr;
+
     void setup_ID_arrays();
     void setup_sensors();
-    void assign_id_maps(SensorInterface * sensor);
-    SensorInterface * get_sensor(int ID);
+    void setup_scheme_buffer();
+    void setup_names_buffer();
+    SensorInterface * get_module(int ID);
     bool all_inactive(SensorInterface * sensor);
 };
-
 
 #endif //EDGEML_ARDUINO_SENSORMANAGERINTERFACE_H

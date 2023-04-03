@@ -7,8 +7,6 @@
 
 class IMU_Sensor_Nano: public SensorInterface {
 public:
-    IMU_Sensor_Nano();
-
     void start() override;
     void end() override;
 
@@ -25,6 +23,5 @@ public:
 private:
     bool available = false;
 };
-
 
 #endif //EDGEML_ARDUINO_IMU_SENSOR_NANO_H

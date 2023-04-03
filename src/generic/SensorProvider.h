@@ -1,8 +1,6 @@
 #ifndef SENSORPRIVDER_H
 #define SENSORPRIVDER_H
 
-
-
 #include "BLEHandler_G.h"
 #include "Debug.h"
 

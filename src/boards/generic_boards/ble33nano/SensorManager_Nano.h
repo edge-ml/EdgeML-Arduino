@@ -8,7 +8,6 @@
 #include <boards/generic_boards/SensorTypes.h>
 
 #include "SensorID_Nano.h"
-#include "SensorParseScheme_Nano.h"
 #include "APDS_Sensor_Nano.h"
 #include "BARO_Sensor_Nano.h"
 #include "HTS_Sensor_Nano.h"

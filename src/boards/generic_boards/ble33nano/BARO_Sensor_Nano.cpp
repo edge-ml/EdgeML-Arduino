@@ -1,14 +1,5 @@
 #include "BARO_Sensor_Nano.h"
 
-BARO_Sensor_Nano::BARO_Sensor_Nano() {
-    _sensors_ids = BARO_MAP_NANO;
-    _module_id = MODULE_BARO_NANO;
-
-    for (bool & status : _active) {
-        status = false;
-    }
-}
-
 void BARO_Sensor_Nano::start() {
     if (BARO.begin()) {
         available = true;

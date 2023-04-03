@@ -1,15 +1,5 @@
 #include "IMU_Sensor_Nano.h"
 
-
-IMU_Sensor_Nano::IMU_Sensor_Nano() {
-    _sensors_ids = IMU_MAP_NANO;
-    _module_id = MODULE_IMU_NANO;
-
-    for (bool & status : _active) {
-        status = false;
-    }
-}
-
 void IMU_Sensor_Nano::start() {
     if (available) {
         return;

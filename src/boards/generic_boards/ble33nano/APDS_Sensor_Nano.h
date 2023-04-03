@@ -7,8 +7,6 @@
 
 class APDS_Sensor_Nano: public SensorInterface {
 public:
-    APDS_Sensor_Nano();
-
     void start() override;
     void end() override;
 

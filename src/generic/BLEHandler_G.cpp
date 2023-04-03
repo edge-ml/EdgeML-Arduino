@@ -8,17 +8,7 @@
 #include <cstdint>
 #include <utility>
 
-// Sensor Data channels
-auto sensorServiceUuid_G = "34c2e3bb-34aa-11eb-adc1-0242ac120002";
-auto sensorDataUuid_G = "34c2e3bc-34aa-11eb-adc1-0242ac120002";
-auto sensorConfigUuid_G = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
 
-
-// Device information channels
-auto deviceInfoServiceUuid_G = ("45622510-6468-465a-b141-0b9b0f96b468");
-auto deviceIdentifierUuid_G = "45622511-6468-465a-b141-0b9b0f96b468";
-auto deviceGenerationUuid_G = "45622512-6468-465a-b141-0b9b0f96b468";
-auto deviceParseSchemeUuid_G = "45622513-6468-465a-b141-0b9b0f96b468";
 
 BLEHandler_G::BLEHandler_G() {
     device_name = DEVICE_IDENTIFER;
@@ -44,6 +34,7 @@ bool BLEHandler_G::begin() {
     bleActive = true;
 
     check_scheme();
+    check_sensor_names();
 
     // Code for name
     String address = BLE.address();
@@ -71,16 +62,20 @@ bool BLEHandler_G::begin() {
     }
 
     // Generate Services
-    sensorService_G = new BLEService(sensorServiceUuid_G);
-    deviceInfoService_G = new BLEService(deviceInfoServiceUuid_G);
+    sensorService_G = new BLEService(sensorServiceUuid);
+    deviceInfoService_G = new BLEService(deviceInfoServiceUuid);
+    parseInfoService_G = new BLEService(parseInfoServiceUuid);
 
     // Generate Characteristics
-    sensorDataC_G = new BLECharacteristic(sensorDataUuid_G, (BLERead | BLENotify), sizeof(SensorDataPacket));
-    sensorConfigC_G = new BLECharacteristic(sensorConfigUuid_G, BLEWrite, sizeof(SensorConfigurationPacket));
+    sensorDataC_G = new BLECharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
+    sensorConfigC_G = new BLECharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
 
-    deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid_G, BLERead, (int)device_id.length());
-    deviceGenerationC_G = new BLECharacteristic(deviceGenerationUuid_G, BLERead, (int)device_gen.length());
-    deviceParseSchemeC_G = new BLECharacteristic(deviceParseSchemeUuid_G, BLERead, _scheme_length);
+    deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
+    deviceGenerationC_G = new BLECharacteristic(deviceGenerationUuid, BLERead, (int)device_gen.length());
+
+
+    deviceParseSchemeC_G = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
+    deviceSensorNamesC_G = new BLECharacteristic(parseSensorNamesUuid, BLERead, _names_length);
 
     // Sensor channel
     BLE.setAdvertisedService(*sensorService_G);
@@ -93,11 +88,17 @@ bool BLEHandler_G::begin() {
     BLE.setAdvertisedService(*deviceInfoService_G);
     deviceInfoService_G->addCharacteristic(*deviceIdentifierC_G);
     deviceInfoService_G->addCharacteristic(*deviceGenerationC_G);
-    deviceInfoService_G->addCharacteristic(*deviceParseSchemeC_G);
     BLE.addService(*deviceInfoService_G);
     deviceIdentifierC_G->writeValue(device_name.c_str());
     deviceGenerationC_G->writeValue(device_gen.c_str());
-    deviceParseSchemeC_G->writeValue((char*)_scheme_buffer);
+
+    // Parse information
+    BLE.setAdvertisedService(*parseInfoService_G);
+    parseInfoService_G->addCharacteristic(*deviceParseSchemeC_G);
+    parseInfoService_G->addCharacteristic(*deviceSensorNamesC_G);
+    BLE.addService(*parseInfoService_G);
+    deviceParseSchemeC_G->writeValue(_scheme_buffer, _scheme_length);
+    deviceSensorNamesC_G->writeValue(_names_buffer, _names_length);
 
     // Advertise
     BLE.advertise();
@@ -149,10 +150,21 @@ void BLEHandler_G::set_parse_scheme(byte *data, int length) {
     _scheme_length = length;
 }
 
+void BLEHandler_G::set_sensor_names(byte *data, int length) {
+    _names_buffer = data;
+    _names_length = length;
+}
+
 void BLEHandler_G::check_scheme() {
     if (_scheme_buffer != nullptr) return;
     _scheme_buffer = new byte[2] {0, 1};
     _scheme_length = 2;
+}
+
+void BLEHandler_G::check_sensor_names() {
+    if (_names_buffer != nullptr) return;
+    _names_buffer = new byte[1] {0};
+    _names_length= 1;
 }
 
 BLEHandler_G bleHandler_G;

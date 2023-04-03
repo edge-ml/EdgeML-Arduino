@@ -7,8 +7,6 @@
 
 class BARO_Sensor_Nano: public SensorInterface {
 public:
-    BARO_Sensor_Nano();
-
     void start() override;
     void end() override;
 

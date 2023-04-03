@@ -31,6 +31,13 @@ private:
   bool _lastDfuPack;
   String device_name;
 
+    int _scheme_length = 0;
+    byte * _scheme_buffer = nullptr;
+
+    // Keep in mind the max length is 510 bytes of the characteristic
+    int _names_length = 0;
+    byte * _names_buffer = nullptr;
+
   void processDFUPacket(DFUType dfuType, BLECharacteristic characteristic);
   static void receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic);
   static void receivedExternalDFU(BLEDevice central, BLECharacteristic characteristic);

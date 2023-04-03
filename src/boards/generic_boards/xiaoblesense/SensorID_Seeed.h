@@ -4,20 +4,55 @@
 IMU:
  - Acceleration
  - Gyroscope
+ - Temperature
  */
 
 #ifndef SENSORID_Seeed_H
 #define SENSORID_Seeed_H
 
-const int IMU_ACCELERATION_SEEED = 0;
-const int IMU_GYROSCOPE_SEEED = 1;
-const int IMU_TEMP_SEEED = 2;
+#include <boards/generic_boards/SensorTypes.h>
 
 const int SENSOR_COUNT_SEEED = 3;
-
 const int MODULE_COUNT_PHYSICAL_SEEED = 1;
 
-const int MODULE_IMU_SEEED = 0;
+// In correct order ID ascending
+enum SensorID_Seeed {
+    IMU_ACCELERATION_SEEED,
+    IMU_GYROSCOPE_SEEED,
+    IMU_TEMP_SEEED
+};
+
+// In correct order ID ascending
+enum ModuleID_Seeed {
+    MODULE_IMU_SEEED
+};
+
+const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
+        {
+            "ACC",
+            IMU_ACCELERATION_SEEED,
+            MODULE_IMU_SEEED,
+            R_TYPE_FLOAT,
+            SCHEME_XYZ,
+            PARSE_TYPE_FLOAT
+        },
+        {
+            "GYRO",
+            IMU_GYROSCOPE_SEEED,
+            MODULE_IMU_SEEED,
+            R_TYPE_FLOAT,
+            SCHEME_XYZ,
+            PARSE_TYPE_FLOAT
+        },
+        {
+            "TEMPERATURE",
+            IMU_TEMP_SEEED,
+            MODULE_IMU_SEEED,
+            R_TYPE_FLOAT,
+            SCHEME_VAL,
+            PARSE_TYPE_FLOAT
+        }
+};
 
 const int IMU_MAP_SEEED[] = {IMU_ACCELERATION_SEEED, IMU_GYROSCOPE_SEEED, IMU_TEMP_SEEED};
 

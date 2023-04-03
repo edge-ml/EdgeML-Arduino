@@ -9,8 +9,9 @@ Edge_ML_Generic::~Edge_ML_Generic() {
 void Edge_ML_Generic::set_custom(SensorManagerInterface *sensorManager) {
     delete _sensorManager;
     _sensorManager = sensorManager;
-    _sensorManager->setup();
+    if (debugging) _sensorManager->debug(*_debug);
 
+    _sensorManager->init();
     sensorProvider.set_sensorManager(_sensorManager);
 }
 
@@ -20,15 +21,20 @@ bool Edge_ML_Generic::begin() {
     if (_sensorManager == nullptr) {
         println("Fetch Sensor Manager");
         _sensorManager = get_manager();
-        _sensorManager->setup();
 
+        if (debugging) _sensorManager->debug(*_debug);
+        _sensorManager->init();
         sensorProvider.set_sensorManager(_sensorManager);
+
     }
 
     // Get parsing scheme
     int length;
     byte * buffer = _sensorManager->get_parse_scheme(length);
     bleHandler_G.set_parse_scheme(buffer, length);
+
+    buffer = _sensorManager->get_sensor_names(length);
+    bleHandler_G.set_sensor_names(buffer, length);
 
     println("Begin");
 
@@ -65,5 +71,3 @@ void Edge_ML_Generic::set_ble_config(String name, String gen) {
 }
 
 Edge_ML_Generic edge_ml_generic;
-
-

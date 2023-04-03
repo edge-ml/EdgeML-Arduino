@@ -1,15 +1,5 @@
 #include "HTS_Sensor_Nano.h"
 
-HTS_Sensor_Nano::HTS_Sensor_Nano() {
-    _sensors_ids = HTS_MAP_NANO;
-    _module_id = MODULE_HTS_NANO;
-
-    for (bool & status : _active) {
-        status = false;
-    }
-}
-
-
 void HTS_Sensor_Nano::start() {
     if (HTS.begin()) {
         available = true;

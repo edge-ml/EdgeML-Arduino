@@ -1,14 +1,5 @@
 #include "APDS_Sensor_Nano.h"
 
-APDS_Sensor_Nano::APDS_Sensor_Nano() {
-    _sensors_ids = APDS_MAP_NANO;
-    _module_id = MODULE_APDS_NANO;
-
-    for (bool & status : _active) {
-        status = false;
-    }
-}
-
 void APDS_Sensor_Nano::start() {
     if (APDS.begin()) {
         available = true;
@@ -42,7 +33,7 @@ void APDS_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
             intArray[0] = 1; // 1 Values
             intArray[1] = get_proximity();
             break;
-        case ADPS_GEST_NANO:
+        case APDS_GEST_NANO:
             intArray[0] = 1; // 1 Values
             intArray[1] = get_gesture();
             break;

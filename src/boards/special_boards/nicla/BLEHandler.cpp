@@ -9,9 +9,7 @@ const char deviceGeneration[] = DEVICE_GENERATION;
 #include "BoschSensortec.h"
 
 // Sensor Data channels
-BLEService sensorService("34c2e3bb-34aa-11eb-adc1-0242ac120002");
-auto sensorDataUuid = "34c2e3bc-34aa-11eb-adc1-0242ac120002";
-auto sensorConfigUuid = "34c2e3bd-34aa-11eb-adc1-0242ac120002";
+BLEService sensorService(sensorServiceUuid);
 BLECharacteristic sensorDataCharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
 BLECharacteristic sensorConfigCharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
 
@@ -23,11 +21,14 @@ BLECharacteristic dfuInternalCharacteristic(dfuInternalUuid, BLEWrite, sizeof(DF
 BLECharacteristic dfuExternalCharacteristic(dfuExternalUuid, BLEWrite, sizeof(DFUPacket), true);
 
 // Device information channel
-BLEService deviceInfoService("45622510-6468-465a-b141-0b9b0f96b468");
-auto deviceIdentifierUuid = "45622511-6468-465a-b141-0b9b0f96b468";
-auto deviceGenerationUuid = "45622512-6468-465a-b141-0b9b0f96b468";
+BLEService deviceInfoService(deviceInfoServiceUuid);
 BLECharacteristic deviceIdentifierCharacteristic(deviceIdentifierUuid, BLERead, sizeof(DEVICE_IDENTIFER));
 BLECharacteristic deviceGenerationCharacteristic(deviceGenerationUuid, BLERead, sizeof(DEVICE_GENERATION));
+
+// Device information channel
+BLEService parseInfoService_N(parseInfoServiceUuid);
+BLECharacteristic deviceParseSchemeC_N(parseSchemeUuid, BLERead, 2);
+BLECharacteristic deviceSensorNamesC_N(parseSensorNamesUuid, BLERead, 1);
 
 Stream *BLEHandler::_debug = NULL;
 
@@ -102,6 +103,18 @@ bool BLEHandler::begin()
     dfuInternalCharacteristic.setEventHandler(BLEWritten, receivedInternalDFU);
     dfuExternalCharacteristic.setEventHandler(BLEWritten, receivedExternalDFU);
 
+    // Parse information
+    BLE.setAdvertisedService(parseInfoService_N);
+    parseInfoService_N.addCharacteristic(deviceParseSchemeC_N);
+    parseInfoService_N.addCharacteristic(deviceSensorNamesC_N);
+    BLE.addService(parseInfoService_N);
+
+    _scheme_buffer = new byte[2] {0, 1};
+    _scheme_length = 2;
+    _names_buffer = new byte[1] {0};
+    _names_length= 1;
+    deviceParseSchemeC_N.writeValue(_scheme_buffer, _scheme_length);
+    deviceSensorNamesC_N.writeValue(_names_buffer, _names_length);
 
     BLE.advertise();
     return true;

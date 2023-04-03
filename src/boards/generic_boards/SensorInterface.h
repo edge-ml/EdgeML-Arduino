@@ -20,13 +20,8 @@ public:
 
     virtual int get_sensor_count() {return 0;};
 
-    // ID of module
-    int _module_id{};
-
     // Is sensor of module active
-    bool _active[MAX_MODULES]{};
-
-    const int * _sensors_ids{}; // is map
+    bool _active[MAX_MODULES] {};
 };
 
 #endif //EDGEML_ARDUINO_SENSORINTERFACE_H

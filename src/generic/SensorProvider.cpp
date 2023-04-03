@@ -6,7 +6,6 @@ SensorProvider::SensorProvider() {
 
 void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
     _sensorManager = sensorManager;
-    if (debugging) _sensorManager->debug(*_debug);
     _sensor_count = sensorManager->get_sensor_count();
     _sensor_array = sensorManager->get_sensors();
 }
@@ -86,7 +85,7 @@ void SensorProvider::send_sensor_data(int ID) {
     int length;
 
     switch (_sensorManager->get_return_type(ID)) {
-        case TYPE_INT: {
+        case R_TYPE_INT: {
             int_data = _sensorManager->get_int_data(ID);
             length = int(int_data[0]);
             short int_temp[3];
@@ -104,7 +103,7 @@ void SensorProvider::send_sensor_data(int ID) {
             delete[] int_data;
             break;
         }
-        case TYPE_FLOAT: {
+        case R_TYPE_FLOAT: {
             float_data = _sensorManager->get_float_data(ID);
 
             if (debugging) {
@@ -118,13 +117,12 @@ void SensorProvider::send_sensor_data(int ID) {
         }
         default:
             if (debugging) {
-                if (_sensorManager->get_return_type(ID) == TYPE_ERROR) {
+                if (_sensorManager->get_return_type(ID) == R_TYPE_ERROR) {
                     print("TYPE ERROR");
                 }
                 print("Type error data ID:  ");
                 _debug->println(ID);
             }
-
             break;
     }
 }

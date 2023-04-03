@@ -1,9 +1,22 @@
 #ifndef SENSORTYPES_H
 #define SENSORTYPES_H
 
-#define TYPE_ERROR -1
-#define TYPE_INT 0
-#define TYPE_FLOAT 1
+#include "SensorScheme.h"
+
+enum ReturnType {
+    R_TYPE_ERROR = -1,
+    R_TYPE_INT,
+    R_TYPE_FLOAT
+};
+
+struct SensorConfig {
+    String name;
+    int sensor_id;
+    int module_id;
+    ReturnType return_type;
+    ParseScheme scheme;
+    ParseType type;
+};
 
 struct Sensor {
     // ID of sensor

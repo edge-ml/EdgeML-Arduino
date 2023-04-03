@@ -7,8 +7,6 @@
 
 class HTS_Sensor_Nano: public SensorInterface {
 public:
-    HTS_Sensor_Nano();
-
     void start() override;
     void end() override;
 

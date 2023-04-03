@@ -18,5 +18,4 @@ protected:
     Stream *_debug;
 };
 
-
 #endif //EDGEML_ARDUINO_DEBUG_H

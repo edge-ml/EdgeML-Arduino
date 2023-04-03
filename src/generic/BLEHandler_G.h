@@ -5,6 +5,8 @@
 #include "ArduinoBLE.h"
 #include "Debug.h"
 
+#include <config/ble_config.h>
+
 // const int BUFFER_SIZE = 5;
 
 #define SENSOR_DATA_FIXED_LENGTH (12)
@@ -42,6 +44,7 @@ public:
     void set_name(String name);
     void set_generation(String gen);
     void set_parse_scheme(byte *data, int length);
+    void set_sensor_names(byte *data, int length);
 
     bool bleActive = false;
 
@@ -52,18 +55,25 @@ private:
 
     BLEService * sensorService_G;
     BLEService * deviceInfoService_G;
+    BLEService * parseInfoService_G;
 
     BLECharacteristic * sensorDataC_G;
     BLECharacteristic * sensorConfigC_G;
     BLECharacteristic * deviceIdentifierC_G;
     BLECharacteristic * deviceGenerationC_G;
     BLECharacteristic * deviceParseSchemeC_G;
+    BLECharacteristic * deviceSensorNamesC_G;
 
     int _scheme_length = 0;
     byte * _scheme_buffer = nullptr;
 
+    // Keep in mind the max length is 510 bytes of the characteristic
+    int _names_length = 0;
+    byte * _names_buffer = nullptr;
+
     void static receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
     void check_scheme();
+    void check_sensor_names();
 };
 
 extern BLEHandler_G bleHandler_G;
