@@ -28,6 +28,8 @@ jobs:
         run: |
           mkdir build
           cp EdgeML-Arduino/arduino-cli.yaml arduino-cli.yaml
+          arduino-cli config init
+          arduino-cli config add board_manager.additional_urls https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
           arduino-cli core update-index
 
           arduino-cli core install arduino:mbed_nicla
