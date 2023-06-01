@@ -25,6 +25,7 @@ void SensorProvider::update() {
             update_sensor(sensor);
         } else if (sensor->active) {
             sensor->active = false;
+            _sensorManager->end_sensor(sensor->ID);
         }
     }
 }
