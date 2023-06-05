@@ -21,8 +21,9 @@ public:
     void start_sensor(int ID);
     void end_sensor(int ID);
 
-    int * get_int_data(int ID);
-    float * get_float_data(int ID);
+    // data arrays must be 4 elements long (or longer)
+    void get_int_data(int ID, int *data);
+    void get_float_data(int ID, float *data);
 
     int get_return_type(int ID);
     byte * get_parse_scheme(int &length);

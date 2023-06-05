@@ -35,20 +35,16 @@ Sensor ** SensorManagerInterface::get_sensors() {
     return _sensors;
 }
 
-float *SensorManagerInterface::get_float_data(int ID) {
-    float* data = new float[4];
+void SensorManagerInterface::get_float_data(int ID, float* data) {
     // Index 0 is length
     SensorInterface * sensor = get_module(ID);
     sensor->get_float_data(data, ID);
-    return data;
 }
 
-int *SensorManagerInterface::get_int_data(int ID) {
-    int* data = new int[4];
+void SensorManagerInterface::get_int_data(int ID, int* data) {
     // Index 0 is length
     SensorInterface * sensor = get_module(ID);
     sensor->get_int_data(data, ID);
-    return data;
 }
 
 void SensorManagerInterface::start_sensor(int ID) {

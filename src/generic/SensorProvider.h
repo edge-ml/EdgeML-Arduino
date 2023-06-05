@@ -28,6 +28,7 @@ private:
     int _sensor_count;
 
     void update_sensor(Sensor * sensor);
+    void check_sensor(Sensor * sensor);
     void send_sensor_data(int ID);
 
     bool check_valid_id(int ID);

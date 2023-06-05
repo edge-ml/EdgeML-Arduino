@@ -20,13 +20,7 @@ void SensorProvider::update() {
     Sensor * sensor;
     for (int i=0; i<_sensor_count; i++) {
         sensor = _sensor_array[i];
-
-        if (sensor->state) {
-            update_sensor(sensor);
-        } else if (sensor->active) {
-            sensor->active = false;
-            _sensorManager->end_sensor(sensor->ID);
-        }
+        update_sensor(sensor);
     }
 }
 
@@ -63,11 +57,22 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
 }
 
 void SensorProvider::update_sensor(Sensor * sensor) {
-    if (!sensor->active) {
-        _sensorManager->start_sensor(sensor->ID);
-        sensor->active = true;
+    if (sensor->state) {
+        if (!sensor->active) {
+            _sensorManager->start_sensor(sensor->ID);
+            sensor->active = true;
+        }
+        check_sensor(sensor);
+    } else if (sensor->active) {
+        sensor->active = false;
+        _sensorManager->end_sensor(sensor->ID);
+        if (_data_callback) {
+            _data_callback(-1, 0, nullptr, R_TYPE_ERROR);
+        }
     }
+}
 
+void SensorProvider::check_sensor(Sensor *sensor) {
     if (sensor->check_delay()) {
         send_sensor_data(sensor->ID);
     }
@@ -80,16 +85,21 @@ void SensorProvider::send_sensor_data(int ID) {
         print("Sending data ID:  ");
         println(ID);
     }
-
     int *int_data;
     float *float_data;
     int length;
+    uint8_t data[4*4]; // size of float and int both 4 bytes
 
-    switch (_sensorManager->get_return_type(ID)) {
+    memset(data, 0, sizeof(data));
+
+    ReturnType sensor_r_type = (ReturnType)_sensorManager->get_return_type(ID);
+
+    switch (sensor_r_type) {
         case R_TYPE_INT: {
-            int_data = _sensorManager->get_int_data(ID);
+            int_data = (int *) data;
+            _sensorManager->get_int_data(ID, int_data);
             length = int(int_data[0]);
-            short int_temp[3];
+            short int_temp[3]; // because int16 expected
             int max_ints = 3;
             for (int i = 0; i < max_ints; ++i) {
                 if (i < length) int_temp[i] = (short)int_data[i+1];
@@ -101,7 +111,6 @@ void SensorProvider::send_sensor_data(int ID) {
             }
 
             bleHandler_G.send(ID, (byte*)&int_temp, length, sizeof(short));
-            delete[] int_data;
             break;
         }
         case R_TYPE_FLOAT: {
@@ -113,7 +122,6 @@ void SensorProvider::send_sensor_data(int ID) {
 
             length = int(float_data[0]);
             bleHandler_G.send(ID, (byte*)&float_data[1], length, sizeof(float));
-            delete[] float_data;
             break;
         }
         default:
