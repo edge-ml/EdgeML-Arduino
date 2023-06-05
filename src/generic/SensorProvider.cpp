@@ -140,6 +140,10 @@ void SensorProvider::send_sensor_data(int ID) {
             }
             break;
     }
+
+    if (_data_callback) {
+        _data_callback(ID, timestamp, data, sensor_r_type);
+    }
 }
 
 void SensorProvider::debug(Stream &stream) {
@@ -156,6 +160,10 @@ bool SensorProvider::check_valid_id(int ID) {
 
 int SensorProvider::get_active() {
     return _active_count;
+}
+
+void SensorProvider::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, ReturnType)) {
+    _data_callback = callback;
 }
 
 SensorProvider sensorProvider;

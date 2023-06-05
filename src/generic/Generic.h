@@ -23,6 +23,8 @@ class Edge_ML_Generic: public Debug {
         String get_name();
 
         int get_active();
+
+        void set_data_callback(void(*)(int, unsigned int, uint8_t*, ReturnType));
     private:
         SensorManagerInterface * _sensorManager = nullptr;
 };

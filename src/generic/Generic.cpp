@@ -74,4 +74,8 @@ int Edge_ML_Generic::get_active() {
     return sensorProvider.get_active();
 }
 
+void Edge_ML_Generic::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, ReturnType)) {
+    sensorProvider.set_data_callback(callback);
+}
+
 Edge_ML_Generic edge_ml_generic;

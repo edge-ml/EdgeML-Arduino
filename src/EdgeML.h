@@ -66,6 +66,16 @@ public:
         return edge_ml_generic.get_active();
 #endif
     }
+
+    void set_data_callback(void(*callback)(int, unsigned int, uint8_t*, ReturnType)) {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else edge_ml_generic.set_data_callback(callback);
+#else
+        edge_ml_generic.set_data_callback(callback);
+#endif
+    }
+
     void debug(Stream &stream) {
 #ifdef NICLA_FLAG
         if (!_custom) edge_ml_nicla.debug(stream);
