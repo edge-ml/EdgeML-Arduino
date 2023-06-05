@@ -35,7 +35,7 @@ public:
     bool begin();
     void update();
 
-    void send(int ID, byte *data, int length, int size);
+    void send(int ID, unsigned int timestamp, byte *data, int length, int size);
 
     void poll(unsigned long timeout);
     void end();

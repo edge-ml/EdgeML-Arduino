@@ -115,13 +115,13 @@ void BLEHandler_G::update() {
     BLE.poll();
 }
 
-void BLEHandler_G::send(int ID, byte *data, int length, int size) {
+void BLEHandler_G::send(int ID, unsigned int timestamp, byte *data, int length, int size) {
     println("Sending data");
     if (!sensorDataC_G->subscribed()) return;
     SensorDataPacket package{};
     package.sensorId = ID;
     package.size = 2 + 4 + length * size;
-    package.millis = millis();
+    package.millis = timestamp;
 
     memcpy(package.data, data, size * 3);
 

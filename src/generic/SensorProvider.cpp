@@ -93,6 +93,8 @@ void SensorProvider::send_sensor_data(int ID) {
     int length;
     uint8_t data[4*4]; // size of float and int both 4 bytes
 
+    unsigned int timestamp = millis();
+
     memset(data, 0, sizeof(data));
 
     ReturnType sensor_r_type = (ReturnType)_sensorManager->get_return_type(ID);
@@ -113,18 +115,19 @@ void SensorProvider::send_sensor_data(int ID) {
                 println("Float Data: " + String(int_data[1]) + " " + String(int_data[2]) + " " + String(int_data[3]));
             }
 
-            bleHandler_G.send(ID, (byte*)&int_temp, length, sizeof(short));
+            bleHandler_G.send(ID, timestamp, (byte*)&int_temp, length, sizeof(short));
             break;
         }
         case R_TYPE_FLOAT: {
-            float_data = _sensorManager->get_float_data(ID);
+            float_data = (float *) data;
+            _sensorManager->get_float_data(ID, float_data);
 
             if (debugging) {
                 println("Float Data: " + String(float_data[1]) + " " + String(float_data[2]) + " " + String(float_data[3]));
             }
 
             length = int(float_data[0]);
-            bleHandler_G.send(ID, (byte*)&float_data[1], length, sizeof(float));
+            bleHandler_G.send(ID, timestamp, (byte*)&float_data[1], length, sizeof(float));
             break;
         }
         default:
