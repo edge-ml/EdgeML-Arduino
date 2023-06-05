@@ -21,6 +21,8 @@ class Edge_ML_Generic: public Debug {
         void set_ble_config(String name, String gen = "0.0.0");
 
         String get_name();
+
+        int get_active();
     private:
         SensorManagerInterface * _sensorManager = nullptr;
 };

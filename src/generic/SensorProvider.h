@@ -20,12 +20,15 @@ public:
 
     // Add additional methods
 
+    int get_active();
+
     void debug(Stream &stream);
 
 private:
     SensorManagerInterface * _sensorManager;
     Sensor ** _sensor_array;
     int _sensor_count;
+    int _active_count;
 
     void update_sensor(Sensor * sensor);
     void check_sensor(Sensor * sensor);

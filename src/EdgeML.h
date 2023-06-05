@@ -58,6 +58,14 @@ public:
 #endif
     }
 
+    int get_active_count() {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else return edge_ml_generic.get_active();
+#else
+        return edge_ml_generic.get_active();
+#endif
+    }
     void debug(Stream &stream) {
 #ifdef NICLA_FLAG
         if (!_custom) edge_ml_nicla.debug(stream);

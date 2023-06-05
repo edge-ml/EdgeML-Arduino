@@ -70,4 +70,8 @@ void Edge_ML_Generic::set_ble_config(String name, String gen) {
     bleHandler_G.set_generation(std::move(gen));
 }
 
+int Edge_ML_Generic::get_active() {
+    return sensorProvider.get_active();
+}
+
 Edge_ML_Generic edge_ml_generic;

@@ -8,6 +8,7 @@ void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
     _sensorManager = sensorManager;
     _sensor_count = sensorManager->get_sensor_count();
     _sensor_array = sensorManager->get_sensors();
+    _active_count = 0;
 }
 
 
@@ -61,6 +62,7 @@ void SensorProvider::update_sensor(Sensor * sensor) {
         if (!sensor->active) {
             _sensorManager->start_sensor(sensor->ID);
             sensor->active = true;
+            _active_count++;
         }
         check_sensor(sensor);
     } else if (sensor->active) {
@@ -69,6 +71,7 @@ void SensorProvider::update_sensor(Sensor * sensor) {
         if (_data_callback) {
             _data_callback(-1, 0, nullptr, R_TYPE_ERROR);
         }
+        _active_count--;
     }
 }
 
@@ -146,6 +149,10 @@ bool SensorProvider::check_valid_id(int ID) {
     if (ID < 0) return false;
     if (ID >= _sensor_count) return false;
     return true;
+}
+
+int SensorProvider::get_active() {
+    return _active_count;
 }
 
 SensorProvider sensorProvider;
