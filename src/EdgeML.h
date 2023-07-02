@@ -76,6 +76,15 @@ public:
 #endif
     }
 
+    void set_config_callback(void(*callback)(SensorConfigurationPacket *)) {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else edge_ml_generic.set_config_callback(callback);
+#else
+        edge_ml_generic.set_config_callback(callback);
+#endif
+    }
+
     void debug(Stream &stream) {
 #ifdef NICLA_FLAG
         if (!_custom) edge_ml_nicla.debug(stream);
