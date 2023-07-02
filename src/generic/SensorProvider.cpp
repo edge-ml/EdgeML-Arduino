@@ -55,6 +55,10 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
     int delay = (int)(1000.0/rate);
     sensor->state = true;
     sensor->delay = delay;
+
+    if (_config_callback) {
+        _config_callback(&config);
+    }
 }
 
 void SensorProvider::update_sensor(Sensor * sensor) {
@@ -164,6 +168,10 @@ int SensorProvider::get_active() {
 
 void SensorProvider::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, ReturnType)) {
     _data_callback = callback;
+}
+
+void SensorProvider::set_config_callback(void (*callback)(SensorConfigurationPacket *)) {
+    _config_callback = callback;
 }
 
 SensorProvider sensorProvider;
