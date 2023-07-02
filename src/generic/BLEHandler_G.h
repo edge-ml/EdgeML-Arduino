@@ -7,8 +7,6 @@
 
 #include <config/ble_config.h>
 
-// const int BUFFER_SIZE = 5;
-
 #define SENSOR_DATA_FIXED_LENGTH (12)
 
 struct __attribute__((packed)) SensorConfigurationPacket {
