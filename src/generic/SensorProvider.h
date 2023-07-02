@@ -19,7 +19,6 @@ public:
     void set_sensorManager(SensorManagerInterface * sensorManager);
 
     void set_data_callback(void(*)(int, unsigned int, uint8_t*, ReturnType));
-    void set_config_callback(void(*)(SensorConfigurationPacket *));
 
     int get_active();
 
@@ -38,7 +37,6 @@ private:
     bool check_valid_id(int ID);
 
     void (*_data_callback)(int ID, unsigned int timestamp, uint8_t * data, ReturnType r_type) = nullptr;
-    void (*_config_callback)(SensorConfigurationPacket * config) = nullptr;
 };
 
 extern SensorProvider sensorProvider;

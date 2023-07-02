@@ -78,8 +78,4 @@ void Edge_ML_Generic::set_data_callback(void (*callback)(int id, unsigned int ti
     sensorProvider.set_data_callback(callback);
 }
 
-void Edge_ML_Generic::set_config_callback(void (*callback)(SensorConfigurationPacket *)) {
-    sensorProvider.set_config_callback(callback);
-}
-
 Edge_ML_Generic edge_ml_generic;
