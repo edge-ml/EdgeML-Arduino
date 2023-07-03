@@ -25,6 +25,6 @@ public:
 };
 
 class DummySensor : public SensorInterface {
-}
+};
 
 #endif //EDGEML_ARDUINO_SENSORINTERFACE_H
