@@ -35,6 +35,11 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
         println(String(config.latency));
     }
 
+    // Do callback first
+    if (_config_callback) {
+        _config_callback(&config);
+    }
+
     int ID = config.sensorId;
     if (!check_valid_id(ID)) {
         if (debugging) {
@@ -64,10 +69,6 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
     int delay = (int)(1000.0/rate);
     sensor->state = true;
     sensor->delay = delay;
-
-    if (_config_callback) {
-        _config_callback(&config);
-    }
 }
 
 void SensorProvider::update_sensor(Sensor * sensor) {
