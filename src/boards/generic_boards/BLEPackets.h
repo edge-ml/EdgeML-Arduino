@@ -1,5 +1,5 @@
-#ifndef EDGEML_ARDUINO_BLE_PACKETS_H
-#define EDGEML_ARDUINO_BLE_PACKETS_H
+#ifndef EDGEML_ARDUINO_BLEPACKETS_H
+#define EDGEML_ARDUINO_BLEPACKETS_H
 
 #include <cstdint>
 
@@ -23,4 +23,4 @@ struct __attribute__((packed)) SensorDataPacket {
     uint8_t data[SENSOR_DATA_FIXED_LENGTH]{};
 };
 
-#endif //EDGEML_ARDUINO_BLE_PACKETS_H
+#endif //EDGEML_ARDUINO_BLEPACKETS_H
