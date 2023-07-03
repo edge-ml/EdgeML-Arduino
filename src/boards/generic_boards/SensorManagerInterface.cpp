@@ -172,6 +172,11 @@ void SensorManagerInterface::set_sensor_configs(const SensorConfig * configurati
     _configs = configurations;
 }
 
+void SensorManagerInterface::set_special_sensors(const int * special_ids, int special_count) {
+    _special_ids = special_ids;
+    _special_count = special_count;
+}
+
 SensorInterface * SensorManagerInterface::get_module(int ID) {
     int module_id = _config_id_index[ID]->module_id;
     return _sensor_modules[module_id];
@@ -195,4 +200,13 @@ bool SensorManagerInterface::all_inactive(SensorInterface * sensor) {
         }
     }
     return true;
+}
+
+bool SensorManagerInterface::check_special_sensor(int ID) {
+    for (int i=0; i<_special_count; i++) {
+        if (_special_ids[i] == ID) {
+            return true;
+        }
+    }
+    return false;
 }

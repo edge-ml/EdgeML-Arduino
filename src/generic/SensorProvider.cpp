@@ -43,6 +43,15 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
         }
         return;
     }
+
+    if (_sensorManager->check_special_sensor(ID)) {
+        if (debugging) {
+            print("Special ID: ");
+            println(ID);
+        }
+        return;
+    }
+
     Sensor * sensor = _sensor_array[ID];
 
     if (config.sampleRate == 0.0) {

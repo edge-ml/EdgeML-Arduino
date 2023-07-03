@@ -29,16 +29,22 @@ public:
     byte * get_parse_scheme(int &length);
     byte * get_sensor_names(int &length);
 
+    bool check_special_sensor(int ID);
+
 protected:
     virtual void setup() {};
 
     void set_modules(SensorInterface ** modules);
     void set_sensor_counts(int sensor_count, int module_count);
     void set_sensor_configs(const SensorConfig * configurations);
+    void set_special_sensors(const int * special_ids, int special_count);
 
 private:
     int _sensor_count = -1;
     int _module_count = -1;
+
+    const int * _special_ids;
+    int _special_count = 0;
 
     const SensorConfig * _configs;
     Sensor ** _sensors;
