@@ -24,4 +24,7 @@ public:
     bool _active[MAX_MODULES] {};
 };
 
+class DummySensor : public SensorInterface {
+}
+
 #endif //EDGEML_ARDUINO_SENSORINTERFACE_H
