@@ -61,6 +61,10 @@ void Edge_ML_Generic::debug(Stream &stream) {
     println("Debugger Active\n");
 }
 
+void Edge_ML_Generic::configure_sensor(SensorConfigurationPacket &config) {
+    sensorProvider.configureSensor(config);
+}
+
 String Edge_ML_Generic::get_name() {
     return bleHandler_G.get_name();
 }

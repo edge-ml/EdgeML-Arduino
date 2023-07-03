@@ -17,6 +17,8 @@ class Edge_ML_Generic: public Debug {
         void update();
         void debug(Stream &stream);
 
+        void configure_sensor(SensorConfigurationPacket& config);
+
         void set_custom(SensorManagerInterface * sensorManager);
         void set_ble_config(String name, String gen = "0.0.0");
 

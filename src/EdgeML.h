@@ -40,6 +40,17 @@ public:
         edge_ml_generic.update();
 #endif
     }
+
+    void configure_sensor(SensorConfigurationPacket& config) {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else edge_ml_generic.configure_sensor(config);
+#else
+        edge_ml_generic.configure_sensor(config);
+#endif
+    }
+
+
     String get_name() {
 #ifdef NICLA_FLAG
         // Do SOMETHING? with nicla
