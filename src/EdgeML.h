@@ -78,7 +78,7 @@ public:
 #endif
     }
 
-    void set_data_callback(void(*callback)(int id, unsigned int timestamp, uint8_t* data, ReturnType r_type)) {
+    void set_data_callback(void(*callback)(int id, unsigned int timestamp, uint8_t* data, int size)) {
 #ifdef NICLA_FLAG
         if (!_custom) return;
         else edge_ml_generic.set_data_callback(callback);

@@ -11,25 +11,21 @@ void HTS_Sensor_Nano::end() {
     available = false;
 }
 
-void HTS_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
-    float data;
+void HTS_Sensor_Nano::get_data(int sensorID, byte *data) {
+    float value;
     switch (sensorID) {
         case HTS_TEMP_NANO:
-            data = get_temperature();
+            value = get_temperature();
             break;
         case HTS_HUM_NANO:
-            data = get_humidity();
+            value = get_humidity();
             break;
         default:
             break;
     }
 
-    floatArray[0] = 1; // 1 Value
-    floatArray[1] = data;
-}
-
-void HTS_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
-    // Not implemented since no int data
+    float * floatArray = (float*)data;
+    floatArray[0] = value;
 }
 
 float HTS_Sensor_Nano::get_temperature() {

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#define SENSOR_DATA_FIXED_LENGTH (12)
+#define SENSOR_DATA_FIXED_LENGTH (18)
 
 struct __attribute__((packed)) SensorConfigurationPacket {
     uint8_t sensorId{};
@@ -14,13 +14,6 @@ struct __attribute__((packed)) SensorConfigurationPacket {
     // before a notification to the host is sent via interrupt
     // expressed in 24 bit
     uint32_t latency{};
-};
-
-struct __attribute__((packed)) SensorDataPacket {
-    uint8_t sensorId{};
-    uint8_t size{};
-    uint32_t millis{};
-    uint8_t data[SENSOR_DATA_FIXED_LENGTH]{};
 };
 
 #endif //EDGEML_ARDUINO_BLEPACKETS_H

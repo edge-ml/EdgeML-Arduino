@@ -17,7 +17,7 @@ void IMU_Sensor_Nano::end() {
     available = false;
 }
 
-void IMU_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
+void IMU_Sensor_Nano::get_data(int sensorID, byte *data) {
     float x, y, z;
     switch (sensorID) {
         case IMU_ACCELERATION_NANO:
@@ -33,14 +33,10 @@ void IMU_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
             break;
     }
 
-    floatArray[0] = 3; // 3 Values
-    floatArray[1] = x;
-    floatArray[2] = y;
-    floatArray[3] = z;
-}
-
-void IMU_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
-    // Not implemented since no int data
+    float * floatArray = (float*)data;
+    floatArray[0] = x;
+    floatArray[1] = y;
+    floatArray[2] = z;
 }
 
 void IMU_Sensor_Nano::get_acc(float &x, float &y, float &z) {

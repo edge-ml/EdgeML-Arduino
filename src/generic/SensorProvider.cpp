@@ -4,11 +4,20 @@ SensorProvider::SensorProvider() {
 
 }
 
+SensorProvider::~SensorProvider() {
+    delete [] _data_buffer;
+}
+
 void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
     _sensorManager = sensorManager;
     _sensor_count = sensorManager->get_sensor_count();
     _sensor_array = sensorManager->get_sensors();
     _active_count = 0;
+
+    delete [] _data_buffer;
+    int size = _sensorManager->get_max_data_size();
+    size += 2 + 4; // Add space for ID [0], size [1], time_stamp [2], normal offset = 6
+    _data_buffer = new uint8_t[size];
 }
 
 
@@ -83,7 +92,7 @@ void SensorProvider::update_sensor(Sensor * sensor) {
         sensor->active = false;
         _sensorManager->end_sensor(sensor->ID);
         if (_data_callback) {
-            _data_callback(-1, 0, nullptr, R_TYPE_ERROR);
+            _data_callback(-1, 0, nullptr, 0);
         }
         _active_count--;
     }
@@ -102,61 +111,17 @@ void SensorProvider::send_sensor_data(int ID) {
         print("Sending data ID:  ");
         println(ID);
     }
-    int *int_data;
-    float *float_data;
-    int length;
-    uint8_t data[4*4]; // size of float and int both 4 bytes
 
     unsigned int timestamp = millis();
+    int data_length = _sensor_array[ID]->data_size;
 
-    memset(data, 0, sizeof(data));
+    uint8_t * data_pointer = &_data_buffer[6];
+    _sensorManager->get_data(ID, (byte*)data_pointer);
 
-    ReturnType sensor_r_type = (ReturnType)_sensorManager->get_return_type(ID);
-
-    switch (sensor_r_type) {
-        case R_TYPE_INT: {
-            int_data = (int *) data;
-            _sensorManager->get_int_data(ID, int_data);
-            length = int(int_data[0]);
-            short int_temp[3]; // because int16 expected
-            int max_ints = 3;
-            for (int i = 0; i < max_ints; ++i) {
-                if (i < length) int_temp[i] = (short)int_data[i+1];
-                else int_temp[i] = 0;
-            }
-
-            if (debugging) {
-                println("Float Data: " + String(int_data[1]) + " " + String(int_data[2]) + " " + String(int_data[3]));
-            }
-
-            bleHandler_G.send(ID, timestamp, (byte*)&int_temp, length, sizeof(short));
-            break;
-        }
-        case R_TYPE_FLOAT: {
-            float_data = (float *) data;
-            _sensorManager->get_float_data(ID, float_data);
-
-            if (debugging) {
-                println("Float Data: " + String(float_data[1]) + " " + String(float_data[2]) + " " + String(float_data[3]));
-            }
-
-            length = int(float_data[0]);
-            bleHandler_G.send(ID, timestamp, (byte*)&float_data[1], length, sizeof(float));
-            break;
-        }
-        default:
-            if (debugging) {
-                if (_sensorManager->get_return_type(ID) == R_TYPE_ERROR) {
-                    print("TYPE ERROR");
-                }
-                print("Type error data ID:  ");
-                _debug->println(ID);
-            }
-            break;
-    }
+    bleHandler_G.send(ID, timestamp, _data_buffer, data_length);
 
     if (_data_callback) {
-        _data_callback(ID, timestamp, data, sensor_r_type);
+        _data_callback(ID, timestamp, data_pointer, data_length);
     }
 }
 
@@ -176,7 +141,7 @@ int SensorProvider::get_active() {
     return _active_count;
 }
 
-void SensorProvider::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, ReturnType)) {
+void SensorProvider::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, int)) {
     _data_callback = callback;
 }
 

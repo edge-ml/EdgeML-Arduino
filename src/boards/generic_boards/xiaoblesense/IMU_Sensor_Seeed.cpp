@@ -20,33 +20,26 @@ void IMU_Sensor_Seeed::end() {
     available = false;
 }
 
-void IMU_Sensor_Seeed::get_float_data(float *floatArray, int sensorID) {
+void IMU_Sensor_Seeed::get_data(int sensorID, byte *data) {
     float x=0, y=0, z=0;
     switch (sensorID) {
         case IMU_ACCELERATION_SEEED:
             get_acc(x,y,z);
-            floatArray[0] = 3; // 3 Values
             break;
         case IMU_GYROSCOPE_SEEED:
             get_gyro(x,y,z);
-            floatArray[0] = 3; // 3 Values
             break;
         case IMU_TEMP_SEEED:
             get_temp(x);
-            floatArray[0] = 1; // 3 Values
             break;
         default:
             break;
     }
 
-
-    floatArray[1] = x;
-    floatArray[2] = y;
-    floatArray[3] = z;
-}
-
-void IMU_Sensor_Seeed::get_int_data(int *intArray, int sensorID) {
-    // Not implemented since no int data
+    float * floatArray = (float*)data;
+    floatArray[0] = x;
+    floatArray[1] = y;
+    floatArray[2] = z;
 }
 
 void IMU_Sensor_Seeed::get_acc(float& x, float& y, float& z) {

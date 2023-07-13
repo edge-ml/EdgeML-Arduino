@@ -11,13 +11,9 @@ void BARO_Sensor_Nano::end() {
     available = false;
 }
 
-void BARO_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
-    floatArray[0] = 1; // 1 Value
-    floatArray[1] = get_pressure();
-}
-
-void BARO_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
-    // Not implemented since no int data
+void BARO_Sensor_Nano::get_data(int sensorID, byte *data) {
+    float * floatArray = (float*)data;
+    floatArray[0] = get_pressure();
 }
 
 float BARO_Sensor_Nano::get_pressure() {

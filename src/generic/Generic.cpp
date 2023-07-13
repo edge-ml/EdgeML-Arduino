@@ -25,7 +25,6 @@ bool Edge_ML_Generic::begin() {
         if (debugging) _sensorManager->debug(*_debug);
         _sensorManager->init();
         sensorProvider.set_sensorManager(_sensorManager);
-
     }
 
     // Get parsing scheme
@@ -78,7 +77,7 @@ int Edge_ML_Generic::get_active() {
     return sensorProvider.get_active();
 }
 
-void Edge_ML_Generic::set_data_callback(void (*callback)(int id, unsigned int timestamp, uint8_t* data, ReturnType r_type)) {
+void Edge_ML_Generic::set_data_callback(void (*callback)(int id, unsigned int timestamp, uint8_t* data, int size)) {
     sensorProvider.set_data_callback(callback);
 }
 

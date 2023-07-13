@@ -22,30 +22,29 @@ SensorManagerInterface::~SensorManagerInterface() {
 }
 
 void SensorManagerInterface::init() {
-    setup();
+    setup(); // Call setup function of board sensor manager
 
-    setup_ID_arrays();
-    setup_sensors();
+    setup_ID_arrays(); // populates _sensor_module_pos and _config_id_index
+    setup_sensors(); // Creates Sensor Objects
 
-    setup_scheme_buffer();
-    setup_names_buffer();
+    setup_scheme_buffer(); // BLE information schemes
+    setup_names_buffer(); // BLE information names
 }
 
 Sensor ** SensorManagerInterface::get_sensors() {
     return _sensors;
 }
 
-void SensorManagerInterface::get_float_data(int ID, float* data) {
-    // Index 0 is length
-    SensorInterface * sensor = get_module(ID);
-    sensor->get_float_data(data, ID);
+int SensorManagerInterface::get_max_data_size() {
+    return _max_data_size;
 }
 
-void SensorManagerInterface::get_int_data(int ID, int* data) {
+void SensorManagerInterface::get_data(int ID, byte *data) {
     // Index 0 is length
-    SensorInterface * sensor = get_module(ID);
-    sensor->get_int_data(data, ID);
+    SensorInterface * module = get_module(ID);
+    module->get_data(ID, data);
 }
+
 
 void SensorManagerInterface::start_sensor(int ID) {
     // Start sensor
@@ -77,10 +76,6 @@ void SensorManagerInterface::end_sensor(int ID) {
             println(ID);
         }
     }
-}
-
-int SensorManagerInterface::get_return_type(int ID) {
-    return _config_id_index[ID]->return_type;
 }
 
 int SensorManagerInterface::get_sensor_count() {
@@ -119,9 +114,28 @@ void SensorManagerInterface::setup_sensors() {
     _sensors = new Sensor * [_sensor_count];
     Sensor * sensor;
     for (int i=0; i<_sensor_count; i++) {
-        sensor = new Sensor {i, false, false, 0, 0};
+        int data_size = calculate_size(i);
+
+        if (data_size > _max_data_size) {
+            _max_data_size = data_size;
+        }
+
+        sensor = new Sensor {i, false, false, 0, 0, data_size};
         _sensors[i] = sensor;
     }
+}
+
+int SensorManagerInterface::calculate_size(int ID) {
+    const SensorConfig * config = _config_id_index[ID];
+
+    ParseScheme scheme = config->scheme;
+    ParseType type = config->type;
+    int count = config->value_count;
+
+    int scheme_count = ParseSchemeCount[scheme];
+    int type_size = ParseTypeSizes[type];
+
+    return count * scheme_count * type_size;
 }
 
 void SensorManagerInterface::set_sensor_counts(int sensor_count, int module_count) {

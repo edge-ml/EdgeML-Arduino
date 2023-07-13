@@ -74,7 +74,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "ACC",
             IMU_ACCELERATION_NANO,
             MODULE_IMU_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_XYZ,
             PARSE_TYPE_FLOAT
         },
@@ -82,7 +82,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "GYRO",
             IMU_GYROSCOPE_NANO,
             MODULE_IMU_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_XYZ,
             PARSE_TYPE_FLOAT
         },
@@ -90,7 +90,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "MAG",
             IMU_MAGNET_NANO,
             MODULE_IMU_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_XYZ,
             PARSE_TYPE_FLOAT
         },
@@ -98,7 +98,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "TEMPERATURE",
             HTS_TEMP_NANO,
             MODULE_HTS_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_FLOAT
         },
@@ -106,7 +106,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "HUMIDITY",
             HTS_HUM_NANO,
             MODULE_HTS_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_FLOAT
         },
@@ -114,7 +114,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "PRESSURE",
             BARO_PRESS_NANO,
             MODULE_BARO_NANO,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_FLOAT
         },
@@ -122,7 +122,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "COLOR",
             APDS_COLOUR_NANO,
             MODULE_APDS_NANO,
-            R_TYPE_INT,
+            1,
             SCHEME_RGB,
             PARSE_TYPE_INT16
         },
@@ -130,7 +130,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "BRIGHTNESS",
             APDS_BRIGHT_NANO,
             MODULE_APDS_NANO,
-            R_TYPE_INT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_INT16
         },
@@ -138,7 +138,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "PROXIMITY",
             APDS_PROX_NANO,
             MODULE_APDS_NANO,
-            R_TYPE_INT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_INT16
         },
@@ -146,7 +146,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
             "GESTURE",
             APDS_GEST_NANO,
             MODULE_APDS_NANO,
-            R_TYPE_INT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_INT16
         }

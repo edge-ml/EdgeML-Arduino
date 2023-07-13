@@ -3,19 +3,28 @@
 
 #include "SensorScheme.h"
 
+/*
 enum ReturnType {
     R_TYPE_ERROR = -1,
     R_TYPE_INT,
     R_TYPE_FLOAT
 };
+*/
 
 struct SensorConfig {
     String name;
     int sensor_id;
     int module_id;
-    ReturnType return_type;
+    int value_count;
     ParseScheme scheme;
     ParseType type;
+};
+
+struct __attribute__((packed)) SensorData {
+    uint8_t sensorId{};
+    uint8_t size{};
+    uint32_t millis{};
+    uint8_t * data{};
 };
 
 struct Sensor {
@@ -31,6 +40,9 @@ struct Sensor {
 
     // last saved activation time
     unsigned long last;
+
+    // size of data array
+    int data_size;
 
     bool check_delay() {
         unsigned long now = millis();

@@ -11,31 +11,25 @@ void APDS_Sensor_Nano::end() {
     available = false;
 }
 
-void APDS_Sensor_Nano::get_float_data(float *floatArray, int sensorID) {
-    // Not implemented since no float data
-}
+void APDS_Sensor_Nano::get_data(int sensorID, byte *data) {
 
-void APDS_Sensor_Nano::get_int_data(int *intArray, int sensorID) {
+    int * intArray = (int*)data;
     switch (sensorID) {
         case APDS_COLOUR_NANO:
             int r, g, b;
             get_color(r, g, b);
-            intArray[0] = 3; // 3 Values
-            intArray[1] = r;
-            intArray[2] = g;
-            intArray[3] = b;
+            intArray[0] = r;
+            intArray[1] = g;
+            intArray[2] = b;
             break;
         case APDS_BRIGHT_NANO:
-            intArray[0] = 1; // 1 Values
-            intArray[1] = get_light();
+            intArray[0] = get_light();
             break;
         case APDS_PROX_NANO:
-            intArray[0] = 1; // 1 Values
-            intArray[1] = get_proximity();
+            intArray[0] = get_proximity();
             break;
         case APDS_GEST_NANO:
-            intArray[0] = 1; // 1 Values
-            intArray[1] = get_gesture();
+            intArray[0] = get_gesture();
             break;
         default:
             break;

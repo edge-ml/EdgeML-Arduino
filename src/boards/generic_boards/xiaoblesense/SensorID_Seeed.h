@@ -32,7 +32,7 @@ const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
             "ACC",
             IMU_ACCELERATION_SEEED,
             MODULE_IMU_SEEED,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_XYZ,
             PARSE_TYPE_FLOAT
         },
@@ -40,7 +40,7 @@ const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
             "GYRO",
             IMU_GYROSCOPE_SEEED,
             MODULE_IMU_SEEED,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_XYZ,
             PARSE_TYPE_FLOAT
         },
@@ -48,7 +48,7 @@ const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
             "TEMPERATURE",
             IMU_TEMP_SEEED,
             MODULE_IMU_SEEED,
-            R_TYPE_FLOAT,
+            1,
             SCHEME_VAL,
             PARSE_TYPE_FLOAT
         }

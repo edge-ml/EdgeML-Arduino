@@ -67,7 +67,7 @@ bool BLEHandler_G::begin() {
     parseInfoService_G = new BLEService(parseInfoServiceUuid);
 
     // Generate Characteristics
-    sensorDataC_G = new BLECharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
+    sensorDataC_G = new BLECharacteristic(sensorDataUuid, (BLERead | BLENotify), SENSOR_DATA_FIXED_LENGTH);
     sensorConfigC_G = new BLECharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
 
     deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
@@ -115,17 +115,10 @@ void BLEHandler_G::update() {
     BLE.poll();
 }
 
-void BLEHandler_G::send(int ID, unsigned int timestamp, byte *data, int length, int size) {
+void BLEHandler_G::send(int ID, unsigned int timestamp, byte *data, int size) {
     println("Sending data");
     if (!sensorDataC_G->subscribed()) return;
-    SensorDataPacket package{};
-    package.sensorId = ID;
-    package.size = 2 + 4 + length * size;
-    package.millis = timestamp;
-
-    memcpy(package.data, data, size * 3);
-
-    sensorDataC_G->writeValue(&package, package.size);
+    sensorDataC_G->writeValue(data, size);
 }
 
 void BLEHandler_G::poll(unsigned long timeout) {

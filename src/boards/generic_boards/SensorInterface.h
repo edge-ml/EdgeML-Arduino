@@ -14,9 +14,7 @@ public:
     virtual void start() {};
     virtual void end() {};
 
-    // arrays always 3 long
-    virtual void get_float_data(float floatArray[], int sensorID) {};
-    virtual void get_int_data(int intArray[], int sensorID) {};
+    virtual void get_data(int ID, byte data[]) {};
 
     virtual int get_sensor_count() {return 0;};
 
