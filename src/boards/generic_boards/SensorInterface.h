@@ -14,7 +14,7 @@ public:
     virtual void start() {};
     virtual void end() {};
 
-    virtual void get_data(int ID, byte data[]) {};
+    virtual void get_data(int sensorID, byte * data) {};
 
     virtual int get_sensor_count() {return 0;};
 

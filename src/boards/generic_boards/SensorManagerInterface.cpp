@@ -39,10 +39,10 @@ int SensorManagerInterface::get_max_data_size() {
     return _max_data_size;
 }
 
-void SensorManagerInterface::get_data(int ID, byte *data) {
+void SensorManagerInterface::get_data(int sensorID, byte *data) {
     // Index 0 is length
-    SensorInterface * module = get_module(ID);
-    module->get_data(ID, data);
+    SensorInterface * module = get_module(sensorID);
+    module->get_data(sensorID, data);
 }
 
 

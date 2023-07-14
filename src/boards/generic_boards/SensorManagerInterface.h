@@ -23,7 +23,7 @@ public:
     void end_sensor(int ID);
 
     // data arrays must be 4 elements long (or longer)
-    void get_data(int ID, byte *data);
+    void get_data(int sensorID, byte *data);
 
     byte * get_parse_scheme(int &length);
     byte * get_sensor_names(int &length);
