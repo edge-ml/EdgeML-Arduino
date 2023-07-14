@@ -19,13 +19,11 @@ enum ParseType {
     PARSE_TYPE_INT16,
     PARSE_TYPE_UINT16,
 
-    PARSE_TYPE_INT24,
-    PARSE_TYPE_UINT24,
-
     PARSE_TYPE_INT32,
     PARSE_TYPE_UINT32,
 
-    PARSE_TYPE_FLOAT
+    PARSE_TYPE_FLOAT,
+    PARSE_TYPE_DOUBLE
 };
 
 // Parse scheme count lookup table
