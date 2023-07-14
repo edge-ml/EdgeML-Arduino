@@ -16,7 +16,7 @@ void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
 
     delete [] _data_buffer;
     int size = _sensorManager->get_max_data_size();
-    size += 2 + 4; // Add space for ID [0], size [1], time_stamp [2], normal offset = 6
+    size += _meta_data_size; // Add space for ID [0], size [1], time_stamp [2], normal offset = 6
     _data_buffer = new uint8_t[size];
 }
 
@@ -114,22 +114,23 @@ void SensorProvider::send_sensor_data(int ID) {
 
     unsigned int timestamp = millis();
     int data_length = _sensor_array[ID]->data_size;
+    int total_size = data_length + _meta_data_size;
 
     if (!_data_buffer) {
         print("Data buffer nullptr");
         return;
     }
     _data_buffer[0] = uint8_t(ID);                  // ID
-    _data_buffer[1] = uint8_t(data_length + 6);     // size of package 2 + 4 + data_length MAX LENGTH = 255
+    _data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
     memcpy(&_data_buffer[2], &timestamp, sizeof(timestamp)); // timestamp
 
-    uint8_t * data_pointer = &_data_buffer[6];
+    uint8_t * data_pointer = &_data_buffer[_meta_data_size];
     _sensorManager->get_data(ID, (byte*)data_pointer);
 
-    bleHandler_G.send(ID, timestamp, _data_buffer, data_length);
+    bleHandler_G.send(_data_buffer, total_size);
 
     if (_data_callback) {
-        _data_callback(ID, timestamp, data_pointer, data_length);
+        _data_callback(ID, timestamp, data_pointer, total_size);
     }
 }
 
