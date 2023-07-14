@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-#define SENSOR_DATA_FIXED_LENGTH (18)
-
 struct __attribute__((packed)) SensorConfigurationPacket {
     uint8_t sensorId{};
     // sample rate is used also to enable/disable the sensor
