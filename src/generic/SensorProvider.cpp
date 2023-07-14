@@ -158,4 +158,66 @@ void SensorProvider::set_config_callback(void (*callback)(SensorConfigurationPac
     _config_callback = callback;
 }
 
+String SensorProvider::parse_to_string(int sensorID, const byte *data) {
+    if (!check_valid_id(sensorID)) return "";
+    if (_sensorManager->check_special_sensor(sensorID)) return "";
+
+    SensorConfig * config = _sensorManager->get_config(sensorID);
+
+    if (!config->value_count) return "";
+    int value_count = config->value_count;
+    int scheme_count = ParseSchemeCount[config->scheme];
+
+    int index;
+    String output = "";
+    for (int i=0; i < value_count; i++) {
+        for (int j=0; j < scheme_count; j++) {
+            index = (i * scheme_count) + j;
+            switch (config->type) {
+                case PARSE_TYPE_INT8: {
+                    int8_t val = ((int8_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_UINT8: {
+                    uint8_t val = ((uint8_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_INT16: {
+                    int16_t val = ((int16_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_UINT16: {
+                    uint16_t val = ((uint16_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_INT32: {
+                    int32_t val = ((int32_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_UINT32: {
+                    uint32_t val = ((uint32_t *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_FLOAT: {
+                    float val = ((float *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+                case PARSE_TYPE_DOUBLE: {
+                    double val = ((double *)data)[index];
+                    output += String(val) + " ,";
+                    break;
+                }
+            }
+        }
+    }
+    return output.substring(0, output.length() - 2);;
+}
+
 SensorProvider sensorProvider;

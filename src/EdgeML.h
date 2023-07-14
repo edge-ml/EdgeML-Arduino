@@ -78,6 +78,15 @@ public:
 #endif
     }
 
+    String parse_to_string(int sensorID, byte * data) {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else return edge_ml_generic.parse_to_string(sensorID, data);
+#else
+        return edge_ml_generic.parse_to_string(sensorID, data);
+#endif
+    }
+
     void set_data_callback(void(*callback)(int id, unsigned int timestamp, uint8_t* data, int size)) {
 #ifdef NICLA_FLAG
         if (!_custom) return;

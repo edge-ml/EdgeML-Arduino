@@ -30,6 +30,8 @@ public:
 
     bool check_special_sensor(int ID);
 
+    SensorConfig * get_config(int ID);
+
 protected:
     virtual void setup() {};
 

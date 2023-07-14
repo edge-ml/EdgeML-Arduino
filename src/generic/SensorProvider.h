@@ -24,6 +24,8 @@ public:
 
     int get_active();
 
+    String parse_to_string(int sensorID, const byte *data);
+
     void debug(Stream &stream);
 
 private:

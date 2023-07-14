@@ -85,4 +85,8 @@ void Edge_ML_Generic::set_config_callback(void (*callback)(SensorConfigurationPa
     sensorProvider.set_config_callback(callback);
 }
 
+String Edge_ML_Generic::parse_to_string(int sensorID, byte *data) {
+    return sensorProvider.parse_to_string(sensorID, data);
+}
+
 Edge_ML_Generic edge_ml_generic;

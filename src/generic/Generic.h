@@ -26,6 +26,8 @@ class Edge_ML_Generic: public Debug {
 
         int get_active();
 
+        String parse_to_string(int sensorID, byte * data);
+
         void set_data_callback(void(*)(int, unsigned int, uint8_t*, int));
         void set_config_callback(void(*)(SensorConfigurationPacket *));
     private:
