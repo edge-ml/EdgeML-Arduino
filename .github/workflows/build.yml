@@ -35,7 +35,7 @@ jobs:
           arduino-cli config add board_manager.additional_urls https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
           arduino-cli core update-index
 
-          arduino-cli core install arduino:mbed_nicla
+          arduino-cli core install arduino:mbed_nicla@4.0.2
           arduino-cli core install arduino:mbed_nano
           arduino-cli core install Seeeduino:mbed
 
