@@ -15,7 +15,7 @@ struct SensorConfig {
 struct __attribute__((packed)) SensorData {
     uint8_t sensorId{};
     uint8_t size{};
-    uint32_t millis{};
+    uint32_t timestamp{};
     uint8_t * data{};
 };
 
