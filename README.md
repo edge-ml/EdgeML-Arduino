@@ -1,12 +1,10 @@
-# {IN DEVELOPMENT}
-# {DOC NOT UPDATED}
-
 # EdgeML-Arduino
 
 ## Table of Contents
 - [Pre-requistes](#Pre-requistes)
 - [How to install](#How-to-install)
 - [Github actions firmware compilation](#Github-actions-firmware-compilation)
+- [BLE Specification](#BLE-Specification)
 - [Usage and functionality](#Usage-and-functionality)
 - [Custom Board Configuration](#Custom-Board-Configuration)
   - [Custom SensorID](#Custom-SensorID)
@@ -55,6 +53,142 @@ Currently, the firmware for the Nicla Sense ME, the Nano 33 BLE and the Seeed Xi
 | Seeed Xiao nRF52840 Sense | https://nightly.link/edge-ml/EdgeML-Arduino/workflows/build/main/xiao.bin.zip  |
 
 ---
+##BLE Specification
+
+The following table contains the BLE specifications with the available Services and Characteristics as well as UUIDs.
+
+| Service Name        | Service UUID                             | Characteristic Name  | Characteristic UUID                    |
+|---------------------|------------------------------------------|----------------------|----------------------------------------|
+| Sensor Service      | `34c2e3bb-34aa-11eb-adc1-0242ac120002`   | Sensor Data          | `34c2e3bc-34aa-11eb-adc1-0242ac120002` |
+|                     |                                          | Sensor Configuration | `34c2e3bd-34aa-11eb-adc1-0242ac120002` |
+| Device Info Service | `45622510-6468-465a-b141-0b9b0f96b468`   | Device Identifier    | `45622511-6468-465a-b141-0b9b0f96b468` |
+|                     |                                          | Device Generation    | `45622512-6468-465a-b141-0b9b0f96b468` |
+| Parse Info Service  | `caa25cb7-7e1b-44f2-adc9-e8c06c9ced43`   | Scheme               | `caa25cb8-7e1b-44f2-adc9-e8c06c9ced43` |
+|                     |                                          | Sensor Names         | `caa25cb9-7e1b-44f2-adc9-e8c06c9ced43` |
+
+### Sensor Data Characteristic
+Permissions: Read/Notify
+
+This Characteristic is responsible for sending data packages from the Earable to the connected device.
+
+A data package has the following structure:
+
+```c++
+struct DataPackage {
+    uint8_t sensorId;
+    uint8_t size;
+    uint32_t timestamp;
+    uint8_t * data;
+}; 
+```
+(Structure example)
+
+sensorId hold the ID of the sensor.<br>
+size holds size of the following data array.<br>
+millis holds a timestamp in milliseconds.<br>
+data is an array of bytes, which need to be parsed according the sensors parsing scheme.
+
+### Sensor Configuration Characteristic
+Permissions: Write
+
+This characteristic is used to send a sensor configuration to the Earable.
+
+A configuration packet is an implemented struct with the following structure:
+
+```c++
+struct SensorConfigurationPacket {
+    uint8_t sensorId;
+    float sampleRate;
+    uint32_t latency;
+};
+```
+
+sensorId hold the ID of the sensor.<br>
+sampleRate holds the sample rate. <br>
+latency is a legacy field and can be mostly ignored. However, it has been repurposed as shown later.
+
+Each sensor or audio IO can be enabled individually or together at the same time with predefined configurations.
+It is recommended to use the predefined configurations.
+
+### Device Identifier Characteristic
+Permissions: Read
+
+This characteristic is used to get the Device Identifier string.
+
+### Device Generation Characteristic
+Permissions: Read
+
+This characteristic is used to get the Device Generation string.
+
+### Scheme Characteristic
+Permissions: Read
+
+With this characteristic the parsing scheme information can be requested from the device.
+The parsing scheme is needed to convert a received data package to usable values.
+
+
+The received buffer can be represented as such:
+
+| Bit 0 | Bit 1                  | Bit 2             | Bit 3           | Bit 4                  | ... |
+|-------|------------------------|-------------------|-----------------|------------------------|-----|
+| Count | Value Count - Sensor 0 | Scheme - Sensor 0 | Type - Sensor 0 | Value Count - Sensor 1 | ... |
+
+Count is the total number of 3 byte blocks. The size of the buffer is equal to `(Count * 3) + 1`.<br>
+Value Count is an 1 byte integer. It encodes how often the Parsing scheme repeats in the buffer.<br>
+Scheme is an 1 byte integer. It determines the parsing scheme.<br>
+Type is an 1 byte integer. It determines the data type of the values in the data buffer.
+
+Parsing Schemes:
+```c++
+enum ParseScheme {
+    SCHEME_VAL,
+    SCHEME_DUAL_VAL,
+    SCHEME_TRIPLE_VAL,
+    SCHEME_QUAD_VAL,
+    SCHEME_XYZ,
+    SCHEME_RGB,
+    SCHEME_ORIENTATION,
+    SCHEME_QUATERNION
+};
+```
+(Enums are integers in ascending order starting from 0)
+
+Data types:
+```c++
+enum ParseType {
+    PARSE_TYPE_INT8,
+    PARSE_TYPE_UINT8,
+
+    PARSE_TYPE_INT16,
+    PARSE_TYPE_UINT16,
+
+    PARSE_TYPE_INT32,
+    PARSE_TYPE_UINT32,
+
+    PARSE_TYPE_FLOAT,
+    PARSE_TYPE_DOUBLE
+};
+```
+(Enums are integers in ascending order starting from 0)
+
+### Sensor Names Characteristic
+Permissions: Read
+
+With this characteristic the sensor count and names can be requested from the device.
+
+
+The received buffer can be represented as such:
+
+| Bit 0 - Bit 3 | Bit 4                   | Bit 5         | Bit 6 - Bit X | Bit X+1       | ... |
+|---------------|-------------------------|---------------|---------------|---------------|-----|
+| Size          | Sensor Count            | Length Name 1 | Name 1        | Length Name 2 | ... |
+
+Size is a 4 byte int. It is the total length of the buffer. It is equal to `(4 + 1 + number_of_sensors * (1 + each_sensor_name_string_lenght))`.<br>
+Sensor Count is an 1 byte integer. It represents the total number of sensors.<br>
+Length Name is an 1 byte integer. It determines the length of the following name.<br>
+Name is a character array.
+
+---
 ## Usage and functionality
 The easiest way to use edge-ml is with the provided `App` sketch.
 The absolute minimum needed to run the code successfully is the following:
@@ -73,6 +207,18 @@ void loop() {
 However, there are a few more functionalities, which the basic edgeml offers to allow better integration.
 
 (Note: The following is only applicable for non-Nicla boards or custom EdgeML implementations)
+
+#### `configure_sensor(SensorConfigurationPacket& config)`
+
+Manually send a Sensor Configuration Packet to EdgeML.
+
+```c++
+SensorConfigurationPacket config;
+// Fill config with values
+
+edge_ml.configure_sensor(config);
+```
+
 
 #### `String get_name()`
 
@@ -103,21 +249,38 @@ int activeSensors = edge_ml.get_active_count();
 Allows to set a custom callback function that is triggered when a sensor provides a new value. The callback function must have the following signature:
 
 ```c++
-void callback(int id, unsigned int timestamp, uint8_t* data, ReturnType r_type)
+void callback(int id, unsigned int timestamp, uint8_t* data, int size)
 ```
 
 - `id` (integer): The ID of the sensor.
 - `timestamp` (unsigned int): The timestamp of the sensor data.
-- `data` (uint8_t*): A pointer to an array of `uint8_t` that contains the sensor data. Ensure that the first element of the casted array (`uint8_t` array to `int` or `float` array) indicates the number of sensor values stored starting from index 1.
-- `r_type` (ReturnType): An argument indicating how the data array should be interpreted. Currently, it can be either `int` or `float`. (This may be subject to change)
+- `data` (uint8_t*): A pointer to an array of `uint8_t` that contains the sensor data. (Index 0: ID; Index 1: total size; Rest: data)
+- `size` (int): Total size of data array. 
 
 ```c++
-void handleSensorData(int id, unsigned int timestamp, uint8_t* data, ReturnType r_type) {
+void handleSensorData(int id, unsigned int timestamp, uint8_t* data, int size) {
   // Your custom logic here
 }
 
 // Setting the callback function
 edge_ml.set_data_callback(handleSensorData);
+```
+
+#### `void set_config_callback(void(*callback)(SensorConfigurationPacket *))`
+
+Allows to set a custom callback function that is triggered when a ble configuration package is received. The callback function must have the following signature:
+
+```c++
+void callback(SensorConfigurationPacket * config)
+```
+
+```c++
+void handleConfig(SensorConfigurationPacket * config) {
+  // Your custom logic here
+}
+
+// Setting the callback function
+edge_ml.set_config_callback(handleSensorData);
 ```
 
 #### `void set_custom(SensorManagerInterface * sensorManager) `
@@ -185,7 +348,7 @@ struct SensorConfig {
     String name;
     int sensor_id;
     int module_id;
-    ReturnType return_type;
+    int value_count;
     ParseScheme scheme;
     ParseType type;
 };
@@ -194,7 +357,7 @@ struct SensorConfig {
 - `name`: The name of the sensor.
 - `sensor_id`: The ID of the sensor (defined in the `SensorID` enumeration).
 - `module_id`: The ID of the module to which the sensor belongs (defined in the `ModuleID` enumeration).
-- `return_type`: The data type returned by the sensor (enum `ReturnType`).
+- `value_count`: It encodes how often the Parsing scheme repeats in the data buffer.
 - `scheme`: The parsing scheme for the sensor data (enum `ParseScheme`).
 - `type`: The parsing type for the sensor data (enum `ParseType`).
 
@@ -202,13 +365,50 @@ Here's an example of how the array of `SensorConfig` structs should be defined:
 
 ```cpp
 const SensorConfig CONFIG[SENSOR_COUNT] = {
-    {"ACC", IMU_ACCELERATION, MODULE_IMU, R_TYPE_FLOAT, SCHEME_XYZ, PARSE_TYPE_FLOAT},
-    {"GYRO", IMU_GYROSCOPE, MODULE_IMU, R_TYPE_FLOAT, SCHEME_XYZ, PARSE_TYPE_FLOAT},
-    {"PRESSURE", BARO_PRESSURE, MODULE_BARO, R_TYPE_FLOAT, SCHEME_VAL, PARSE_TYPE_FLOAT}
+    {"ACC", IMU_ACCELERATION, MODULE_IMU, 1, SCHEME_XYZ, PARSE_TYPE_FLOAT},
+    {"GYRO", IMU_GYROSCOPE, MODULE_IMU, 1, SCHEME_XYZ, PARSE_TYPE_FLOAT},
+    {"PRESSURE", BARO_PRESSURE, MODULE_BARO, 1, SCHEME_VAL, PARSE_TYPE_FLOAT}
 };
 ```
 
 This array defines the sensor configurations, including their names, IDs, module IDs, return types, parsing schemes, and parsing types.
+
+#### Special Sensors
+
+Special sensors are sensors that are ignored by the EdgeML framework.
+This can be useful when a `config_callback` is used. 
+The user can process the configuration package without EdgeML trying to initialize a sensor.
+
+
+Special sensors are optional.
+
+The special sensors get their own SensorID and Dummy Module in the enums.
+They also get included into the CONFIG list. value_count, scheme, and type can be arbitrarily selected.
+They count towards the total number of sensors.
+
+Here's an example:
+```c++
+const int SPECIAL_SENSOR_COUNT = 1;
+
+enum SensorID {
+    // Normal Sensors
+    SPECIAL_SENSOR
+};
+
+enum ModuleID {
+    // Normal Modules
+    MODULE_DUMMY
+};
+
+const int SpecialSensors[SPECIAL_SENSOR_COUNT] = {
+        SPECIAL_SENSOR
+};
+
+const SensorConfig CONFIG[SENSOR_COUNT] = 
+    // Normal sensor configs
+    {"Special Name", SPECIAL_SENSOR, MODULE_DUMMY, 0, 0, 0}
+};
+```
 
 ### Custom Sensor Manager Interface
 
@@ -257,6 +457,35 @@ In the `setup` method of the `CustomSensorManager` class, perform the following 
 3. Use the `set_modules` method of `SensorManagerInterface` to set the `modules` array.
 4. Use the `set_sensor_counts` method of `SensorManagerInterface` to set the total number of sensors (`SENSOR_COUNT`) and physical modules (`MODULE_COUNT_PHYSICAL`).
 5. Use the `set_sensor_configs` method of `SensorManagerInterface` to set the sensor configurations (`CONFIG`).
+
+If there are any special sensors they get included as follows:
+
+```c++
+class CustomSensorManager : public SensorManagerInterface {
+public:
+    void setup() override {
+        // Create instances of the custom sensors
+        CustomIMUSensor *sensorIMU = new CustomIMUSensor();
+        CustomBAROSensor *sensorBARO = new CustomBAROSensor();
+        
+        // Dummy sensor
+        DummySensor * dummy = new DummySensor();
+
+        // Create an array of SensorInterface pointers
+        SensorInterface **modules = new SensorInterface *[MODULE_COUNT_PHYSICAL] {sensorIMU, sensorBARO, dummy};
+
+        // Set the modules and sensor counts
+        SensorManagerInterface::set_modules(modules);
+        SensorManagerInterface::set_sensor_counts(SENSOR_COUNT, MODULE_COUNT_PHYSICAL);
+        
+        // Set special sensors and special sensor count
+        SensorManagerInterface::set_special_sensors(SpecialSensors, SPECIAL_SENSOR_COUNT);
+        
+        // Set the sensor configurations
+        SensorManagerInterface::set_sensor_configs(CONFIG);
+    }
+};
+```
 
 ---
 ### Custom Sensor
