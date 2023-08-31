@@ -26,10 +26,10 @@ public:
 
     bool begin() {
 #ifdef NICLA_FLAG
-        if (!_custom) edge_ml_nicla.begin();
-        else edge_ml_generic.begin();
+        if (!_custom) return edge_ml_nicla.begin();
+        else return edge_ml_generic.begin();
 #else
-        edge_ml_generic.begin();
+        return edge_ml_generic.begin();
 #endif
     }
     void update() {
