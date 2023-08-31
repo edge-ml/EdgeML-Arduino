@@ -3,14 +3,6 @@
 
 #include "SensorScheme.h"
 
-/*
-enum ReturnType {
-    R_TYPE_ERROR = -1,
-    R_TYPE_INT,
-    R_TYPE_FLOAT
-};
-*/
-
 struct SensorConfig {
     String name;
     int sensor_id;
