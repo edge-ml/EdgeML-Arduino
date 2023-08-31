@@ -512,9 +512,8 @@ public:
 
     void start() override;
     void stop() override;
-
-    void get_float_data(float floatArray[], int sensorID) override;
-    void get_int_data(int intArray[], int sensorID) override;
+    
+    void get_data(int sensorID, byte *data) override;
 
     int get_sensor_count() override;
 
@@ -526,8 +525,7 @@ In the `CustomSensor` class, the following methods need to be implemented:
 - Constructor: Implement any necessary initialization of the sensor that should occur only once.
 - `start`: This method is called each time when the sensor is started. Implement any necessary setup code within this method.
 - `stop`: This method is called each time when the sensor is stopped. Implement any necessary cleanup or shutdown code within this method.
-- `get_float_data`: This method retrieves the sensor data in floating-point format. It takes an array, `floatArray`, and a `sensorID` as parameters. Based on the `sensorID`, retrieve the corresponding sensor data and store it in the `floatArray`. Ensure that the first element of the array (`floatArray[0]`) indicates the number of sensor values stored starting from index 1.
-- `get_int_data`: This method is similar to `get_float_data` but retrieves the sensor data in integer format. Follow the same approach as in `get_float_data`, but with the appropriate data type and indexing.
+- `get_data`: This method retrieves the sensor data. Based on the `sensorID`, retrieve the corresponding sensor data and store it in the `data` array. Cast `data` array pointer as needed (to int or float).
 - `get_sensor_count`: This method returns the total number of sensors managed by the custom sensor. Set the value of `sensor_count` to the appropriate count.
 
 ---
