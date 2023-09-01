@@ -168,7 +168,7 @@ void SensorManagerInterface::setup_names_buffer() {
     _names_buffer = new byte[_names_length];
     int offset = 0;
 
-    memcpy(&_names_buffer, &_names_length, sizeof(int));
+    memcpy(_names_buffer, &_names_length, sizeof(int));
     offset += sizeof(int);
     _names_buffer[4] = (byte)_sensor_count;
     offset += 1;

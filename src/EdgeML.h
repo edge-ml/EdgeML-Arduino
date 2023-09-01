@@ -60,6 +60,15 @@ public:
 #endif
     }
 
+    void ble_manual_advertise() {
+#ifdef NICLA_FLAG
+        if (!_custom) return;
+        else edge_ml_generic.ble_manual_advertise;
+#else
+        return edge_ml_generic.ble_manual_advertise();
+#endif
+    }
+
     void set_ble_config(String name, String gen = "0.0.0") {
 #ifdef NICLA_FLAG
         if (!_custom) return;

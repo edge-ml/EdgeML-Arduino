@@ -101,7 +101,7 @@ bool BLEHandler_G::begin() {
     deviceSensorNamesC_G->writeValue(_names_buffer, _names_length);
 
     // Advertise
-    BLE.advertise();
+    if (!manual_advertise) BLE.advertise(); // if manual advertise is set, BLE.advertise() HAS to be called manually!!!
     return true;
 }
 
@@ -158,6 +158,10 @@ void BLEHandler_G::check_sensor_names() {
     if (_names_buffer != nullptr) return;
     _names_buffer = new byte[1] {0};
     _names_length= 1;
+}
+
+void BLEHandler_G::ble_manual_advertise() {
+    manual_advertise = true;
 }
 
 BLEHandler_G bleHandler_G;

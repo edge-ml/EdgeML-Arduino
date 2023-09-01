@@ -27,6 +27,8 @@ public:
 
     bool bleActive = false;
 
+    void ble_manual_advertise();
+
 private:
     String device_id;
     String device_name;
@@ -42,6 +44,8 @@ private:
     BLECharacteristic * deviceGenerationC_G;
     BLECharacteristic * deviceParseSchemeC_G;
     BLECharacteristic * deviceSensorNamesC_G;
+
+    bool manual_advertise = false;
 
     int _scheme_length = 0;
     byte * _scheme_buffer = nullptr;

@@ -89,4 +89,8 @@ String Edge_ML_Generic::parse_to_string(int sensorID, byte *data) {
     return sensorProvider.parse_to_string(sensorID, data);
 }
 
+void Edge_ML_Generic::ble_manual_advertise() {
+    bleHandler_G.ble_manual_advertise();
+}
+
 Edge_ML_Generic edge_ml_generic;
