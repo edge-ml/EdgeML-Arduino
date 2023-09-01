@@ -230,6 +230,20 @@ Returns the current name of the device.
 String deviceName = edge_ml.get_name();
 ```
 
+#### `void ble_manual_advertise()`
+
+Stop EdgeML from automatically advertising BLE services during `edge_ml.begin()`.
+This has to be use if custom BLE Services and Characteristics are defined outside EdgeML.
+Make sure to then place the custom BLE Services and Characteristics after `edge_ml.begin()`.
+
+```c++
+edge_ml.ble_manual_advertise();
+
+// Other BLE Services and Characteristics
+
+BLE.advertise();
+```
+
 #### `void set_ble_config(String name, String version)`
 
 Sets the name of the device as well as the current version string.

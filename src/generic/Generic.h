@@ -30,6 +30,8 @@ class Edge_ML_Generic: public Debug {
 
         void set_data_callback(void(*)(int, unsigned int, uint8_t*, int));
         void set_config_callback(void(*)(SensorConfigurationPacket *));
+
+        void ble_manual_advertise();
     private:
         SensorManagerInterface * _sensorManager = nullptr;
 };
