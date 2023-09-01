@@ -83,10 +83,10 @@ struct SensorConfigurationPacket {
 
 Configuration Package structure:
 
-| Bit 0    | Bit 1-4    | Bit 5-8  |
-|----------|------------|----------|
-| sensorId | sampleRate | latency  |
-| uint8    | float      | uint32   |
+| Byte 0    | Byte 1-4     | Byte 5-8  |
+|-----------|--------------|-----------|
+| sensorId  | sampleRate   | latency   |
+| uint8     | float        | uint32    |
 
 sensorId: ID of the sensor.<br>
 sampleRate: Desired sample rate. <br>
@@ -102,10 +102,10 @@ This Characteristic is responsible for sending data packages from the Earable to
 
 Data Package structure:
 
-| Bit 0    | Bit 1   | Bit 2-5    | Bit 5-X    |
-|----------|---------|------------|------------|
-| SensorID | Size    | Time Stamp | Data Array |
-| uint8    | uint8   | uint32     | ---        |
+| Byte 0     | Byte 1 | Byte 2-5    | Byte 5-X   |
+|------------|--------|-------------|------------|
+| SensorID   | Size   |  Time Stamp | Data Array |
+| uint8      | uint8  | uint32      | ---        |
 
 SensorID: ID of the sensor.<br>
 Size: Size of the following Data Array.<br>
@@ -131,9 +131,9 @@ The parsing scheme is needed to convert a received data package to usable values
 
 The received buffer can be represented as such:
 
-| Bit 0 | Bit 1                  | Bit 2             | Bit 3           | Bit 4                  | ... |
-|-------|------------------------|-------------------|-----------------|------------------------|-----|
-| Count | Value Count - Sensor 0 | Scheme - Sensor 0 | Type - Sensor 0 | Value Count - Sensor 1 | ... |
+| Byte 0 | Byte 1                   | Byte 2             | Byte 3           | Byte 4                  | ... |
+|--------|--------------------------|--------------------|------------------|-------------------------|-----|
+| Count  | Value Count - Sensor 0   | Scheme - Sensor 0  |  Type - Sensor 0 |  Value Count - Sensor 1 | ... |
 
 Count is the total number of 3 byte blocks. The size of the buffer is equal to `(Count * 3) + 1`.<br>
 Value Count is an 1 byte integer. It encodes how often the Parsing scheme repeats in the buffer.<br>
@@ -181,9 +181,9 @@ With this characteristic the sensor count and names can be requested from the de
 
 The received buffer can be represented as such:
 
-| Bit 0 - Bit 3 | Bit 4                   | Bit 5         | Bit 6 - Bit X | Bit X+1       | ... |
-|---------------|-------------------------|---------------|---------------|---------------|-----|
-| Size          | Sensor Count            | Length Name 1 | Name 1        | Length Name 2 | ... |
+| Byte 0 - Bit 3 | Byte 4             | Byte 5         | Byte 6 - Byte X | Byte X+1       | ... |
+|----------------|--------------------|----------------|-----------------|----------------|-----|
+| Size           | Sensor Count       | Length Name 1  | Name 1          | Length Name 2  | ... |
 
 Size is a 4 byte int. It is the total length of the buffer. It is equal to `(4 + 1 + number_of_sensors * (1 + each_sensor_name_string_lenght))`.<br>
 Sensor Count is an 1 byte integer. It represents the total number of sensors.<br>
