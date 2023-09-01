@@ -59,41 +59,19 @@ The following table contains the BLE specifications with the available Services 
 
 | Service Name        | Service UUID                             | Characteristic Name  | Characteristic UUID                    |
 |---------------------|------------------------------------------|----------------------|----------------------------------------|
-| Sensor Service      | `34c2e3bb-34aa-11eb-adc1-0242ac120002`   | Sensor Data          | `34c2e3bc-34aa-11eb-adc1-0242ac120002` |
-|                     |                                          | Sensor Configuration | `34c2e3bd-34aa-11eb-adc1-0242ac120002` |
+| Sensor Service      | `34c2e3bb-34aa-11eb-adc1-0242ac120002`   | Sensor Configuration | `34c2e3bd-34aa-11eb-adc1-0242ac120002` |
+|                     |                                          | Sensor Data          | `34c2e3bc-34aa-11eb-adc1-0242ac120002` |
 | Device Info Service | `45622510-6468-465a-b141-0b9b0f96b468`   | Device Identifier    | `45622511-6468-465a-b141-0b9b0f96b468` |
 |                     |                                          | Device Generation    | `45622512-6468-465a-b141-0b9b0f96b468` |
 | Parse Info Service  | `caa25cb7-7e1b-44f2-adc9-e8c06c9ced43`   | Scheme               | `caa25cb8-7e1b-44f2-adc9-e8c06c9ced43` |
 |                     |                                          | Sensor Names         | `caa25cb9-7e1b-44f2-adc9-e8c06c9ced43` |
-
-### Sensor Data Characteristic
-Permissions: Read/Notify
-
-This Characteristic is responsible for sending data packages from the Earable to the connected device.
-
-A data package has the following structure:
-
-```c++
-struct DataPackage {
-    uint8_t sensorId;
-    uint8_t size;
-    uint32_t timestamp;
-    uint8_t * data;
-}; 
-```
-(Structure example)
-
-sensorId hold the ID of the sensor.<br>
-size holds size of the following data array.<br>
-millis holds a timestamp in milliseconds.<br>
-data is an array of bytes, which need to be parsed according the sensors parsing scheme.
 
 ### Sensor Configuration Characteristic
 Permissions: Write
 
 This characteristic is used to send a sensor configuration to the Earable.
 
-A configuration packet is an implemented struct with the following structure:
+A configuration packet is an implemented struct:
 
 ```c++
 struct SensorConfigurationPacket {
@@ -103,12 +81,36 @@ struct SensorConfigurationPacket {
 };
 ```
 
-sensorId hold the ID of the sensor.<br>
-sampleRate holds the sample rate. <br>
-latency is a legacy field and can be mostly ignored. However, it has been repurposed as shown later.
+Configuration Package structure:
+
+| Bit 0    | Bit 1-4    | Bit 5-8  |
+|----------|------------|----------|
+| sensorId | sampleRate | latency  |
+| uint8    | float      | uint32   |
+
+sensorId: ID of the sensor.<br>
+sampleRate: Desired sample rate. <br>
+latency: Legacy field which is mostly ignored.
 
 Each sensor or audio IO can be enabled individually or together at the same time with predefined configurations.
 It is recommended to use the predefined configurations.
+
+### Sensor Data Characteristic
+Permissions: Read/Notify
+
+This Characteristic is responsible for sending data packages from the Earable to the connected device.
+
+Data Package structure:
+
+| Bit 0    | Bit 1   | Bit 2-5    | Bit 5-X    |
+|----------|---------|------------|------------|
+| SensorID | Size    | Time Stamp | Data Array |
+| uint8    | uint8   | uint32     | ---        |
+
+SensorID: ID of the sensor.<br>
+Size: Size of the following Data Array.<br>
+Time Stamp:  Timestamp in milliseconds.<br>
+Data Array: Array of bytes, which need to be parsed according the sensors parsing scheme.
 
 ### Device Identifier Characteristic
 Permissions: Read
