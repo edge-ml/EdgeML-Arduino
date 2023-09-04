@@ -63,7 +63,7 @@ public:
     void ble_manual_advertise() {
 #ifdef NICLA_FLAG
         if (!_custom) return;
-        else edge_ml_generic.ble_manual_advertise;
+        else edge_ml_generic.ble_manual_advertise();
 #else
         return edge_ml_generic.ble_manual_advertise();
 #endif
@@ -80,7 +80,7 @@ public:
 
     int get_active_count() {
 #ifdef NICLA_FLAG
-        if (!_custom) return;
+        if (!_custom) return 0;
         else return edge_ml_generic.get_active();
 #else
         return edge_ml_generic.get_active();
@@ -89,7 +89,7 @@ public:
 
     String parse_to_string(int sensorID, byte * data) {
 #ifdef NICLA_FLAG
-        if (!_custom) return;
+        if (!_custom) return "";
         else return edge_ml_generic.parse_to_string(sensorID, data);
 #else
         return edge_ml_generic.parse_to_string(sensorID, data);
