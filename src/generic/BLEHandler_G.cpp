@@ -75,7 +75,6 @@ bool BLEHandler_G::begin() {
 
 
     deviceParseSchemeC_G = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
-    deviceSensorNamesC_G = new BLECharacteristic(parseSensorNamesUuid, BLERead, _names_length);
 
     // Sensor channel
     BLE.setAdvertisedService(*sensorService_G);
@@ -95,10 +94,8 @@ bool BLEHandler_G::begin() {
     // Parse information
     BLE.setAdvertisedService(*parseInfoService_G);
     parseInfoService_G->addCharacteristic(*deviceParseSchemeC_G);
-    parseInfoService_G->addCharacteristic(*deviceSensorNamesC_G);
     BLE.addService(*parseInfoService_G);
     deviceParseSchemeC_G->writeValue(_scheme_buffer, _scheme_length);
-    deviceSensorNamesC_G->writeValue(_names_buffer, _names_length);
 
     // Advertise
     if (!manual_advertise) BLE.advertise(); // if manual advertise is set, BLE.advertise() HAS to be called manually!!!
@@ -141,11 +138,6 @@ void BLEHandler_G::set_generation(String gen) {
 void BLEHandler_G::set_parse_scheme(byte *data, int length) {
     _scheme_buffer = data;
     _scheme_length = length;
-}
-
-void BLEHandler_G::set_sensor_names(byte *data, int length) {
-    _names_buffer = data;
-    _names_length = length;
 }
 
 void BLEHandler_G::check_scheme() {

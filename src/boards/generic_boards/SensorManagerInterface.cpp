@@ -28,7 +28,6 @@ void SensorManagerInterface::init() {
     setup_sensors(); // Creates Sensor Objects
 
     setup_scheme_buffer(); // BLE information schemes
-    setup_names_buffer(); // BLE information names
 }
 
 Sensor ** SensorManagerInterface::get_sensors() {
@@ -128,14 +127,13 @@ void SensorManagerInterface::setup_sensors() {
 int SensorManagerInterface::calculate_size(int ID) {
     const SensorConfig * config = _config_id_index[ID];
 
-    ParseScheme scheme = config->scheme;
-    ParseType type = config->type;
-    int count = config->value_count;
-
-    int scheme_count = ParseSchemeCount[scheme];
-    int type_size = ParseTypeSizes[type];
-
-    return count * scheme_count * type_size;
+    int size = 0;
+    const SensorComponent * comp;
+    for (int i = 0; i < config->component_count; ++i) {
+        comp = &config->components[i];
+        size += ParseTypeSizes[comp->type];
+    }
+    return size;
 }
 
 void SensorManagerInterface::set_sensor_counts(int sensor_count, int module_count) {
@@ -144,42 +142,71 @@ void SensorManagerInterface::set_sensor_counts(int sensor_count, int module_coun
 }
 
 void SensorManagerInterface::setup_scheme_buffer() {
-    _scheme_length = 1 + _sensor_count * 3;
+/*
+ Scheme buffer layout:
+
+ [packet_count; uint_8] [Packet 1] [Packet 2] ...
+
+
+ Packet:
+ [id; uint_8] [name_size; uint_8] [name; chars] [component_count: uint_8] [Component 1] [Component 2] ...
+
+ Component:
+ [type: uint_8] [group_name_size; uint8] [group_name; char] [component_name_size; uint8] [component_name; char] [unit_name_size; uint8] [unit_name; char]
+*/
+
+    _scheme_length = 1;
+
+    const SensorConfig * s_con;
+    const SensorComponent * comp;
+    for (int s_id = 0; s_id < _sensor_count; ++s_id) {
+        s_con = _config_id_index[s_id];
+        _scheme_length += 3 + s_con->name.length(); // 3 * 1
+
+        for (int i = 0; i < s_con->component_count; ++i) {
+            comp = &s_con->components[i];
+            _scheme_length += 4; // 4 * 1
+            _scheme_length += comp->group_name.length();
+            _scheme_length += comp->component_name.length();
+            _scheme_length += comp->unit.length();
+        }
+    }
+
     _scheme_buffer = new byte[_scheme_length];
 
-    _scheme_buffer[0] = (uint8_t)_sensor_count;
-    const SensorConfig * s_con;
+    int offset = 0;
+    _scheme_buffer[offset] = (uint8_t)_sensor_count;
+    offset += 1;
     for (int s_id = 0; s_id < _sensor_count; ++s_id) {
         s_con = _config_id_index[s_id];
 
-        _scheme_buffer[3*s_id + 1] = (uint8_t)s_con->value_count;
-        _scheme_buffer[3*s_id + 2] = (uint8_t)s_con->scheme;
-        _scheme_buffer[3*s_id + 3] = (uint8_t)s_con->type;
+        _scheme_buffer[offset++] = (uint8_t)s_id;
+        _scheme_buffer[offset++] = (uint8_t)s_con->name.length();
+
+        memcpy(&_scheme_buffer[offset], s_con->name.c_str(), s_con->name.length());
+        offset += s_con->name.length();
+
+        _scheme_buffer[offset] = (uint8_t)s_con->component_count;
+        offset += 1;
+
+        for (int i = 0; i < s_con->component_count; ++i) {
+            comp = &s_con->components[i];
+            _scheme_buffer[offset++] = comp->type;
+            _scheme_buffer[offset++] = comp->group_name.length();
+
+            memcpy(&_scheme_buffer[offset], comp->group_name.c_str(), comp->group_name.length());
+            offset += comp->group_name.length();
+
+            _scheme_buffer[offset++] = comp->component_name.length();
+            memcpy(&_scheme_buffer[offset], comp->component_name.c_str(), comp->component_name.length());
+            offset += comp->component_name.length();
+
+            _scheme_buffer[offset++] = comp->unit.length();
+            memcpy(&_scheme_buffer[offset], comp->unit.c_str(), comp->unit.length());
+            offset += comp->unit.length();
+        }
     }
 }
-
-void SensorManagerInterface::setup_names_buffer() {
-    _names_length = sizeof(int) + 1; // 1 byte for number of sensors
-
-    for (int i = 0; i < _sensor_count; ++i) {
-        _names_length += 1 + _config_id_index[i]->name.length();
-    }
-
-    _names_buffer = new byte[_names_length];
-    int offset = 0;
-
-    memcpy(_names_buffer, &_names_length, sizeof(int));
-    offset += sizeof(int);
-    _names_buffer[4] = (byte)_sensor_count;
-    offset += 1;
-    for (int i = 0; i < _sensor_count; ++i) {
-        const String& name = _config_id_index[i]->name;
-        _names_buffer[offset] = (uint8_t)name.length();
-        memcpy(&_names_buffer[offset+1], name.c_str(), name.length());
-        offset += (uint8_t)name.length() + 1;
-    }
-}
-
 
 void SensorManagerInterface::set_modules(SensorInterface **modules) {
     _sensor_modules = modules;
@@ -203,12 +230,6 @@ byte * SensorManagerInterface::get_parse_scheme(int &length) {
     length = _scheme_length;
     return _scheme_buffer;
 }
-
-byte *SensorManagerInterface::get_sensor_names(int &length) {
-    length = _names_length;
-    return _names_buffer;
-}
-
 
 bool SensorManagerInterface::all_inactive(SensorInterface * sensor) {
     for (int i=0; i < sensor->get_sensor_count(); i++) {

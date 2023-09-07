@@ -26,7 +26,6 @@ public:
     void get_data(int sensorID, byte *data);
 
     byte * get_parse_scheme(int &length);
-    byte * get_sensor_names(int &length);
 
     bool check_special_sensor(int ID);
 
@@ -57,15 +56,11 @@ private:
     int _scheme_length = 0;
     byte * _scheme_buffer = nullptr;
 
-    int _names_length = 0;
-    byte * _names_buffer = nullptr;
-
     int _max_data_size = 0;
 
     void setup_ID_arrays();
     void setup_sensors();
     void setup_scheme_buffer();
-    void setup_names_buffer();
 
     int calculate_size(int ID);
 

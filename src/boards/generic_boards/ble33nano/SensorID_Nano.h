@@ -69,86 +69,124 @@ enum ModuleID_Nano {
     MODULE_APDS_NANO
 };
 
+const SensorComponent ACC_COMPONENTS_Nano[] = {
+        {"ACC", PARSE_TYPE_FLOAT, "X", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Y", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Z", "g"}
+};
+
+const SensorComponent GYRO_COMPONENTS_Nano[] = {
+        {"GYRO", PARSE_TYPE_FLOAT, "X","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Y","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Z","dps"}
+};
+
+const SensorComponent MAG_COMPONENTS_Nano[] = {
+        {"MAG", PARSE_TYPE_FLOAT, "X","uT"},
+        {"MAG", PARSE_TYPE_FLOAT, "Y","uT"},
+        {"MAG", PARSE_TYPE_FLOAT, "Z","uT"}
+};
+
+const SensorComponent TEMP_COMPONENTS_Nano[] = {
+        {"TEMP", PARSE_TYPE_FLOAT, "Temperature", "°C"}
+};
+
+const SensorComponent HUM_COMPONENTS_Nano[] = {
+        {"HUM", PARSE_TYPE_FLOAT, "Humidity", "%"}
+};
+
+const SensorComponent BARO_COMPONENTS_Nano[] = {
+        {"BARO", PARSE_TYPE_FLOAT, "Pressure", "kPa"}
+};
+
+const SensorComponent COLOR_COMPONENTS_Nano[] = {
+        {"COL", PARSE_TYPE_INT16, "R", ""},
+        {"COL", PARSE_TYPE_INT16, "G", ""},
+        {"COL", PARSE_TYPE_INT16, "B", ""}
+};
+
+const SensorComponent BRIGHT_COMPONENTS_Nano[] = {
+        {"BRIGHT", PARSE_TYPE_INT16, "Brightness", ""}
+};
+
+const SensorComponent PROX_COMPONENTS_Nano[] = {
+        {"PROX", PARSE_TYPE_INT16, "Proximity", ""}
+};
+
+const SensorComponent GEST_COMPONENTS_Nano[] = {
+        {"GEST", PARSE_TYPE_INT16, "Gesture", ""}
+};
+
 const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
         {
-            "ACC",
-            IMU_ACCELERATION_NANO,
-            MODULE_IMU_NANO,
-            1,
-            SCHEME_XYZ,
-            PARSE_TYPE_FLOAT
+                "ACCELERATION",
+                IMU_ACCELERATION_NANO,
+                MODULE_IMU_NANO,
+                3,
+                ACC_COMPONENTS_Nano
         },
         {
-            "GYRO",
-            IMU_GYROSCOPE_NANO,
-            MODULE_IMU_NANO,
-            1,
-            SCHEME_XYZ,
-            PARSE_TYPE_FLOAT
+                "GYROSCOPE",
+                IMU_GYROSCOPE_NANO,
+                MODULE_IMU_NANO,
+                3,
+                GYRO_COMPONENTS_Nano
         },
         {
-            "MAG",
-            IMU_MAGNET_NANO,
-            MODULE_IMU_NANO,
-            1,
-            SCHEME_XYZ,
-            PARSE_TYPE_FLOAT
+                "MAGNETOMETER",
+                IMU_MAGNET_NANO,
+                MODULE_IMU_NANO,
+                3,
+                MAG_COMPONENTS_Nano
         },
         {
-            "TEMPERATURE",
-            HTS_TEMP_NANO,
-            MODULE_HTS_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_FLOAT
+                "THERMOMETER",
+                HTS_TEMP_NANO,
+                MODULE_HTS_NANO,
+                1,
+                TEMP_COMPONENTS_Nano
         },
         {
-            "HUMIDITY",
-            HTS_HUM_NANO,
-            MODULE_HTS_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_FLOAT
+                "HYGROMETER",
+                HTS_HUM_NANO,
+                MODULE_IMU_NANO,
+                1,
+                HUM_COMPONENTS_Nano
         },
         {
-            "PRESSURE",
-            BARO_PRESS_NANO,
-            MODULE_BARO_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_FLOAT
+                "BAROMETER",
+                BARO_PRESS_NANO,
+                MODULE_BARO_NANO,
+                1,
+                BARO_COMPONENTS_Nano
         },
         {
-            "COLOR",
-            APDS_COLOUR_NANO,
-            MODULE_APDS_NANO,
-            1,
-            SCHEME_RGB,
-            PARSE_TYPE_INT16
+                "COLOR",
+                APDS_COLOUR_NANO,
+                MODULE_APDS_NANO,
+                3,
+                COLOR_COMPONENTS_Nano
         },
         {
-            "BRIGHTNESS",
-            APDS_BRIGHT_NANO,
-            MODULE_APDS_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_INT16
+                "BRIGHTNESS",
+                APDS_BRIGHT_NANO,
+                MODULE_APDS_NANO,
+                1,
+                BRIGHT_COMPONENTS_Nano
         },
         {
-            "PROXIMITY",
-            APDS_PROX_NANO,
-            MODULE_APDS_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_INT16
+                "PROXIMITY",
+                APDS_PROX_NANO,
+                MODULE_APDS_NANO,
+                1,
+                PROX_COMPONENTS_Nano
         },
         {
-            "GESTURE",
-            APDS_GEST_NANO,
-            MODULE_APDS_NANO,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_INT16
+                "GESTURE",
+                APDS_GEST_NANO,
+                MODULE_APDS_NANO,
+                1,
+                GEST_COMPONENTS_Nano
         }
 };
 
