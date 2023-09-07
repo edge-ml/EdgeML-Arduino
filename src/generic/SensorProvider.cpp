@@ -16,7 +16,7 @@ void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
 
     delete [] _data_buffer;
     int size = _sensorManager->get_max_data_size();
-    size += _meta_data_size; // Add space for ID [0], size [1], time_stamp [2], normal offset = 6
+    size += _meta_data_size; // Add space for ID [0], time_stamp [1], normal offset = 5
     _data_buffer = new uint8_t[size];
 }
 
@@ -121,8 +121,8 @@ void SensorProvider::send_sensor_data(int ID) {
         return;
     }
     _data_buffer[0] = uint8_t(ID);                  // ID
-    _data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
-    memcpy(&_data_buffer[2], &timestamp, sizeof(timestamp)); // timestamp
+    //_data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
+    memcpy(&_data_buffer[1], &timestamp, sizeof(timestamp)); // timestamp
 
     uint8_t * data_pointer = &_data_buffer[_meta_data_size];
     _sensorManager->get_data(ID, (byte*)data_pointer);
@@ -164,58 +164,60 @@ String SensorProvider::parse_to_string(int sensorID, const byte *data) {
 
     SensorConfig * config = _sensorManager->get_config(sensorID);
 
-    if (!config->value_count) return "";
-    int value_count = config->value_count;
-    int scheme_count = ParseSchemeCount[config->scheme];
+    if (!config->component_count) return "";
 
-    int index;
+    int comp_count = config->component_count;
+
+    int offset = 0;
     String output = "";
-    for (int i=0; i < value_count; i++) {
-        for (int j=0; j < scheme_count; j++) {
-            index = (i * scheme_count) + j;
-            switch (config->type) {
-                case PARSE_TYPE_INT8: {
-                    int8_t val = ((int8_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_UINT8: {
-                    uint8_t val = ((uint8_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_INT16: {
-                    int16_t val = ((int16_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_UINT16: {
-                    uint16_t val = ((uint16_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_INT32: {
-                    int32_t val = ((int32_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_UINT32: {
-                    uint32_t val = ((uint32_t *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_FLOAT: {
-                    float val = ((float *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
-                case PARSE_TYPE_DOUBLE: {
-                    double val = ((double *)data)[index];
-                    output += String(val) + " ,";
-                    break;
-                }
+    const SensorComponent * comp;
+    for (int i=0; i < comp_count; i++) {
+        comp = &config->components[i];
+        switch (comp->type) {
+            case PARSE_TYPE_INT8: {
+                int8_t val = *reinterpret_cast<const int8_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
             }
+            case PARSE_TYPE_UINT8: {
+                uint8_t val = *reinterpret_cast<const uint8_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_INT16: {
+                int16_t val = *reinterpret_cast<const int16_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_UINT16: {
+                uint16_t val = *reinterpret_cast<const uint16_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_INT32: {
+                int32_t val = *reinterpret_cast<const int32_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_UINT32: {
+                uint32_t val = *reinterpret_cast<const uint32_t*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_FLOAT: {
+                float val = *reinterpret_cast<const float*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            case PARSE_TYPE_DOUBLE: {
+                double val = *reinterpret_cast<const double*>(&data[offset]);
+                output += String(val) + " ,";
+                break;
+            }
+            default:
+                continue;
         }
+        offset += ParseTypeSizes[comp->type];
     }
     return output.substring(0, output.length() - 2);;
 }

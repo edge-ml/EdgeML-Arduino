@@ -27,39 +27,44 @@ enum ModuleID_Seeed {
     MODULE_IMU_SEEED
 };
 
-const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
-        {
-            "ACC",
-            IMU_ACCELERATION_SEEED,
-            MODULE_IMU_SEEED,
-            1,
-            SCHEME_XYZ,
-            PARSE_TYPE_FLOAT
-        },
-        {
-            "GYRO",
-            IMU_GYROSCOPE_SEEED,
-            MODULE_IMU_SEEED,
-            1,
-            SCHEME_XYZ,
-            PARSE_TYPE_FLOAT
-        },
-        {
-            "TEMPERATURE",
-            IMU_TEMP_SEEED,
-            MODULE_IMU_SEEED,
-            1,
-            SCHEME_VAL,
-            PARSE_TYPE_FLOAT
-        }
+const SensorComponent ACC_COMPONENTS_Seeed[] = {
+        {"ACC", PARSE_TYPE_FLOAT, "X", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Y", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Z", "g"}
 };
 
-const int IMU_MAP_SEEED[] = {IMU_ACCELERATION_SEEED, IMU_GYROSCOPE_SEEED, IMU_TEMP_SEEED};
+const SensorComponent GYRO_COMPONENTS_Seeed[] = {
+        {"GYRO", PARSE_TYPE_FLOAT, "X","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Y","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Z","dps"}
+};
 
-const int INT_TYPE_COUNT_SEEED = 0;
-const int FLOAT_TYPE_COUNT_SEEED = 3;
+const SensorComponent TEMP_COMPONENTS_Seeed[] = {
+        {"TEMP", PARSE_TYPE_FLOAT, "Temperature", "°C"}
+};
 
-const int RETURN_TYPE_INT_SEEED[] = {};
-const int RETURN_TYPE_FLOAT_SEEED[] = {IMU_ACCELERATION_SEEED, IMU_GYROSCOPE_SEEED, IMU_TEMP_SEEED};
+const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
+        {
+                "ACC",
+                IMU_ACCELERATION_SEEED,
+                MODULE_IMU_SEEED,
+                3,
+                ACC_COMPONENTS_Seeed
+        },
+        {
+                "GYRO",
+                IMU_GYROSCOPE_SEEED,
+                MODULE_IMU_SEEED,
+                3,
+                GYRO_COMPONENTS_Seeed
+        },
+        {
+                "TEMPERATURE",
+                IMU_TEMP_SEEED,
+                MODULE_IMU_SEEED,
+                1,
+                TEMP_COMPONENTS_Seeed
+        }
+};
 
 #endif //SENSORID_Seeed_H

@@ -2,8 +2,7 @@
 #define EDGEML_ARDUINO_SENSORINTERFACE_H
 
 // Is a module interface
-
-#define MAX_MODULES 5
+#define MAX_MODULES 32
 
 #include <generic/Debug.h>
 

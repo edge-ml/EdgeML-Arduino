@@ -23,8 +23,6 @@ public:
     void set_name(String name);
     void set_generation(String gen);
     void set_parse_scheme(byte *data, int length);
-    void set_sensor_names(byte *data, int length);
-
     bool bleActive = false;
 
     void ble_manual_advertise();
@@ -43,7 +41,6 @@ private:
     BLECharacteristic * deviceIdentifierC_G;
     BLECharacteristic * deviceGenerationC_G;
     BLECharacteristic * deviceParseSchemeC_G;
-    BLECharacteristic * deviceSensorNamesC_G;
 
     bool manual_advertise = false;
 
