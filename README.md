@@ -64,7 +64,6 @@ The following table contains the BLE specifications with the available Services 
 | Device Info Service | `45622510-6468-465a-b141-0b9b0f96b468`   | Device Identifier    | `45622511-6468-465a-b141-0b9b0f96b468` |
 |                     |                                          | Device Generation    | `45622512-6468-465a-b141-0b9b0f96b468` |
 | Parse Info Service  | `caa25cb7-7e1b-44f2-adc9-e8c06c9ced43`   | Scheme               | `caa25cb8-7e1b-44f2-adc9-e8c06c9ced43` |
-|                     |                                          | Sensor Names         | `caa25cb9-7e1b-44f2-adc9-e8c06c9ced43` |
 
 ### Sensor Configuration Characteristic
 Permissions: Write
@@ -131,29 +130,39 @@ The parsing scheme is needed to convert a received data package to usable values
 
 The received buffer can be represented as such:
 
-| Byte 0 | Byte 1                   | Byte 2             | Byte 3           | Byte 4                  | ... |
-|--------|--------------------------|--------------------|------------------|-------------------------|-----|
-| Count  | Value Count - Sensor 0   | Scheme - Sensor 0  |  Type - Sensor 0 |  Value Count - Sensor 1 | ... |
+| Byte 0       | Byte 1 - Byte X        | Byte X+1 - Byte Y      | ... |
+|--------------|------------------------|------------------------|-----|
+| Scheme Count | Scheme Packet Sensor 0 | Scheme Packet Sensor 0 | ... |
+| uint8        | Scheme Packet          | Scheme Packet          | ... |
 
-Count is the total number of 3 byte blocks. The size of the buffer is equal to `(Count * 3) + 1`.<br>
-Value Count is an 1 byte integer. It encodes how often the Parsing scheme repeats in the buffer.<br>
-Scheme is an 1 byte integer. It determines the parsing scheme.<br>
-Type is an 1 byte integer. It determines the data type of the values in the data buffer.
+Scheme Count is the total number Scheme Packets.<br>
 
-Parsing Schemes:
-```c++
-enum ParseScheme {
-    SCHEME_VAL,
-    SCHEME_DUAL_VAL,
-    SCHEME_TRIPLE_VAL,
-    SCHEME_QUAD_VAL,
-    SCHEME_XYZ,
-    SCHEME_RGB,
-    SCHEME_ORIENTATION,
-    SCHEME_QUATERNION
-};
-```
-(Enums are integers in ascending order starting from 0)
+Scheme Packet structure:
+
+| Byte 0   | Byte 1             | Byte 2 - Byte X | Byte X+1        | Byte X+2 - Byte Y  | Byte Y+1 - Byte Z  | ...  |
+|----------|--------------------|-----------------|-----------------|--------------------|--------------------|------|
+| SensorID | Sensor Name Length | Sensor Name     | Component Count | Component Packet 0 | Component Packet 1 | ...  |
+| uint8    | uint8              | char array      | uint8           | Component Packet   | Component Packet   | ...  |
+
+SensorID is ID of sensor.<br>
+Sensor Name Length is length of sensor name char array.<br>
+Sensor Name is name char array.<br>
+Component Count is count of total number of Component Packets of the sensor. 
+
+Scheme Packet structure:
+
+| Byte 0 | Byte 1            | Byte 2 - Byte X | Byte X+1              | Byte X+2 - Byte Y | Byte Y+1 - Byte Z | Byte Z+1 - Byte A |
+|--------|-------------------|-----------------|-----------------------|-------------------|-------------------|-------------------|
+| Type   | Group Name Length | Group Name      | Component Name Length | Component Name    | Unit Name Length  | Unit Name         |
+| uint8  | uint8             | char array      | uint8                 | char array        | uint8             | char array        |
+
+Type is the data type of component.<br>
+Group Name Length is length of group name char array.<br>
+Group Name is name char array.<br>
+Component Name Length is length of component name char array.<br>
+Component Name is name char array.<br>
+Unit Name Length is length of unit name char array.<br>
+Unit Name is name char array.
 
 Data types:
 ```c++
@@ -172,23 +181,6 @@ enum ParseType {
 };
 ```
 (Enums are integers in ascending order starting from 0)
-
-### Sensor Names Characteristic
-Permissions: Read
-
-With this characteristic the sensor count and names can be requested from the device.
-
-
-The received buffer can be represented as such:
-
-| Byte 0 - Bit 3 | Byte 4             | Byte 5         | Byte 6 - Byte X | Byte X+1       | ... |
-|----------------|--------------------|----------------|-----------------|----------------|-----|
-| Size           | Sensor Count       | Length Name 1  | Name 1          | Length Name 2  | ... |
-
-Size is a 4 byte int. It is the total length of the buffer. It is equal to `(4 + 1 + number_of_sensors * (1 + each_sensor_name_string_lenght))`.<br>
-Sensor Count is an 1 byte integer. It represents the total number of sensors.<br>
-Length Name is an 1 byte integer. It determines the length of the following name.<br>
-Name is a character array.
 
 ---
 ## Usage and functionality
@@ -355,6 +347,39 @@ enum ModuleID {
 };
 ```
 
+#### Sensor Components
+
+Each sensor has components representing the structure of the data the sensor produces.
+
+The `SensorComponent` struct looks the following:
+
+```cpp
+struct SensorComponent {
+    String group_name;
+    ParseType type;
+    String component_name;
+    String unit;
+};
+```
+- `group_name`: The name of the group this component belongs to. (e.g. "ACC", "GYRO",...)
+- `type`: The parsing type for the sensor data (enum `ParseType`).
+- `component_name`: The name of the component (e.g. "X", "Y", "Z", "Value",...)
+- `unit`: The name of the unit of the components value. The unit is optional and can be left empty.
+
+Note that group_name only becomes relevant if the sensor provides data from several different sources that should not be interpreted together.
+For example, if the sensor is an accelerometer and its acceleration and gyro data is supposed to be sent together. They can be given their own group under the same sensor.
+
+
+The sensor components need to be defined as const array of `SensorComponent` structs, seen in the following example:
+
+```cpp
+const SensorComponent ACC_COMPONENTS[] = {
+        {"ACC", PARSE_TYPE_FLOAT, "X", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Y", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Z", "g"}
+};
+```
+
 #### Array of SensorConfig Structs
 
 The `SensorConfig` struct defines the configuration for each sensor. It contains the following fields:
@@ -364,26 +389,24 @@ struct SensorConfig {
     String name;
     int sensor_id;
     int module_id;
-    int value_count;
-    ParseScheme scheme;
-    ParseType type;
+    int component_count;
+    const SensorComponent * components;
 };
 ```
 
 - `name`: The name of the sensor.
 - `sensor_id`: The ID of the sensor (defined in the `SensorID` enumeration).
 - `module_id`: The ID of the module to which the sensor belongs (defined in the `ModuleID` enumeration).
-- `value_count`: It encodes how often the Parsing scheme repeats in the data buffer.
-- `scheme`: The parsing scheme for the sensor data (enum `ParseScheme`).
-- `type`: The parsing type for the sensor data (enum `ParseType`).
+- `component_count`: The number of components the sensor holds (can be 0).
+- `components`: The pointer to the `SensorComponent` array.
 
 Here's an example of how the array of `SensorConfig` structs should be defined:
 
 ```cpp
 const SensorConfig CONFIG[SENSOR_COUNT] = {
-    {"ACC", IMU_ACCELERATION, MODULE_IMU, 1, SCHEME_XYZ, PARSE_TYPE_FLOAT},
-    {"GYRO", IMU_GYROSCOPE, MODULE_IMU, 1, SCHEME_XYZ, PARSE_TYPE_FLOAT},
-    {"PRESSURE", BARO_PRESSURE, MODULE_BARO, 1, SCHEME_VAL, PARSE_TYPE_FLOAT}
+    {"ACC", IMU_ACCELERATION, MODULE_IMU, 3, ACC_COMPONENTS},
+    {"GYRO", IMU_GYROSCOPE, MODULE_IMU, 3, GYRO_COMPONENTS},
+    {"PRESSURE", BARO_PRESSURE, MODULE_BARO, 1, PRESSURE_COMPONENTS}
 };
 ```
 
@@ -399,7 +422,7 @@ The user can process the configuration package without EdgeML trying to initiali
 Special sensors are optional.
 
 The special sensors get their own SensorID and Dummy Module in the enums.
-They also get included into the CONFIG list. value_count, scheme, and type can be arbitrarily selected.
+They also get included into the CONFIG list. The component field can be set to 0.
 They count towards the total number of sensors.
 
 Here's an example:
@@ -422,7 +445,7 @@ const int SpecialSensors[SPECIAL_SENSOR_COUNT] = {
 
 const SensorConfig CONFIG[SENSOR_COUNT] = 
     // Normal sensor configs
-    {"Special Name", SPECIAL_SENSOR, MODULE_DUMMY, 0, 0, 0}
+    {"Special Name", SPECIAL_SENSOR, MODULE_DUMMY, 0, {}}
 };
 ```
 
