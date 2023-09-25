@@ -44,16 +44,20 @@ bool Arduino_BHY2::begin()
 
 void Arduino_BHY2::pingI2C()
 {
-  #if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
   char response = 0xFF;
   int currTime = millis();
-  if ((currTime - _pingTime) > 30000)
-  {
+  if ((currTime - _pingTime) > 30000) {
     _pingTime = currTime;
-    // Read status reg
+#ifdef USE_FASTCHG_TO_KICK_WATCHDOG
+    //Read charger reg
+    nicla::checkChgReg();
+#else
+    //Read LDO reg
     nicla::readLDOreg();
-  }
-  #endif
+#endif
+	}
+#endif
 }
 
 void Arduino_BHY2::update()
