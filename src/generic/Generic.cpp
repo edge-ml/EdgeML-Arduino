@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Generic.h"
 
 Edge_ML_Generic::Edge_ML_Generic() {
@@ -91,3 +94,5 @@ void Edge_ML_Generic::ble_manual_advertise() {
 }
 
 Edge_ML_Generic edge_ml_generic;
+
+#endif

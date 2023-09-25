@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "HTS_Sensor_Nano.h"
 
 void HTS_Sensor_Nano::start() {
@@ -48,3 +51,5 @@ float HTS_Sensor_Nano::get_humidity(){
 int HTS_Sensor_Nano::get_sensor_count() {
     return sensor_count;
 }
+
+#endif

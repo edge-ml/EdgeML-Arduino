@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "IMU_Sensor_Nano.h"
 
 void IMU_Sensor_Nano::start() {
@@ -66,3 +69,5 @@ void IMU_Sensor_Nano::get_mag(float &x, float &y, float &z) {
 int IMU_Sensor_Nano::get_sensor_count() {
     return sensor_count;
 }
+
+#endif

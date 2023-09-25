@@ -1,5 +1,3 @@
-#include "Arduino.h"
-
 /*
 Sensors:
  - APDS
@@ -39,6 +37,10 @@ Sensors:
 #ifndef SENSORID_H_NANO
 #define SENSORID_H_NANO
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
+#include "Arduino.h"
 #include <boards/generic_boards/SensorTypes.h>
 
 const int SENSOR_COUNT_NANO = 10;
@@ -190,4 +192,5 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
         }
 };
 
+#endif
 #endif //SENSORID_H_NANO

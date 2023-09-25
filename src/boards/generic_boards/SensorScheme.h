@@ -1,6 +1,9 @@
 #ifndef EDGEML_ARDUINO_SENSORSCHEME_H
 #define EDGEML_ARDUINO_SENSORSCHEME_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 enum ParseType {
     PARSE_TYPE_INT8,
     PARSE_TYPE_UINT8,
@@ -30,4 +33,5 @@ const int ParseTypeSizes[] = {
         8           // PARSE_TYPE_DOUBLE
 };
 
+#endif
 #endif //EDGEML_ARDUINO_SENSORSCHEME_H

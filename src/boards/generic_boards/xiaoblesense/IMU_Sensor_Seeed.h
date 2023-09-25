@@ -1,6 +1,9 @@
 #ifndef IMU_SENSOR_SEEED_H
 #define IMU_SENSOR_SEEED_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "LSM6DS3.h"
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_Seeed.h"
@@ -25,4 +28,5 @@ private:
     LSM6DS3 * IMU;
 };
 
+#endif
 #endif //IMU_SENSOR_SEEED_H

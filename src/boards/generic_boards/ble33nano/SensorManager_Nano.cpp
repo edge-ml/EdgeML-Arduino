@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "SensorManager_Nano.h"
 
 void SensorManager_Nano::setup() {
@@ -13,3 +16,5 @@ void SensorManager_Nano::setup() {
 
     SensorManagerInterface::set_sensor_configs(CONFIG_NANO);
 }
+
+#endif

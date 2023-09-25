@@ -1,6 +1,9 @@
 #ifndef EDGEML_ARDUINO_SENSORMANAGERINTERFACE_H
 #define EDGEML_ARDUINO_SENSORMANAGERINTERFACE_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 
 #include "SensorInterface.h"
@@ -68,4 +71,5 @@ private:
     bool all_inactive(SensorInterface * sensor);
 };
 
+#endif
 #endif //EDGEML_ARDUINO_SENSORMANAGERINTERFACE_H

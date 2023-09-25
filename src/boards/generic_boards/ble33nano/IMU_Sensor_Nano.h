@@ -1,6 +1,9 @@
 #ifndef EDGEML_ARDUINO_IMU_SENSOR_NANO_H
 #define EDGEML_ARDUINO_IMU_SENSOR_NANO_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include <Arduino_LSM9DS1.h>
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_Nano.h"
@@ -23,4 +26,5 @@ private:
     bool available = false;
 };
 
+#endif
 #endif //EDGEML_ARDUINO_IMU_SENSOR_NANO_H

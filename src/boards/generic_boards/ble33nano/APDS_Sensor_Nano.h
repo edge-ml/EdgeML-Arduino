@@ -1,6 +1,9 @@
 #ifndef APDS_Sensor_H_NANO
 #define APDS_Sensor_H_NANO
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include <Arduino_APDS9960.h>
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_Nano.h"
@@ -25,5 +28,5 @@ private:
     bool available = false;
 };
 
-
+#endif
 #endif //APDS_Sensor_H_NANO

@@ -1,6 +1,9 @@
 #ifndef SENSORMANAGER_H_NANO
 #define SENSORMANAGER_H_NANO
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 
 #include <boards/generic_boards/SensorInterface.h>
@@ -18,4 +21,5 @@ public:
     void setup() override;
 };
 
+#endif
 #endif //SENSORMANAGER_H_NANO

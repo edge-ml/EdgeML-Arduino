@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 
 /*
@@ -67,4 +70,5 @@ const SensorConfig CONFIG_SEEED[SENSOR_COUNT_SEEED] = {
         }
 };
 
+#endif
 #endif //SENSORID_Seeed_H

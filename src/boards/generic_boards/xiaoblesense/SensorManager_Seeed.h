@@ -1,6 +1,9 @@
 #ifndef SENSORMANAGER_SEEED_H
 #define SENSORMANAGER_SEEED_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 
 #include <boards/generic_boards/SensorInterface.h>
@@ -15,4 +18,5 @@ public:
     void setup() override;
 };
 
+#endif
 #endif //SENSORMANAGER_SEEED_H

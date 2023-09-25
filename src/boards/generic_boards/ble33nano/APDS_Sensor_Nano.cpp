@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "APDS_Sensor_Nano.h"
 
 void APDS_Sensor_Nano::start() {
@@ -86,3 +89,5 @@ int APDS_Sensor_Nano:: get_gesture() {
 int APDS_Sensor_Nano::get_sensor_count() {
     return sensor_count;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "BLEHandler_G.h"
 
 #include "Arduino.h"
@@ -7,8 +10,6 @@
 #include <config/ble_config.h>
 #include <cstdint>
 #include <utility>
-
-
 
 BLEHandler_G::BLEHandler_G() {
     device_name = DEVICE_IDENTIFER;
@@ -157,3 +158,5 @@ void BLEHandler_G::ble_manual_advertise() {
 }
 
 BLEHandler_G bleHandler_G;
+
+#endif

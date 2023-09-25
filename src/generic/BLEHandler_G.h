@@ -1,6 +1,9 @@
 #ifndef BLEHANDLER_H_G
 #define BLEHANDLER_H_G
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 #include "ArduinoBLE.h"
 #include "Debug.h"
@@ -57,4 +60,6 @@ private:
 };
 
 extern BLEHandler_G bleHandler_G;
+
+#endif
 #endif //BLEHANDLER_H_G

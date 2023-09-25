@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Debug.h"
 
 void Debug::debug(Stream &stream) {
@@ -33,3 +36,5 @@ void Debug::println(int value, bool end) {
 
     println(String(value), end);
 }
+
+#endif

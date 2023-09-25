@@ -27,6 +27,9 @@
 #ifndef __LSM6DS3IMU_H__
 #define __LSM6DS3IMU_H__
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "stdint.h"
 
 #define I2C_MODE 0
@@ -2084,4 +2087,5 @@ typedef enum {
     LSM6DS3_ACC_GYRO_INT2_SLEEP_ENABLED 		 = 0x80,
 } LSM6DS3_ACC_GYRO_INT2_SLEEP_t;
 
+#endif
 #endif  // End of __LSM6DS3IMU_H__ definition check

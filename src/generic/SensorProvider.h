@@ -1,6 +1,9 @@
 #ifndef SENSORPRIVDER_H
 #define SENSORPRIVDER_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "BLEHandler_G.h"
 #include "Debug.h"
 
@@ -49,4 +52,5 @@ private:
 
 extern SensorProvider sensorProvider;
 
+#endif
 #endif //SENSORPRIVDER_H

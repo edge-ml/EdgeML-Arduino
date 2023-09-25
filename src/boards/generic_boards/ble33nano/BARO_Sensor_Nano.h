@@ -1,6 +1,9 @@
 #ifndef BARO_SENSOR_H_NANO
 #define BARO_SENSOR_H_NANO
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include <Arduino_LPS22HB.h>
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_Nano.h"
@@ -21,4 +24,5 @@ private:
     bool available = false;
 };
 
+#endif
 #endif //BARO_SENSOR_H_NANO

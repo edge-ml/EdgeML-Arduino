@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "SensorManager_Seeed.h"
 
 void SensorManager_Seeed::setup() {
@@ -10,3 +13,5 @@ void SensorManager_Seeed::setup() {
 
     SensorManagerInterface::set_sensor_configs(CONFIG_SEEED);
 }
+
+#endif

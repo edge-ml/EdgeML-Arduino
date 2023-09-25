@@ -1,6 +1,9 @@
 #ifndef EDGEML_ARDUINO_DEBUG_H
 #define EDGEML_ARDUINO_DEBUG_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "Arduino.h"
 
 class Debug {
@@ -18,4 +21,5 @@ protected:
     Stream *_debug;
 };
 
+#endif
 #endif //EDGEML_ARDUINO_DEBUG_H

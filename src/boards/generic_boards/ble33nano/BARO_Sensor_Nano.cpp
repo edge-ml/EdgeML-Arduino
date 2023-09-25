@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "BARO_Sensor_Nano.h"
 
 void BARO_Sensor_Nano::start() {
@@ -27,3 +30,5 @@ float BARO_Sensor_Nano::get_pressure() {
 int BARO_Sensor_Nano::get_sensor_count() {
     return sensor_count;
 }
+
+#endif

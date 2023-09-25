@@ -1,6 +1,9 @@
 #ifndef EDGEML_ARDUINO_SENSORINTERFACE_H
 #define EDGEML_ARDUINO_SENSORINTERFACE_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 // Is a module interface
 #define MAX_MODULES 32
 
@@ -24,4 +27,5 @@ public:
 class DummySensor : public SensorInterface {
 };
 
+#endif
 #endif //EDGEML_ARDUINO_SENSORINTERFACE_H

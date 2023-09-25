@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "IMU_Sensor_Seeed.h"
 
 IMU_Sensor_Seeed::IMU_Sensor_Seeed() {
@@ -71,3 +74,5 @@ void IMU_Sensor_Seeed::get_temp(float &C) {
 
     C = IMU->readTempC();
 }
+
+#endif

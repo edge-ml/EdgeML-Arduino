@@ -1,6 +1,9 @@
 #ifndef HTS_SENSOR_H_NANO
 #define HTS_SENSOR_H_NANO
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include <Arduino_HTS221.h>
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_Nano.h"
@@ -22,4 +25,5 @@ private:
     bool available = false;
 };
 
+#endif
 #endif //HTS_SENSOR_H_NANO

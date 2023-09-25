@@ -1,6 +1,10 @@
 #ifndef SENSORTYPES_H
 #define SENSORTYPES_H
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
+#include "Arduino.h"
 #include "SensorScheme.h"
 
 struct SensorComponent {
@@ -52,4 +56,5 @@ struct Sensor {
     }
 };
 
+#endif
 #endif //SENSORTYPES_H

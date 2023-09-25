@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "SensorProvider.h"
 
 SensorProvider::SensorProvider() {
@@ -223,3 +226,5 @@ String SensorProvider::parse_to_string(int sensorID, const byte *data) {
 }
 
 SensorProvider sensorProvider;
+
+#endif

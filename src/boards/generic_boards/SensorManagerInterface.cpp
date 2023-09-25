@@ -1,3 +1,6 @@
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "SensorManagerInterface.h"
 
 SensorManagerInterface::SensorManagerInterface() {
@@ -252,3 +255,5 @@ bool SensorManagerInterface::check_special_sensor(int ID) {
 SensorConfig * SensorManagerInterface::get_config(int ID) {
     return (SensorConfig *) _config_id_index[ID];
 }
+
+#endif

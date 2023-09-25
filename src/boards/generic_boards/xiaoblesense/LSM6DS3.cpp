@@ -26,6 +26,9 @@
 
 //See SparkFunLSM6DS3.h for additional topology notes.
 
+#include "config/flags.h"
+#if defined NORMAL_BOARD
+
 #include "LSM6DS3.h"
 #include "stdint.h"
 
@@ -711,3 +714,4 @@ void LSM6DS3::fifoEnd(void) {
     writeRegister(LSM6DS3_ACC_GYRO_FIFO_STATUS1, 0x00);  //Disable
 }
 
+#endif
