@@ -38,8 +38,8 @@ bool Arduino_BHY2::begin()
   }
   _sensorDataCharacteristic = bleHandler.getSensorDataCharacteristic();
   BoschParser::setSensorDataCharacteristic(_sensorDataCharacteristic);
-  return true;
 #endif
+    return true;
 }
 
 void Arduino_BHY2::pingI2C()
@@ -116,7 +116,10 @@ void Arduino_BHY2::delay(unsigned long ms)
 String Arduino_BHY2::get_name() {
 #if defined(ARDUINO_NICLA)
     return bleHandler.get_name();
+#else
+    return "";
 #endif
+
 }
 
 void Arduino_BHY2::debug(Stream &stream)

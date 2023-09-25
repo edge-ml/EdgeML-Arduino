@@ -1,3 +1,7 @@
+//
+// EdgeML-Arduino code created by Dylan Ray Roodt [https://github.com/Xraydylan] for TECO KIT
+// More infos at: https://github.com/edge-ml/EdgeML-Arduino
+//
 #ifndef Edge_ML_BASE_H_
 #define Edge_ML_BASE_H_
 
@@ -128,6 +132,6 @@ private:
 #endif
 };
 
-extern Edge_ML edge_ml;
+Edge_ML edge_ml;
 
 #endif //Edge_ML_BASE_H_
