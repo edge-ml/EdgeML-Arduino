@@ -26,9 +26,6 @@ BLECharacteristic deviceIdentifierCharacteristic(deviceIdentifierUuid, BLERead, 
 BLECharacteristic deviceGenerationCharacteristic(deviceGenerationUuid, BLERead, sizeof(DEVICE_GENERATION));
 
 // Device information channel
-BLEService parseInfoService_N(parseInfoServiceUuid);
-BLECharacteristic deviceParseSchemeC_N(parseSchemeUuid, BLERead, 2);
-BLECharacteristic deviceSensorNamesC_N(parseSensorNamesUuid, BLERead, 1);
 
 Stream *BLEHandler::_debug = NULL;
 
@@ -102,19 +99,6 @@ bool BLEHandler::begin()
     BLE.addService(dfuService);
     dfuInternalCharacteristic.setEventHandler(BLEWritten, receivedInternalDFU);
     dfuExternalCharacteristic.setEventHandler(BLEWritten, receivedExternalDFU);
-
-    // Parse information
-    BLE.setAdvertisedService(parseInfoService_N);
-    parseInfoService_N.addCharacteristic(deviceParseSchemeC_N);
-    parseInfoService_N.addCharacteristic(deviceSensorNamesC_N);
-    BLE.addService(parseInfoService_N);
-
-    _scheme_buffer = new byte[2] {0, 1};
-    _scheme_length = 2;
-    _names_buffer = new byte[1] {0};
-    _names_length= 1;
-    deviceParseSchemeC_N.writeValue(_scheme_buffer, _scheme_length);
-    deviceSensorNamesC_N.writeValue(_names_buffer, _names_length);
 
     BLE.advertise();
     return true;
