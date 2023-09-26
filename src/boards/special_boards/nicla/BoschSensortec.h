@@ -28,41 +28,45 @@ extern "C"
 #define MAX_READ_WRITE_LEN 256
 
 enum SensorAckCode {
-  SensorAck = 0x0F,
-  SensorNack = 0x00
+    SensorAck = 0x0F,
+    SensorNack = 0x00
 };
 
 class BoschSensortec {
 public:
-  BoschSensortec();
-  virtual ~BoschSensortec();
+    BoschSensortec();
+    virtual ~BoschSensortec();
 
-  // sketch-side API
-  bool begin(); 
-  void update();
-  void configureSensor(SensorConfigurationPacket& config);
+    // sketch-side API
+    bool begin();
+    void update();
+    void configureSensor(SensorConfigurationPacket& config);
 
-  //uint8_t availableSensorData();
-  //bool readSensorData(SensorDataPacket &data);
+    //uint8_t availableSensorData();
+    //bool readSensorData(SensorDataPacket &data);
 
-  // ANNA <-> BOSCH interface
-  //void addSensorData(SensorDataPacket &sensorData);
+    // ANNA <-> BOSCH interface
+    //void addSensorData(SensorDataPacket &sensorData);
 
-  uint8_t acknowledgment();
+    uint8_t acknowledgment();
 
-private:
-  //mbed::CircularBuffer<SensorDataPacket, SENSOR_QUEUE_SIZE, uint8_t> _sensorQueue;
-
-  uint8_t _workBuffer[WORK_BUFFER_SIZE];
-  uint8_t _acknowledgment;
-  
-  struct bhy2_dev _bhy2;
-  uint8_t _sensorsPresent[32];
+    void set_config_callback(void(*)(SensorConfigurationPacket *));
 
 private:
-  friend class Arduino_BHY2;
-  void debug(Stream &stream);
-  Stream *_debug;
+    //mbed::CircularBuffer<SensorDataPacket, SENSOR_QUEUE_SIZE, uint8_t> _sensorQueue;
+
+    uint8_t _workBuffer[WORK_BUFFER_SIZE];
+    uint8_t _acknowledgment;
+
+    struct bhy2_dev _bhy2;
+    uint8_t _sensorsPresent[32];
+
+private:
+    friend class Arduino_BHY2;
+    void debug(Stream &stream);
+    Stream *_debug;
+
+    void (*_config_callback)(SensorConfigurationPacket * config) = nullptr;
 };
 
 extern BoschSensortec sensortec;

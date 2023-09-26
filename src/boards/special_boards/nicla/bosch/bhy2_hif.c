@@ -106,7 +106,7 @@ static int8_t bhy2_hif_exec_cmd_generic(uint16_t cmd,
                 command_buf[2] = (temp_total_len / 4) & 0xFF;
                 command_buf[3] = ((temp_total_len / 4) >> 8) & 0xFF;
             }
-            /* Length in byte */
+                /* Length in byte */
             else
             {
                 command_buf[2] = temp_total_len & 0xFF;

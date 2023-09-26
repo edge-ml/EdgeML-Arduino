@@ -130,7 +130,7 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         return rslt;
     }
 
-    
+
     // Get and process the Wake up FIFO
     fifos.read_length = 0;
     int_status = int_status_bak;
@@ -159,9 +159,9 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         rslt = parse_fifo(BHY2_FIFO_TYPE_WAKEUP, &fifos, dev);
         int_status = 0;
     }
-       
 
-    
+
+
     //Get and process the Non Wake-up FIFO
     fifos.read_length = 0;
     int_status = int_status_bak;
@@ -190,7 +190,7 @@ int8_t bhy2_get_and_process_fifo(uint8_t *work_buffer, uint32_t buffer_size, str
         rslt = parse_fifo(BHY2_FIFO_TYPE_NON_WAKEUP, &fifos, dev);
         int_status = 0;
     }
-    
+
 
     /*
     // Get and process the Status fifo

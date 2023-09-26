@@ -46,22 +46,42 @@ public:
     }
 
 
+    void set_ble_config(String name, String gen = "0.0.0") {
 #if defined NORMAL_BOARD
-    void set_custom(SensorManagerInterface * sensorManager) {
-        edge_ml_generic.set_custom(sensorManager);
+        edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
+#elif defined NICLA_FLAG
+        return edge_ml_nicla.set_ble_config(std::move(name), std::move(gen));
+#endif
     }
 
     void configure_sensor(SensorConfigurationPacket& config) {
+#if defined NORMAL_BOARD
         edge_ml_generic.configure_sensor(config);
+#elif defined NICLA_FLAG
+        edge_ml_nicla.configure_sensor(config);
+#endif
     }
-
 
     void ble_manual_advertise() {
-        return edge_ml_generic.ble_manual_advertise();
+#if defined NORMAL_BOARD
+        edge_ml_generic.ble_manual_advertise();
+#elif defined NICLA_FLAG
+        edge_ml_nicla.ble_manual_advertise();
+#endif
     }
 
-    void set_ble_config(String name, String gen = "0.0.0") {
-        edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
+    void set_config_callback(void(*callback)(SensorConfigurationPacket *)) {
+#if defined NORMAL_BOARD
+        edge_ml_generic.set_config_callback(callback);
+#elif defined NICLA_FLAG
+        edge_ml_nicla.set_config_callback(callback);
+#endif
+    }
+
+
+#if defined NORMAL_BOARD
+    void set_custom(SensorManagerInterface * sensorManager) {
+        edge_ml_generic.set_custom(sensorManager);
     }
 
     int get_active_count() {
@@ -70,14 +90,6 @@ public:
 
     String parse_to_string(int sensorID, byte * data) {
         return edge_ml_generic.parse_to_string(sensorID, data);
-    }
-
-    void set_data_callback(void(*callback)(int id, unsigned int timestamp, uint8_t* data, int size)) {
-        edge_ml_generic.set_data_callback(callback);
-    }
-
-    void set_config_callback(void(*callback)(SensorConfigurationPacket *)) {
-        edge_ml_generic.set_config_callback(callback);
     }
 #endif
 

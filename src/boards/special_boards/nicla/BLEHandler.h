@@ -10,39 +10,57 @@
 
 class BLEHandler {
 public:
-  BLEHandler();
-  virtual ~BLEHandler();
+    BLEHandler();
+    virtual ~BLEHandler();
 
-  bool begin();
-  void update();
-  void poll(unsigned long timeout);
-  void end();
-  BLECharacteristic* getSensorDataCharacteristic();
-  String get_name();
+    bool begin();
+    void update();
+    void poll(unsigned long timeout);
+    void end();
+    BLECharacteristic* getSensorDataCharacteristic();
+    String get_name();
 
-  static void debug(Stream &stream);
+    void set_name(String name);
+    void set_generation(String gen);
 
-  bool bleActive = false;
+    void ble_manual_advertise();
+
+    static void debug(Stream &stream);
+
+    bool bleActive = false;
 
 
 private:
-  static Stream *_debug;
+    static Stream *_debug;
 
-  bool _lastDfuPack;
-  String device_name;
+    String device_id;
+    String device_name;
+    String device_gen;
 
-    int _scheme_length = 0;
-    byte * _scheme_buffer = nullptr;
+    bool _lastDfuPack;
 
-    // Keep in mind the max length is 510 bytes of the characteristic
-    int _names_length = 0;
-    byte * _names_buffer = nullptr;
+    bool manual_advertise = false;
 
-  void processDFUPacket(DFUType dfuType, BLECharacteristic characteristic);
-  static void receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic);
-  static void receivedExternalDFU(BLEDevice central, BLECharacteristic characteristic);
+    String dfuServiceUuid = "34c2e3b8-34aa-11eb-adc1-0242ac120002";
+    String dfuInternalUuid = "34c2e3b9-34aa-11eb-adc1-0242ac120002";
+    String dfuExternalUuid = "34c2e3ba-34aa-11eb-adc1-0242ac120002";
 
-  static void receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
+    BLEService * sensorService;
+    BLEService * dfuService;
+    BLEService * deviceInfoService;
+
+    BLECharacteristic * sensorDataCharacteristic;
+    BLECharacteristic * sensorConfigCharacteristic;
+    BLECharacteristic * dfuInternalCharacteristic;
+    BLECharacteristic * dfuExternalCharacteristic;
+    BLECharacteristic * deviceIdentifierCharacteristic;
+    BLECharacteristic * deviceGenerationCharacteristic;
+
+    void processDFUPacket(DFUType dfuType, BLECharacteristic characteristic);
+    static void receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic);
+    static void receivedExternalDFU(BLEDevice central, BLECharacteristic characteristic);
+
+    static void receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
 };
 
 extern BLEHandler bleHandler;

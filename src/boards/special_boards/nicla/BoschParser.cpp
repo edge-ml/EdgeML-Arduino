@@ -5,10 +5,12 @@
 
 Stream* BoschParser::_debug = NULL;
 BLECharacteristic* BoschParser::_sensorDataCharacteristic = NULL;
+void (*BoschParser::_data_callback)(int ID, unsigned int timestamp, uint8_t * data, int size) = nullptr;
+
 
 void BoschParser::debug(Stream &stream)
 {
-  _debug = &stream;
+    _debug = &stream;
 }
 
 void BoschParser::convertTime(uint64_t time_ticks, uint32_t *millis)
@@ -22,36 +24,44 @@ void BoschParser::convertTime(uint64_t time_ticks, uint32_t *millis)
 }
 
 void BoschParser::setSensorDataCharacteristic(BLECharacteristic *sensorDataCharacteristic) {
-  _sensorDataCharacteristic = sensorDataCharacteristic;
+    _sensorDataCharacteristic = sensorDataCharacteristic;
+}
+
+void BoschParser::set_data_callback(void (*callback)(int, unsigned int, uint8_t *, int)) {
+    _data_callback = callback;
 }
 
 void BoschParser::parseData(const struct bhy2_fifo_parse_data_info *fifoData, void *arg)
 {
-  SensorDataPacket sensorData;
-  uint32_t millis;
-  convertTime(*fifoData->time_stamp, &millis);
-  sensorData.sensorId = fifoData->sensor_id;
-  sensorData.time = millis;
-  sensorData.size = (fifoData->data_size > sizeof(sensorData.data)) ? sizeof(sensorData.data) : fifoData->data_size;
-  memcpy(&sensorData.data, fifoData->data_ptr, sensorData.size);
+    SensorDataPacket sensorData;
+    uint32_t millis;
+    convertTime(*fifoData->time_stamp, &millis);
+    sensorData.sensorId = fifoData->sensor_id;
+    sensorData.time = millis;
+    sensorData.size = (fifoData->data_size > sizeof(sensorData.data)) ? sizeof(sensorData.data) : fifoData->data_size;
+    memcpy(&sensorData.data, fifoData->data_ptr, sensorData.size);
 
-  if (_debug) {
-    _debug->print("Sensor: ");
-    _debug->print(sensorData.sensorId);
-    _debug->print("  value: ");
-    for (uint8_t i = 0; i < (fifoData->data_size - 1); i++)
-    {
-        _debug->print(sensorData.data[i], HEX);
+    if (_debug) {
+        _debug->print("Sensor: ");
+        _debug->print(sensorData.sensorId);
+        _debug->print("  value: ");
+        for (uint8_t i = 0; i < (fifoData->data_size - 1); i++)
+        {
+            _debug->print(sensorData.data[i], HEX);
+        }
+        _debug->print("  ");
+        for (uint8_t i = 0; i < (fifoData->data_size - 1); i++)
+        {
+            _debug->print(fifoData->data_ptr[i], HEX);
+        }
+        _debug->println("");
     }
-    _debug->print("  ");
-    for (uint8_t i = 0; i < (fifoData->data_size - 1); i++)
-    {
-        _debug->print(fifoData->data_ptr[i], HEX);
-    }
-    _debug->println("");
-  }
 
-  _sensorDataCharacteristic->writeValue(&sensorData, sizeof(SensorDataPacket));
+    _sensorDataCharacteristic->writeValue(&sensorData, sizeof(SensorDataPacket));
+
+    if (_data_callback) {
+        _data_callback(sensorData.sensorId, sensorData.time, sensorData.data, sensorData.size);
+    }
 }
 
 #endif

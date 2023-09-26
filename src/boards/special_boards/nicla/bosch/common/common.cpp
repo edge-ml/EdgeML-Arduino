@@ -56,14 +56,14 @@ mbed::DigitalIn BHY260_INT_PIN(INT_BHI260);
 
 bool get_interrupt_status(void)
 {
-    #if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
     return BHY260_INT_PIN;
-    #endif
+#endif
 }
 
 char* get_api_error(int8_t error_code)
 {
-    #if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
     char *ret = " ";
 
     switch (error_code)
@@ -102,7 +102,7 @@ char* get_api_error(int8_t error_code)
     }
 
     return ret;
-    #endif
+#endif
 }
 
 mbed::SPI spi(SPI_PSELMOSI0, SPI_PSELMISO0, SPI_PSELSCK0 /*, SPI_PSELSS0 */);
@@ -118,7 +118,7 @@ void close_interfaces(void)
 
 int8_t bhy2_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t length, void *intf_ptr)
 {
-    #if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
     (void)intf_ptr;
 
     BHY260_CS_PIN = 0;
@@ -127,12 +127,12 @@ int8_t bhy2_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t length, void 
     BHY260_CS_PIN = 1;
 
     return BHY2_INTF_RET_SUCCESS;
-    #endif
+#endif
 }
 
 int8_t bhy2_spi_write(uint8_t reg_addr, const uint8_t *reg_data, uint32_t length, void *intf_ptr)
 {
-    #if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
     (void)intf_ptr;
     BHY260_CS_PIN = 0;
     spi.write(reg_addr);
@@ -140,7 +140,7 @@ int8_t bhy2_spi_write(uint8_t reg_addr, const uint8_t *reg_data, uint32_t length
     BHY260_CS_PIN = 1;
 
     return BHY2_INTF_RET_SUCCESS;
-    #endif
+#endif
 }
 
 int8_t bhy2_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t length, void *intf_ptr)
