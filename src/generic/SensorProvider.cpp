@@ -20,7 +20,8 @@ void SensorProvider::set_sensorManager(SensorManagerInterface *sensorManager) {
     delete [] _data_buffer;
     int size = _sensorManager->get_max_data_size();
     size += _meta_data_size; // Add space for ID [0], time_stamp [1], normal offset = 5
-    _data_buffer = new uint8_t[size];
+    _data_buffer_size = size;
+    _data_buffer = new uint8_t[_data_buffer_size];
 }
 
 
@@ -30,6 +31,9 @@ bool SensorProvider::begin() {
 }
 
 void SensorProvider::update() {
+    _sensorManager->update();
+    _sensorManager->update_modules();
+
     Sensor * sensor;
     for (int i=0; i<_sensor_count; i++) {
         sensor = _sensor_array[i];
@@ -127,6 +131,9 @@ void SensorProvider::send_sensor_data(int ID) {
         print("Data buffer nullptr");
         return;
     }
+
+    memset(_data_buffer, 0, _data_buffer_size); // Reset memory
+
     _data_buffer[0] = uint8_t(ID);                  // ID
     _data_buffer[1] = uint8_t(data_length);          // Size of data array; Originally: size of package 2 + 4 + data_length MAX LENGTH = 255
     memcpy(&_data_buffer[2], &timestamp, sizeof(timestamp)); // timestamp

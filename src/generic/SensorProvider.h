@@ -37,6 +37,7 @@ private:
     int _sensor_count;
     int _active_count;
 
+    int _data_buffer_size = 0;
     uint8_t * _data_buffer = nullptr;
 
     const int _meta_data_size = 2 + 4; // 2 + 4;

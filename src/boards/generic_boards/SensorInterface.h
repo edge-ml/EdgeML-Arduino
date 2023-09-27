@@ -15,6 +15,7 @@ public:
 
     virtual void start() {};
     virtual void end() {};
+    virtual void update() {};
 
     virtual void get_data(int sensorID, byte * data) {};
 

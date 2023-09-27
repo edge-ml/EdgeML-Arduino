@@ -17,6 +17,8 @@ public:
     virtual ~SensorManagerInterface();
 
     void init();
+    virtual void update() {};
+    void update_modules();
 
     int get_sensor_count();
     Sensor ** get_sensors();
@@ -50,8 +52,6 @@ private:
 
     const int * _special_ids;
     int _special_count = 0;
-
-
 
     const SensorConfig * _configs;
     Sensor ** _sensors;  // INDEX -> Sensor
