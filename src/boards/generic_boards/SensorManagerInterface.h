@@ -34,6 +34,8 @@ public:
 
     SensorConfig * get_config(int ID);
 
+    int get_index_from_id(int id);
+
 protected:
     virtual void setup() {};
 
@@ -49,12 +51,16 @@ private:
     const int * _special_ids;
     int _special_count = 0;
 
+
+
     const SensorConfig * _configs;
-    Sensor ** _sensors;  // ID -> Sensor
+    Sensor ** _sensors;  // INDEX -> Sensor
     SensorInterface ** _sensor_modules; // Module ID -> SensorInterface (Pointer to array of pointers)
 
-    int * _sensor_module_pos;  // ID -> Module Position
-    const SensorConfig ** _config_id_index; // Index (ID) -> SensorConfig pointer (ID ascending)
+
+    int * _index_to_id;  // INDEX -> ID
+    int * _sensor_module_pos;  // INDEX -> MODULE POSITION (position within module)
+    const SensorConfig ** _config_id_index; // INDEX -> SensorConfig pointer
 
     int _scheme_length = 0;
     byte * _scheme_buffer = nullptr;

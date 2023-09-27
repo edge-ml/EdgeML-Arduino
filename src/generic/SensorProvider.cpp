@@ -53,7 +53,9 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
     }
 
     int ID = config.sensorId;
-    if (!check_valid_id(ID)) {
+    int index = _sensorManager->get_index_from_id(ID);
+
+    if (index == -1) {
         if (debugging) {
             print("Invalid ID: ");
             println(ID);
@@ -69,7 +71,7 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
         return;
     }
 
-    Sensor * sensor = _sensor_array[ID];
+    Sensor * sensor = _sensor_array[index];
 
     if (config.sampleRate == 0.0) {
         sensor->state = false;
@@ -116,7 +118,9 @@ void SensorProvider::send_sensor_data(int ID) {
     }
 
     unsigned int timestamp = millis();
-    int data_length = _sensor_array[ID]->data_size;
+
+    int index = _sensorManager->get_index_from_id(ID);
+    int data_length = _sensor_array[index]->data_size;
     int total_size = data_length + _meta_data_size;
 
     if (!_data_buffer) {
@@ -124,7 +128,7 @@ void SensorProvider::send_sensor_data(int ID) {
         return;
     }
     _data_buffer[0] = uint8_t(ID);                  // ID
-    _data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
+    _data_buffer[1] = uint8_t(data_length);          // Size of data array; Originally: size of package 2 + 4 + data_length MAX LENGTH = 255
     memcpy(&_data_buffer[2], &timestamp, sizeof(timestamp)); // timestamp
 
     uint8_t * data_pointer = &_data_buffer[_meta_data_size];
@@ -133,7 +137,7 @@ void SensorProvider::send_sensor_data(int ID) {
     bleHandler_G.send(_data_buffer, total_size);
 
     if (_data_callback) {
-        _data_callback(ID, timestamp, data_pointer, total_size);
+        _data_callback(ID, timestamp, data_pointer, data_length);
     }
 }
 
@@ -144,9 +148,7 @@ void SensorProvider::debug(Stream &stream) {
 }
 
 bool SensorProvider::check_valid_id(int ID) {
-    if (ID < 0) return false;
-    if (ID >= _sensor_count) return false;
-    return true;
+    return _sensorManager->get_index_from_id(ID) != -1;
 }
 
 int SensorProvider::get_active() {
@@ -162,7 +164,8 @@ void SensorProvider::set_config_callback(void (*callback)(SensorConfigurationPac
 }
 
 String SensorProvider::parse_to_string(int sensorID, const byte *data) {
-    if (!check_valid_id(sensorID)) return "";
+    int index = _sensorManager->get_index_from_id(sensorID);
+    if (index == -1) return "";
     if (_sensorManager->check_special_sensor(sensorID)) return "";
 
     SensorConfig * config = _sensorManager->get_config(sensorID);

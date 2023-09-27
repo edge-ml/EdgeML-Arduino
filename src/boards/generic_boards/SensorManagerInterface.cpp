@@ -27,7 +27,7 @@ SensorManagerInterface::~SensorManagerInterface() {
 void SensorManagerInterface::init() {
     setup(); // Call setup function of board sensor manager
 
-    setup_ID_arrays(); // populates _sensor_module_pos and _config_id_index
+    setup_ID_arrays(); // populates _sensor_module_pos and _config_id_index and _index_to_id
     setup_sensors(); // Creates Sensor Objects
 
     setup_scheme_buffer(); // BLE information schemes
@@ -54,7 +54,8 @@ void SensorManagerInterface::start_sensor(int ID) {
         print("Starting Sensor: ");
         println(ID);
     }
-    int pos = _sensor_module_pos[ID];
+    int index = get_index_from_id(ID);
+    int pos = _sensor_module_pos[index];
     SensorInterface * sensor = get_module(ID);
     sensor->_active[pos] = true;
     sensor->start();
@@ -67,7 +68,8 @@ void SensorManagerInterface::end_sensor(int ID) {
         println(ID);
     }
 
-    int pos = _sensor_module_pos[ID];
+    int index = get_index_from_id(ID);
+    int pos = _sensor_module_pos[index];
     SensorInterface * sensor = get_module(ID);
     sensor->_active[pos] = false;
 
@@ -87,25 +89,19 @@ int SensorManagerInterface::get_sensor_count() {
 void SensorManagerInterface::setup_ID_arrays() {
     _sensor_module_pos = new int[_sensor_count];
     _config_id_index = new const SensorConfig * [_sensor_count];
+    _index_to_id = new int[_sensor_count];
 
     int * counts = new int[_module_count] {0};
     const SensorConfig * s_con;
     // i -> Index
-    for (int i=0; i<_sensor_count; i++) {
-        s_con = &_configs[i];
-        int s_id = s_con->sensor_id;
-        int m_id = s_con->module_id;
+    for (int index=0; index<_sensor_count; index++) {
+        s_con = &_configs[index];                       // Get config
+        int sensor_id = s_con->sensor_id;               // Get ID
+        int m_id = s_con->module_id;                    // Get Module ID
 
-        // In order to account for out of order config array
-        // i -> ID, j -> Index
-        for (int j = 0; j < _sensor_count; ++j) {
-            if (_configs[j].sensor_id == i) {
-                _config_id_index[i] = &_configs[j];
-                break;
-            }
-        }
-
-        _sensor_module_pos[s_id] = counts[m_id];
+        _index_to_id[index] = sensor_id;                // Add to: INDEX -> ID
+        _config_id_index[index] = &_configs[index];     // Add to: INDEX -> CONFIG
+        _sensor_module_pos[index] = counts[m_id];       // Add to: INDEX -> Position in module
 
         counts[m_id]++;
     }
@@ -115,20 +111,23 @@ void SensorManagerInterface::setup_ID_arrays() {
 void SensorManagerInterface::setup_sensors() {
     _sensors = new Sensor * [_sensor_count];
     Sensor * sensor;
-    for (int i=0; i<_sensor_count; i++) {
-        int data_size = calculate_size(i);
+    for (int index=0; index<_sensor_count; index++) {
+        int id = _index_to_id[index];
+        int data_size = calculate_size(id);
 
         if (data_size > _max_data_size) {
             _max_data_size = data_size;
         }
 
-        sensor = new Sensor {i, false, false, 0, 0, data_size};
-        _sensors[i] = sensor;
+        int sensor_id = _index_to_id[index];
+        sensor = new Sensor {sensor_id, false, false, 0, 0, data_size};
+        _sensors[index] = sensor;
     }
 }
 
 int SensorManagerInterface::calculate_size(int ID) {
-    const SensorConfig * config = _config_id_index[ID];
+    int index = get_index_from_id(ID);
+    const SensorConfig * config = _config_id_index[index];
 
     int size = 0;
     const SensorComponent * comp;
@@ -162,8 +161,8 @@ void SensorManagerInterface::setup_scheme_buffer() {
 
     const SensorConfig * s_con;
     const SensorComponent * comp;
-    for (int s_id = 0; s_id < _sensor_count; ++s_id) {
-        s_con = _config_id_index[s_id];
+    for (int index = 0; index < _sensor_count; ++index) {
+        s_con = _config_id_index[index];
         _scheme_length += 3 + s_con->name.length(); // 3 * 1
 
         for (int i = 0; i < s_con->component_count; ++i) {
@@ -180,10 +179,10 @@ void SensorManagerInterface::setup_scheme_buffer() {
     int offset = 0;
     _scheme_buffer[offset] = (uint8_t)_sensor_count;
     offset += 1;
-    for (int s_id = 0; s_id < _sensor_count; ++s_id) {
-        s_con = _config_id_index[s_id];
+    for (int index = 0; index < _sensor_count; ++index) {
+        s_con = _config_id_index[index];
 
-        _scheme_buffer[offset++] = (uint8_t)s_id;
+        _scheme_buffer[offset++] = (uint8_t)_index_to_id[index];
         _scheme_buffer[offset++] = (uint8_t)s_con->name.length();
 
         memcpy(&_scheme_buffer[offset], s_con->name.c_str(), s_con->name.length());
@@ -225,7 +224,8 @@ void SensorManagerInterface::set_special_sensors(const int * special_ids, int sp
 }
 
 SensorInterface * SensorManagerInterface::get_module(int ID) {
-    int module_id = _config_id_index[ID]->module_id;
+    int index = get_index_from_id(ID);
+    int module_id = _config_id_index[index]->module_id;
     return _sensor_modules[module_id];
 }
 
@@ -244,6 +244,7 @@ bool SensorManagerInterface::all_inactive(SensorInterface * sensor) {
 }
 
 bool SensorManagerInterface::check_special_sensor(int ID) {
+    // Index conversion not needed
     for (int i=0; i<_special_count; i++) {
         if (_special_ids[i] == ID) {
             return true;
@@ -253,7 +254,19 @@ bool SensorManagerInterface::check_special_sensor(int ID) {
 }
 
 SensorConfig * SensorManagerInterface::get_config(int ID) {
-    return (SensorConfig *) _config_id_index[ID];
+    int index = get_index_from_id(ID);
+    return (SensorConfig *) _config_id_index[index];
 }
+
+int SensorManagerInterface::get_index_from_id(int id) {
+    for (int i = 0; i < _sensor_count; ++i) {
+        int val = _index_to_id[i];
+        if (val == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 
 #endif
