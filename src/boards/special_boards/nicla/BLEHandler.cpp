@@ -31,6 +31,8 @@ BLEHandler::BLEHandler() : _lastDfuPack(false)
     device_name = DEVICE_IDENTIFER;
     device_id = DEVICE_IDENTIFER;
     device_gen = DEVICE_GENERATION;
+    _scheme_buffer = parse_scheme;
+    _scheme_length = scheme_size;
 }
 
 BLEHandler::~BLEHandler()
@@ -79,16 +81,19 @@ bool BLEHandler::begin()
 
 
     sensorService = new BLEService(sensorServiceUuid);
-    dfuService = new BLEService(dfuServiceUuid.c_str());
     deviceInfoService = new BLEService(deviceInfoServiceUuid);
+    parseInfoService = new BLEService(parseInfoServiceUuid);
+    dfuService = new BLEService(dfuServiceUuid.c_str());
 
     sensorDataCharacteristic = new BLECharacteristic(sensorDataUuid, (BLERead | BLENotify), sizeof(SensorDataPacket));
     sensorConfigCharacteristic = new BLECharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
-    dfuInternalCharacteristic = new BLECharacteristic(dfuInternalUuid.c_str(), BLEWrite, sizeof(DFUPacket), true);
-    dfuExternalCharacteristic = new BLECharacteristic(dfuExternalUuid.c_str(), BLEWrite, sizeof(DFUPacket), true);
     deviceIdentifierCharacteristic = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
     deviceGenerationCharacteristic = new BLECharacteristic(deviceGenerationUuid, BLERead, (int)device_gen.length());
 
+    deviceParseSchemeCharacteristic = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
+
+    dfuInternalCharacteristic = new BLECharacteristic(dfuInternalUuid.c_str(), BLEWrite, sizeof(DFUPacket), true);
+    dfuExternalCharacteristic = new BLECharacteristic(dfuExternalUuid.c_str(), BLEWrite, sizeof(DFUPacket), true);
 
     // Sensor channel
     BLE.setAdvertisedService(*sensorService);
@@ -105,6 +110,12 @@ bool BLEHandler::begin()
     deviceIdentifierCharacteristic->writeValue(device_id.c_str());
     deviceGenerationCharacteristic->writeValue(device_gen.c_str());
 
+    // Parse information
+    BLE.setAdvertisedService(*parseInfoService);
+    parseInfoService->addCharacteristic(*deviceParseSchemeCharacteristic);
+    BLE.addService(*parseInfoService);
+    deviceParseSchemeCharacteristic->writeValue(_scheme_buffer, _scheme_length);
+
     // DFU channel
     BLE.setAdvertisedService(*dfuService);
     dfuService->addCharacteristic(*dfuInternalCharacteristic);
@@ -112,6 +123,8 @@ bool BLEHandler::begin()
     BLE.addService(*dfuService);
     dfuInternalCharacteristic->setEventHandler(BLEWritten, receivedInternalDFU);
     dfuExternalCharacteristic->setEventHandler(BLEWritten, receivedExternalDFU);
+
+    delay(2);
 
     // Advertise
     if (!manual_advertise) BLE.advertise(); // if manual advertise is set, BLE.advertise() HAS to be called manually!!!

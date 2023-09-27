@@ -5,6 +5,7 @@
 
 #include "Arduino.h"
 #include "ArduinoBLE.h"
+#include "Nicla_Parse_Scheme.h"
 
 #include "DFUManager.h"
 
@@ -28,8 +29,6 @@ public:
     static void debug(Stream &stream);
 
     bool bleActive = false;
-
-
 private:
     static Stream *_debug;
 
@@ -41,6 +40,9 @@ private:
 
     bool manual_advertise = false;
 
+    int _scheme_length = 0;
+    byte * _scheme_buffer = nullptr;
+
     String dfuServiceUuid = "34c2e3b8-34aa-11eb-adc1-0242ac120002";
     String dfuInternalUuid = "34c2e3b9-34aa-11eb-adc1-0242ac120002";
     String dfuExternalUuid = "34c2e3ba-34aa-11eb-adc1-0242ac120002";
@@ -48,6 +50,7 @@ private:
     BLEService * sensorService;
     BLEService * dfuService;
     BLEService * deviceInfoService;
+    BLEService * parseInfoService;
 
     BLECharacteristic * sensorDataCharacteristic;
     BLECharacteristic * sensorConfigCharacteristic;
@@ -55,6 +58,8 @@ private:
     BLECharacteristic * dfuExternalCharacteristic;
     BLECharacteristic * deviceIdentifierCharacteristic;
     BLECharacteristic * deviceGenerationCharacteristic;
+
+    BLECharacteristic * deviceParseSchemeCharacteristic;
 
     void processDFUPacket(DFUType dfuType, BLECharacteristic characteristic);
     static void receivedInternalDFU(BLEDevice central, BLECharacteristic characteristic);
