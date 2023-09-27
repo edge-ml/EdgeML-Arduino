@@ -70,6 +70,14 @@ public:
 #endif
     }
 
+    void set_data_callback(void(*callback)(int id, unsigned int timestamp, uint8_t* data, int size)) {
+#if defined NORMAL_BOARD
+        edge_ml_generic.set_data_callback(callback);
+#elif defined NICLA_FLAG
+        edge_ml_nicla.set_data_callback(callback);
+#endif
+    }
+
     void set_config_callback(void(*callback)(SensorConfigurationPacket *)) {
 #if defined NORMAL_BOARD
         edge_ml_generic.set_config_callback(callback);
