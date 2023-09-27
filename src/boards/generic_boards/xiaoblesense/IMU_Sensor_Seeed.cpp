@@ -68,6 +68,7 @@ void IMU_Sensor_Seeed::get_gyro(float& x, float& y, float& z) {
 }
 
 void IMU_Sensor_Seeed::get_temp(float &C) {
+    // °C
     if (!available) {
         return;
     }
