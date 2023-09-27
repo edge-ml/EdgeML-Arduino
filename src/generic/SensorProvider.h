@@ -39,7 +39,7 @@ private:
 
     uint8_t * _data_buffer = nullptr;
 
-    const int _meta_data_size = 1 + 4; // 2 + 4;
+    const int _meta_data_size = 2 + 4; // 2 + 4;
 
     void update_sensor(Sensor * sensor);
     void check_sensor(Sensor * sensor);

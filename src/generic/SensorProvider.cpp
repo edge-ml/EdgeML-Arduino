@@ -124,8 +124,8 @@ void SensorProvider::send_sensor_data(int ID) {
         return;
     }
     _data_buffer[0] = uint8_t(ID);                  // ID
-    //_data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
-    memcpy(&_data_buffer[1], &timestamp, sizeof(timestamp)); // timestamp
+    _data_buffer[1] = uint8_t(total_size);          // size of package 2 + 4 + data_length MAX LENGTH = 255
+    memcpy(&_data_buffer[2], &timestamp, sizeof(timestamp)); // timestamp
 
     uint8_t * data_pointer = &_data_buffer[_meta_data_size];
     _sensorManager->get_data(ID, (byte*)data_pointer);
