@@ -74,7 +74,6 @@ bool BLEHandler_G::begin() {
     deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
     deviceGenerationC_G = new BLECharacteristic(deviceGenerationUuid, BLERead, (int)device_gen.length());
 
-
     deviceParseSchemeC_G = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
 
     // Sensor channel
