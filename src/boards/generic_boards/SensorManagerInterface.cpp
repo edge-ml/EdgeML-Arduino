@@ -82,6 +82,12 @@ void SensorManagerInterface::end_sensor(int ID) {
     }
 }
 
+void SensorManagerInterface::update_modules() {
+    for (int i = 0; i < _module_count; ++i) {
+        _sensor_modules[i]->update();
+    }
+}
+
 int SensorManagerInterface::get_sensor_count() {
     return _sensor_count;
 }
@@ -182,7 +188,7 @@ void SensorManagerInterface::setup_scheme_buffer() {
     for (int index = 0; index < _sensor_count; ++index) {
         s_con = _config_id_index[index];
 
-        _scheme_buffer[offset++] = (uint8_t)_index_to_id[index];
+        _scheme_buffer[offset++] = (uint8_t)s_con->sensor_id;
         _scheme_buffer[offset++] = (uint8_t)s_con->name.length();
 
         memcpy(&_scheme_buffer[offset], s_con->name.c_str(), s_con->name.length());
