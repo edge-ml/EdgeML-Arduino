@@ -102,21 +102,21 @@ const SensorComponent BARO_COMPONENTS_Nano[] = {
 };
 
 const SensorComponent COLOR_COMPONENTS_Nano[] = {
-        {"COL", PARSE_TYPE_INT16, "R", ""},
-        {"COL", PARSE_TYPE_INT16, "G", ""},
-        {"COL", PARSE_TYPE_INT16, "B", ""}
+        {"COL", PARSE_TYPE_UINT16, "R", ""},
+        {"COL", PARSE_TYPE_UINT16, "G", ""},
+        {"COL", PARSE_TYPE_UINT16, "B", ""}
 };
 
 const SensorComponent BRIGHT_COMPONENTS_Nano[] = {
-        {"BRIGHT", PARSE_TYPE_INT16, "Brightness", ""}
+        {"BRIGHT", PARSE_TYPE_UINT16, "Brightness", ""}
 };
 
 const SensorComponent PROX_COMPONENTS_Nano[] = {
-        {"PROX", PARSE_TYPE_INT16, "Proximity", ""}
+        {"PROX", PARSE_TYPE_UINT8, "Proximity", ""}
 };
 
 const SensorComponent GEST_COMPONENTS_Nano[] = {
-        {"GEST", PARSE_TYPE_INT16, "Gesture", ""}
+        {"GEST", PARSE_TYPE_INT8, "Gesture", ""}
 };
 
 const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
@@ -151,7 +151,7 @@ const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
         {
                 "HYGROMETER",
                 HTS_HUM_NANO,
-                MODULE_IMU_NANO,
+                MODULE_HTS_NANO,
                 1,
                 HUM_COMPONENTS_Nano
         },

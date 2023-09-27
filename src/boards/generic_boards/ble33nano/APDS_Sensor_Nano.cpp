@@ -15,25 +15,31 @@ void APDS_Sensor_Nano::end() {
 }
 
 void APDS_Sensor_Nano::get_data(int sensorID, byte *data) {
-
-    int * intArray = (int*)data;
     switch (sensorID) {
-        case APDS_COLOUR_NANO:
+        case APDS_COLOUR_NANO: {
             int r, g, b;
             get_color(r, g, b);
-            intArray[0] = r;
-            intArray[1] = g;
-            intArray[2] = b;
+            uint16_t * arr = (uint16_t*)data;
+            arr[0] = (uint16_t)r;
+            arr[1] = (uint16_t)g;
+            arr[2] = (uint16_t)b;
             break;
-        case APDS_BRIGHT_NANO:
-            intArray[0] = get_light();
+        }
+        case APDS_BRIGHT_NANO: {
+            uint16_t * arr = (uint16_t*)data;
+            arr[0] = get_light();
             break;
-        case APDS_PROX_NANO:
-            intArray[0] = get_proximity();
+        }
+        case APDS_PROX_NANO: {
+            uint8_t * arr = (uint8_t*)data;
+            arr[0] = get_proximity();
             break;
-        case APDS_GEST_NANO:
-            intArray[0] = get_gesture();
+        }
+        case APDS_GEST_NANO: {
+            int8_t * arr = (int8_t*)data;
+            arr[0] = get_gesture();
             break;
+        }
         default:
             break;
     }
@@ -46,12 +52,12 @@ void APDS_Sensor_Nano::get_color(int& r, int& g, int& b) {
     while (! APDS.colorAvailable()) {
         delay(2);
     }
-
+    // In library is only uint16; later converted
     APDS.readColor(r, g, b);
 
 }
 
-int APDS_Sensor_Nano::get_light() {
+uint16_t APDS_Sensor_Nano::get_light() {
     if (!available) {
         return 0;
     }
@@ -61,21 +67,23 @@ int APDS_Sensor_Nano::get_light() {
 
     int r, g, b, c;
     APDS.readColor(r, g, b, c);
-    return c;
+    // In library is only uint16
+    return (uint16_t)c;
 }
 
-int APDS_Sensor_Nano::get_proximity() {
+uint8_t APDS_Sensor_Nano::get_proximity() {
     if (!available) {
         return -1;
     }
     while (! APDS.proximityAvailable()) {
         delay(2);
     }
-    return APDS.readProximity();
+    // In library is only uint8
+    return (uint8_t)APDS.readProximity();
 }
 
 // Warning if gesture is turned on then it will wait for a gesture!!!
-int APDS_Sensor_Nano:: get_gesture() {
+int8_t APDS_Sensor_Nano::get_gesture() {
     if (!available) {
         return -1;
     }
@@ -83,7 +91,8 @@ int APDS_Sensor_Nano:: get_gesture() {
         delay(2);
     }
 
-    return APDS.readGesture();
+    // In library is only int8
+    return (int8_t)APDS.readGesture();
 }
 
 int APDS_Sensor_Nano::get_sensor_count() {

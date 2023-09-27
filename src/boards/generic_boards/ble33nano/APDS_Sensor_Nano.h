@@ -18,9 +18,9 @@ public:
     int get_sensor_count() override;
 
     void get_color(int& r, int& g, int& b);
-    int get_light();
-    int get_proximity();
-    int get_gesture();
+    uint16_t get_light();
+    uint8_t get_proximity();
+    int8_t get_gesture();
 
     const int sensor_count = 4;
 
