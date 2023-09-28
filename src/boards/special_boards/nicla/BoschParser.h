@@ -6,6 +6,7 @@
 #include "Arduino.h"
 #include "mbed.h"
 #include "ArduinoBLE.h"
+#include "BoschSensortec.h"
 
 #include "bosch/common/common.h"
 
@@ -26,12 +27,25 @@ public:
 
     static void set_data_callback(void(*)(int, unsigned int, uint8_t*, int));
 
+    static void use_raw_sensor_values();
+    static SensorDataPacket convert_unit(SensorDataPacket * data);
+
 private:
     friend class Arduino_BHY2;
     static void debug(Stream &stream);
     static Stream *_debug;
     static BLECharacteristic *_sensorDataCharacteristic;
+    static bool _use_raw;
 
+    const static float acc_resolution;
+    const static float gyro_resolution;
+    const static float magx_resolution;
+    const static float magy_resolution;
+    const static float magz_resolution;
+
+    const static float ori_heading_conversion;
+    const static float ori_pitch_conversion;
+    const static float ori_roll_conversion;
 
     static void (*_data_callback)(int ID, unsigned int timestamp, uint8_t * data, int size);
 };

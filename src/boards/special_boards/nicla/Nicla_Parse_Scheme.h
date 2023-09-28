@@ -5,9 +5,9 @@
 
 #include "Arduino.h"
 
-extern byte parse_scheme[];
+extern const byte parse_scheme[];
 
-extern int scheme_size;
+extern const int scheme_size;
 
 #endif //NICLA_TEST_NICLA_PARSE_SCHEME_H
 #endif

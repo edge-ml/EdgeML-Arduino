@@ -41,7 +41,7 @@ private:
     bool manual_advertise = false;
 
     int _scheme_length = 0;
-    byte * _scheme_buffer = nullptr;
+    const byte * _scheme_buffer = nullptr;
 
     String dfuServiceUuid = "34c2e3b8-34aa-11eb-adc1-0242ac120002";
     String dfuInternalUuid = "34c2e3b9-34aa-11eb-adc1-0242ac120002";

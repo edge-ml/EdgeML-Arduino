@@ -101,6 +101,12 @@ public:
     }
 #endif
 
+#if defined NICLA_FLAG
+    void use_raw_sensor_values() {
+        edge_ml_nicla.use_raw_sensor_values();
+    }
+#endif
+
     void debug(Stream &stream) {
 #if defined NORMAL_BOARD
         edge_ml_generic.debug(stream);

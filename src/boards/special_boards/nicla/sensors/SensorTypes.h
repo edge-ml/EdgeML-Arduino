@@ -3,7 +3,18 @@
 
 #include "stdint.h"
 
-#define SENSOR_DATA_FIXED_LENGTH (10)
+#define SENSOR_DATA_FIXED_LENGTH (12)
+
+enum SensorID_Nicla {
+    ACCELERATION_NICLA = 4,
+    GYROSCOPE_NICLA = 13,
+    MAGNET_NICLA = 22,
+    ORIENTATION_NICLA = 43,
+    TEMPERATURE_NICLA = 128,
+    BAROMETER_NICLA = 129,
+    HUMIDITY_NICLA = 130,
+    GAS_NICLA = 131
+};
 
 struct __attribute__((packed)) SensorConfigurationPacket {
     uint8_t sensorId;

@@ -44,6 +44,10 @@ void Edge_ML_Nicla::set_config_callback(void (*callback)(SensorConfigurationPack
     bhy->set_config_callback(callback);
 }
 
+void Edge_ML_Nicla::use_raw_sensor_values() {
+    BoschParser::use_raw_sensor_values();
+}
+
 void Edge_ML_Nicla::debug(Stream &stream) {
     bhy->debug(stream);
 }

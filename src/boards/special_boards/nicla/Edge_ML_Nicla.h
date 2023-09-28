@@ -4,6 +4,7 @@
 #define Edge_ML_H_
 
 #include "Arduino_BHY2.h"
+#include "BoschParser.h"
 
 class Edge_ML_Nicla {
 public:
@@ -18,6 +19,7 @@ public:
     void configure_sensor(SensorConfigurationPacket& config);
 
     void ble_manual_advertise();
+    void use_raw_sensor_values();
 
     void set_data_callback(void(*)(int, unsigned int, uint8_t*, int));
     void set_config_callback(void(*)(SensorConfigurationPacket *));

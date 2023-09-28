@@ -245,7 +245,8 @@ edge_ml.set_ble_config("MyDevice", "1.2.3");
 
 #### `int get_active_count()`
 
-Returns the number of currently active sensors.
+Returns the number of currently active sensors.<br>
+(Not available on standard Nicla, unless `USE_SPECIAL_BOARD` in "flags.h" set to 0 and custom Sensor Manager provided)
 
 ```c++
 int activeSensors = edge_ml.get_active_count();
@@ -281,6 +282,8 @@ Allows to set a custom callback function that is triggered when a ble configurat
 void callback(SensorConfigurationPacket * config)
 ```
 
+- `config` (SensorConfigurationPacket): Pointer to a configuration packet struct.
+
 ```c++
 void handleConfig(SensorConfigurationPacket * config) {
   // Your custom logic here
@@ -292,7 +295,19 @@ edge_ml.set_config_callback(handleSensorData);
 
 #### `void set_custom(SensorManagerInterface * sensorManager) `
 Allows the user to set a custom Sensor Manager to implement a custom Board Configuration.
-More on that in the chapter below.
+More on that in the chapter below.<br>
+(Not available on standard Nicla, unless `USE_SPECIAL_BOARD` in "flags.h" set to 0)
+
+
+#### `void use_raw_sensor_values()`
+
+This is Nicla exclusive function.
+It disables the automatic conversion of internal sensor values.
+
+```c++
+edge_ml.use_raw_sensor_values();
+```
+
 
 ---
 ## Custom Board Configuration
@@ -485,6 +500,8 @@ public:
         // Set the sensor configurations
         SensorManagerInterface::set_sensor_configs(CONFIG);
     }
+    
+    void update() override {}; // update() is optional
 };
 ```
 
@@ -522,6 +539,8 @@ public:
         // Set the sensor configurations
         SensorManagerInterface::set_sensor_configs(CONFIG);
     }
+    
+    void update() override {}; // update() is optional
 };
 ```
 
@@ -550,6 +569,8 @@ public:
 
     void start() override;
     void stop() override;
+    
+    void update() override {}; // update() is optional
     
     void get_data(int sensorID, byte *data) override;
 

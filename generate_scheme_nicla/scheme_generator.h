@@ -76,27 +76,27 @@ enum SensorID_Nicla {
 };
 
 const SensorComponent ACC_COMPONENTS_Nicla[] = {
-        {"ACC", PARSE_TYPE_INT16, "X", ""},
-        {"ACC", PARSE_TYPE_INT16, "Y", ""},
-        {"ACC", PARSE_TYPE_INT16, "Z", ""}
+        {"ACC", PARSE_TYPE_FLOAT, "X", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Y", "g"},
+        {"ACC", PARSE_TYPE_FLOAT, "Z", "g"}
 };
 
 const SensorComponent GYRO_COMPONENTS_Nicla[] = {
-        {"GYRO", PARSE_TYPE_INT16, "X",""},
-        {"GYRO", PARSE_TYPE_INT16, "Y",""},
-        {"GYRO", PARSE_TYPE_INT16, "Z",""}
+        {"GYRO", PARSE_TYPE_FLOAT, "X","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Y","dps"},
+        {"GYRO", PARSE_TYPE_FLOAT, "Z","dps"}
 };
 
 const SensorComponent MAG_COMPONENTS_Nicla[] = {
-        {"MAG", PARSE_TYPE_INT16, "X",""},
-        {"MAG", PARSE_TYPE_INT16, "Y",""},
-        {"MAG", PARSE_TYPE_INT16, "Z",""}
+        {"MAG", PARSE_TYPE_FLOAT, "X","uT"},
+        {"MAG", PARSE_TYPE_FLOAT, "Y","uT"},
+        {"MAG", PARSE_TYPE_FLOAT, "Z","uT"}
 };
 
 const SensorComponent ORI_COMPONENTS_Nicla[] = {
-        {"ORI", PARSE_TYPE_FLOAT, "Heading", ""},
-        {"ORI", PARSE_TYPE_FLOAT, "Pitch", ""},
-        {"ORI", PARSE_TYPE_FLOAT, "Roll", ""}
+        {"ORI", PARSE_TYPE_FLOAT, "Heading", "deg"},
+        {"ORI", PARSE_TYPE_FLOAT, "Pitch", "deg"},
+        {"ORI", PARSE_TYPE_FLOAT, "Roll", "deg"}
 };
 
 const SensorComponent TEMP_COMPONENTS_Nicla[] = {
@@ -171,10 +171,10 @@ schemeData *  make_scheme_buffer();
 
 String make_code(schemeData * scheme) {
     String out = "";
-    out += "\n\nbyte parse_scheme[] = ";
+    out += "\n\nconst byte parse_scheme[] = ";
     out += scheme->make_string();
     out += "\n\n";
-    out += "int scheme_size = ";
+    out += "const int scheme_size = ";
     out += String(scheme->length);
     out += ";\n\n";
 
