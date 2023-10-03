@@ -116,6 +116,6 @@ public:
     }
 };
 
-Edge_ML edge_ml;
+extern Edge_ML edge_ml;
 
 #endif //Edge_ML_BASE_H_
