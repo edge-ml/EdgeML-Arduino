@@ -31,6 +31,7 @@ BLEHandler::BLEHandler() : _lastDfuPack(false)
     device_name = DEVICE_IDENTIFER;
     device_id = DEVICE_IDENTIFER;
     device_gen = DEVICE_GENERATION;
+    hardware_gen = HARDWARE_GENERATION;
     _scheme_buffer = parse_scheme;
     _scheme_length = scheme_size;
 }
@@ -89,6 +90,7 @@ bool BLEHandler::begin()
     sensorConfigCharacteristic = new BLECharacteristic(sensorConfigUuid, BLEWrite, sizeof(SensorConfigurationPacket));
     deviceIdentifierCharacteristic = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
     deviceGenerationCharacteristic = new BLECharacteristic(deviceGenerationUuid, BLERead, (int)device_gen.length());
+    hardwareGenerationCharacteristic = new BLECharacteristic(hardwareGenerationUuid, BLERead, (int)hardware_gen.length());
 
     deviceParseSchemeCharacteristic = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
 
@@ -106,9 +108,11 @@ bool BLEHandler::begin()
     BLE.setAdvertisedService(*deviceInfoService);
     deviceInfoService->addCharacteristic(*deviceIdentifierCharacteristic);
     deviceInfoService->addCharacteristic(*deviceGenerationCharacteristic);
+    deviceInfoService->addCharacteristic(*hardwareGenerationCharacteristic);
     BLE.addService(*deviceInfoService);
     deviceIdentifierCharacteristic->writeValue(device_id.c_str());
     deviceGenerationCharacteristic->writeValue(device_gen.c_str());
+    hardwareGenerationCharacteristic->writeValue(hardware_gen.c_str());
 
     // Parse information
     BLE.setAdvertisedService(*parseInfoService);
@@ -197,6 +201,10 @@ void BLEHandler::set_name(String name) {
 
 void BLEHandler::set_generation(String gen) {
     device_gen = std::move(gen);
+}
+
+void BLEHandler::set_hardware_generation(String gen) {
+    hardware_gen = std::move(gen);
 }
 
 void BLEHandler::ble_manual_advertise() {

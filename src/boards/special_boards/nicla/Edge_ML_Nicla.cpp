@@ -23,9 +23,10 @@ String Edge_ML_Nicla::get_name() {
     return bhy->get_name();
 }
 
-void Edge_ML_Nicla::set_ble_config(String name, String gen) {
+void Edge_ML_Nicla::set_ble_config(String name, String gen, String hard_gen) {
     bhy->set_name(std::move(name));
     bhy->set_generation(std::move(gen));
+    bhy->set_hardware_generation(std::move(hard_gen));
 }
 
 void Edge_ML_Nicla::configure_sensor(SensorConfigurationPacket &config) {

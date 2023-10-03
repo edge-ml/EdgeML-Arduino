@@ -25,6 +25,7 @@ public:
     String get_name();
     void set_name(String name);
     void set_generation(String gen);
+    void set_hardware_generation(String gen);
     void set_parse_scheme(byte *data, int length);
     bool bleActive = false;
 
@@ -34,6 +35,7 @@ private:
     String device_id;
     String device_name;
     String device_gen;
+    String hardware_gen;
 
     BLEService * sensorService_G;
     BLEService * deviceInfoService_G;
@@ -43,6 +45,7 @@ private:
     BLECharacteristic * sensorConfigC_G;
     BLECharacteristic * deviceIdentifierC_G;
     BLECharacteristic * deviceGenerationC_G;
+    BLECharacteristic * hardwareGenerationC_G;
     BLECharacteristic * deviceParseSchemeC_G;
 
     bool manual_advertise = false;

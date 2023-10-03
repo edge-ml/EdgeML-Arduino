@@ -23,7 +23,7 @@ class Edge_ML_Generic: public Debug {
         void configure_sensor(SensorConfigurationPacket& config);
 
         void set_custom(SensorManagerInterface * sensorManager);
-        void set_ble_config(String name, String gen = "0.0.0");
+        void set_ble_config(String name, String gen = "0.0.0", String hard_gen = "0.0.0");
 
         String get_name();
 

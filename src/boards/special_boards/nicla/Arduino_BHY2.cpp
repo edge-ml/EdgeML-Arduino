@@ -115,6 +115,10 @@ void Arduino_BHY2::set_generation(String gen) {
     bleHandler.set_generation(std::move(gen));
 }
 
+void Arduino_BHY2::set_hardware_generation(String gen) {
+    bleHandler.set_hardware_generation(std::move(gen));
+}
+
 void Arduino_BHY2::configure_sensor(SensorConfigurationPacket &config) {
     sensortec.configureSensor(config);
 }

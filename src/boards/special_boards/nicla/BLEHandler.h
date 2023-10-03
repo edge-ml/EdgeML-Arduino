@@ -23,6 +23,7 @@ public:
 
     void set_name(String name);
     void set_generation(String gen);
+    void set_hardware_generation(String gen);
 
     void ble_manual_advertise();
 
@@ -35,6 +36,7 @@ private:
     String device_id;
     String device_name;
     String device_gen;
+    String hardware_gen;
 
     bool _lastDfuPack;
 
@@ -58,6 +60,7 @@ private:
     BLECharacteristic * dfuExternalCharacteristic;
     BLECharacteristic * deviceIdentifierCharacteristic;
     BLECharacteristic * deviceGenerationCharacteristic;
+    BLECharacteristic * hardwareGenerationCharacteristic;
 
     BLECharacteristic * deviceParseSchemeCharacteristic;
 

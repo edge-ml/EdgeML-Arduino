@@ -10,8 +10,11 @@ extern const char * sensorConfigUuid;
 extern const char * deviceInfoServiceUuid;
 extern const char * deviceIdentifierUuid;
 extern const char * deviceGenerationUuid;
+extern const char * hardwareGenerationUuid;
 extern const char * parseInfoServiceUuid;
 extern const char * parseSchemeUuid;
+
+#define HARDWARE_GENERATION "0.0.0"
 
 #ifdef XIAO_SEEED_FLAG
     #define DEVICE_IDENTIFER "Seeed XIAO"

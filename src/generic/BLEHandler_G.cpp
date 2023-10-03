@@ -15,6 +15,7 @@ BLEHandler_G::BLEHandler_G() {
     device_name = DEVICE_IDENTIFER;
     device_id = DEVICE_IDENTIFER;
     device_gen = DEVICE_GENERATION;
+    hardware_gen = HARDWARE_GENERATION;
 }
 
 // Sensor channel
@@ -73,6 +74,8 @@ bool BLEHandler_G::begin() {
 
     deviceIdentifierC_G = new BLECharacteristic(deviceIdentifierUuid, BLERead, (int)device_id.length());
     deviceGenerationC_G = new BLECharacteristic(deviceGenerationUuid, BLERead, (int)device_gen.length());
+    hardwareGenerationC_G = new BLECharacteristic(hardwareGenerationUuid, BLERead, (int)hardware_gen.length());
+
 
     deviceParseSchemeC_G = new BLECharacteristic(parseSchemeUuid, BLERead, _scheme_length);
 
@@ -87,9 +90,11 @@ bool BLEHandler_G::begin() {
     BLE.setAdvertisedService(*deviceInfoService_G);
     deviceInfoService_G->addCharacteristic(*deviceIdentifierC_G);
     deviceInfoService_G->addCharacteristic(*deviceGenerationC_G);
+    deviceInfoService_G->addCharacteristic(*hardwareGenerationC_G);
     BLE.addService(*deviceInfoService_G);
     deviceIdentifierC_G->writeValue(device_name.c_str());
     deviceGenerationC_G->writeValue(device_gen.c_str());
+    hardwareGenerationC_G->writeValue(hardware_gen.c_str());
 
     // Parse information
     BLE.setAdvertisedService(*parseInfoService_G);
@@ -133,6 +138,10 @@ void BLEHandler_G::set_name(String name) {
 
 void BLEHandler_G::set_generation(String gen) {
     device_gen = std::move(gen);
+}
+
+void BLEHandler_G::set_hardware_generation(String gen) {
+    hardware_gen = std::move(gen);
 }
 
 void BLEHandler_G::set_parse_scheme(byte *data, int length) {

@@ -14,7 +14,7 @@ public:
     bool begin();
     void update();
     String get_name();
-    void set_ble_config(String name, String gen = "0.0.0");
+    void set_ble_config(String name, String gen = "0.0.0", String hard_gen = "0.0.0");
 
     void configure_sensor(SensorConfigurationPacket& config);
 

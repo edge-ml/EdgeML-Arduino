@@ -46,11 +46,11 @@ public:
     }
 
 
-    void set_ble_config(String name, String gen = "0.0.0") {
+    void set_ble_config(String name, String gen = "0.0.0", String hard_gen = "0.0.0") {
 #if defined NORMAL_BOARD
-        edge_ml_generic.set_ble_config(std::move(name), std::move(gen));
+        edge_ml_generic.set_ble_config(std::move(name), std::move(gen), std::move(hard_gen));
 #elif defined NICLA_FLAG
-        return edge_ml_nicla.set_ble_config(std::move(name), std::move(gen));
+        return edge_ml_nicla.set_ble_config(std::move(name), std::move(gen), std::move(hard_gen));
 #endif
     }
 

@@ -26,6 +26,7 @@ public:
     String get_name();
     void set_name(String name);
     void set_generation(String gen);
+    void set_hardware_generation(String get);
 
     void configure_sensor(SensorConfigurationPacket& config);
 
