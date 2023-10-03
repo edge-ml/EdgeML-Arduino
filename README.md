@@ -235,12 +235,12 @@ edge_ml.ble_manual_advertise();
 BLE.advertise();
 ```
 
-#### `void set_ble_config(String name, String version)`
+#### `void set_ble_config(String name, String version, String hardware_version)`
 
-Sets the name of the device as well as the current version string.
+Sets the name of the device as well as the current version string and hardware_version string.
 
 ```c++
-edge_ml.set_ble_config("MyDevice", "1.2.3");
+edge_ml.set_ble_config("MyDevice", "1.2.3", "0.0.1");
 ```
 
 #### `int get_active_count()`
