@@ -17,7 +17,7 @@ class Edge_ML_Generic: public Debug {
         ~Edge_ML_Generic();
         
         bool begin();
-        void update();
+        void update(bool force = false);
         void debug(Stream &stream);
 
         void configure_sensor(SensorConfigurationPacket& config);

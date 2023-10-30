@@ -45,9 +45,9 @@ bool Edge_ML_Generic::begin() {
     return true;
 }
 
-void Edge_ML_Generic::update() {
+void Edge_ML_Generic::update(bool force) {
     // Update logic
-    sensorProvider.update();
+    sensorProvider.update(force);
     bleHandler_G.update();
 }
 
