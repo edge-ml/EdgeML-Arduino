@@ -30,14 +30,18 @@ bool SensorProvider::begin() {
     return true;
 }
 
-void SensorProvider::update() {
+void SensorProvider::update_manager() {
     _sensorManager->update();
     _sensorManager->update_modules();
+}
+
+void SensorProvider::update(bool force) {
+    update_manager();
 
     Sensor * sensor;
     for (int i=0; i<_sensor_count; i++) {
         sensor = _sensor_array[i];
-        update_sensor(sensor);
+        update_sensor(sensor, force);
     }
 }
 
@@ -89,14 +93,19 @@ void SensorProvider::configureSensor(SensorConfigurationPacket& config) {
     sensor->delay = delay;
 }
 
-void SensorProvider::update_sensor(Sensor * sensor) {
+void SensorProvider::update_sensor(int id, bool force) {
+    const int index = _sensorManager->get_index_from_id(id);
+    update_sensor(_sensor_array[index], force);
+}
+
+void SensorProvider::update_sensor(Sensor * sensor, bool force) {
     if (sensor->state) {
         if (!sensor->active) {
             _sensorManager->start_sensor(sensor->ID);
             sensor->active = true;
             _active_count++;
         }
-        check_sensor(sensor);
+        if (force || sensor->check_delay()) send_sensor_data(sensor->ID);
     } else if (sensor->active) {
         sensor->active = false;
         _sensorManager->end_sensor(sensor->ID);
@@ -104,12 +113,6 @@ void SensorProvider::update_sensor(Sensor * sensor) {
             _data_callback(-1, 0, nullptr, 0);
         }
         _active_count--;
-    }
-}
-
-void SensorProvider::check_sensor(Sensor *sensor) {
-    if (sensor->check_delay()) {
-        send_sensor_data(sensor->ID);
     }
 }
 

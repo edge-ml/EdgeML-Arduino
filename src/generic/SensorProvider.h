@@ -17,7 +17,7 @@ public:
     ~SensorProvider();
 
     bool begin();
-    void update();
+    void update(bool force = false);
     void configureSensor(SensorConfigurationPacket& config);
 
     void set_sensorManager(SensorManagerInterface * sensorManager);
@@ -31,6 +31,10 @@ public:
 
     void debug(Stream &stream);
 
+    void update_sensor(int id, bool force = false);
+
+    void update_manager();
+
 private:
     SensorManagerInterface * _sensorManager;
     Sensor ** _sensor_array;
@@ -42,7 +46,7 @@ private:
 
     const int _meta_data_size = 2 + 4; // 2 + 4;
 
-    void update_sensor(Sensor * sensor);
+    void update_sensor(Sensor * sensor, bool force = false);
     void check_sensor(Sensor * sensor);
     void send_sensor_data(int ID);
 
