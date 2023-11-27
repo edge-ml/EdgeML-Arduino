@@ -1,6 +1,5 @@
-#ifndef MASTERFLAG
-	#include "flags.h"
-#endif
+
+#include "flags.h"
 
 // when using custom board don't forget to change DEVICE_IDENTIFER and DEVICE_GENERATION
 
@@ -22,6 +21,9 @@ extern const char * parseSchemeUuid;
 #elif defined BLE33NANO_FLAG
     #define DEVICE_IDENTIFER "NANO"
 	#define DEVICE_GENERATION "1.2.1"
+#elif defined BLE33_NANO_SENSE_V2
+    #define DEVICE_IDENTIFER "NanoV2"
+    #define DEVICE_GENERATION "1.2.1"
 #elif defined NICLA_FLAG
     #define DEVICE_IDENTIFER "NICLA"
     #define DEVICE_GENERATION "1.2.1"

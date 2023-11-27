@@ -5,6 +5,8 @@
 #ifndef Edge_ML_BASE_H_
 #define Edge_ML_BASE_H_
 
+#include <config/flags.h>
+
 // 	arduino-libraries/Arduino_BHY2@^1.0.6
 
 #include <config/flags.h>
