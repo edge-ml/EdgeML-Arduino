@@ -9,12 +9,12 @@ void SensorManager_NanoV2::setup() {
     BARO_Sensor_NanoV2 * baro_sensor = new BARO_Sensor_NanoV2();
     APDS_Sensor_NanoV2 * apds_sensor = new APDS_Sensor_NanoV2();
 
-    SensorInterface ** modules = new SensorInterface * [MODULE_COUNT_PHYSICAL_NANO] {(imu_sensor),(hts_sensor),(baro_sensor),(apds_sensor)};
+    SensorInterface ** modules = new SensorInterface * [MODULE_COUNT_PHYSICAL_NANOV2] {(imu_sensor),(hts_sensor),(baro_sensor),(apds_sensor)};
 
     SensorManagerInterface::set_modules(modules);
-    SensorManagerInterface::set_sensor_counts(SENSOR_COUNT_NANO, MODULE_COUNT_PHYSICAL_NANO);
+    SensorManagerInterface::set_sensor_counts(SENSOR_COUNT_NANOV2, MODULE_COUNT_PHYSICAL_NANOV2);
 
-    SensorManagerInterface::set_sensor_configs(CONFIG_NANO);
+    SensorManagerInterface::set_sensor_configs(CONFIG_NANOV2);
 }
 
 #endif

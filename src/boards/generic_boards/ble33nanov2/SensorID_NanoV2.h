@@ -34,8 +34,8 @@ Sensors:
  - Microphone
  */
 
-#ifndef SENSORID_H_NANO
-#define SENSORID_H_NANO
+#ifndef SENSORID_H_NANOV2
+#define SENSORID_H_NANOV2
 
 #include "config/flags.h"
 #if defined NORMAL_BOARD
@@ -43,154 +43,154 @@ Sensors:
 #include "Arduino.h"
 #include <boards/generic_boards/SensorTypes.h>
 
-const int SENSOR_COUNT_NANO = 10;
-const int MODULE_COUNT_PHYSICAL_NANO = 4;
+const int SENSOR_COUNT_NANOV2 = 10;
+const int MODULE_COUNT_PHYSICAL_NANOV2 = 4;
 
 // In correct order ID ascending
-enum SensorID_Nano {
-    IMU_ACCELERATION_NANO,
-    IMU_GYROSCOPE_NANO,
-    IMU_MAGNET_NANO,
+enum SensorID_NanoV2 {
+    IMU_ACCELERATION_NANOV2,
+    IMU_GYROSCOPE_NANOV2,
+    IMU_MAGNET_NANOV2,
 
-    HTS_TEMP_NANO,
-    HTS_HUM_NANO,
+    HTS_TEMP_NANOV2,
+    HTS_HUM_NANOV2,
 
-    BARO_PRESS_NANO,
+    BARO_PRESS_NANOV2,
 
-    APDS_COLOUR_NANO,
-    APDS_BRIGHT_NANO,
-    APDS_PROX_NANO,
-    APDS_GEST_NANO
+    APDS_COLOUR_NANOV2,
+    APDS_BRIGHT_NANOV2,
+    APDS_PROX_NANOV2,
+    APDS_GEST_NANOV2
 };
 
 // In correct order ID ascending
-enum ModuleID_Nano {
-    MODULE_IMU_NANO,
-    MODULE_HTS_NANO,
-    MODULE_BARO_NANO,
-    MODULE_APDS_NANO
+enum ModuleID_NanoV2 {
+    MODULE_IMU_NANOV2,
+    MODULE_HTS_NANOV2,
+    MODULE_BARO_NANOV2,
+    MODULE_APDS_NANOV2
 };
 
-const SensorComponent ACC_COMPONENTS_Nano[] = {
+const SensorComponent ACC_COMPONENTS_NanoV2[] = {
         {"ACC", PARSE_TYPE_FLOAT, "X", "g"},
         {"ACC", PARSE_TYPE_FLOAT, "Y", "g"},
         {"ACC", PARSE_TYPE_FLOAT, "Z", "g"}
 };
 
-const SensorComponent GYRO_COMPONENTS_Nano[] = {
+const SensorComponent GYRO_COMPONENTS_NanoV2[] = {
         {"GYRO", PARSE_TYPE_FLOAT, "X","dps"},
         {"GYRO", PARSE_TYPE_FLOAT, "Y","dps"},
         {"GYRO", PARSE_TYPE_FLOAT, "Z","dps"}
 };
 
-const SensorComponent MAG_COMPONENTS_Nano[] = {
+const SensorComponent MAG_COMPONENTS_NanoV2[] = {
         {"MAG", PARSE_TYPE_FLOAT, "X","uT"},
         {"MAG", PARSE_TYPE_FLOAT, "Y","uT"},
         {"MAG", PARSE_TYPE_FLOAT, "Z","uT"}
 };
 
-const SensorComponent TEMP_COMPONENTS_Nano[] = {
+const SensorComponent TEMP_COMPONENTS_NanoV2[] = {
         {"TEMP", PARSE_TYPE_FLOAT, "Temperature", "°C"}
 };
 
-const SensorComponent HUM_COMPONENTS_Nano[] = {
+const SensorComponent HUM_COMPONENTS_NanoV2[] = {
         {"HUM", PARSE_TYPE_FLOAT, "Humidity", "%"}
 };
 
-const SensorComponent BARO_COMPONENTS_Nano[] = {
+const SensorComponent BARO_COMPONENTS_NanoV2[] = {
         {"BARO", PARSE_TYPE_FLOAT, "Pressure", "kPa"}
 };
 
-const SensorComponent COLOR_COMPONENTS_Nano[] = {
+const SensorComponent COLOR_COMPONENTS_NanoV2[] = {
         {"COL", PARSE_TYPE_UINT16, "R", ""},
         {"COL", PARSE_TYPE_UINT16, "G", ""},
         {"COL", PARSE_TYPE_UINT16, "B", ""}
 };
 
-const SensorComponent BRIGHT_COMPONENTS_Nano[] = {
+const SensorComponent BRIGHT_COMPONENTS_NanoV2[] = {
         {"BRIGHT", PARSE_TYPE_UINT16, "Brightness", ""}
 };
 
-const SensorComponent PROX_COMPONENTS_Nano[] = {
+const SensorComponent PROX_COMPONENTS_NanoV2[] = {
         {"PROX", PARSE_TYPE_UINT8, "Proximity", ""}
 };
 
-const SensorComponent GEST_COMPONENTS_Nano[] = {
+const SensorComponent GEST_COMPONENTS_NanoV2[] = {
         {"GEST", PARSE_TYPE_INT8, "Gesture", ""}
 };
 
-const SensorConfig CONFIG_NANO[SENSOR_COUNT_NANO] = {
+const SensorConfig CONFIG_NANOV2[SENSOR_COUNT_NANOV2] = {
         {
                 "ACCELERATION",
-                IMU_ACCELERATION_NANO,
-                MODULE_IMU_NANO,
+                IMU_ACCELERATION_NANOV2,
+                MODULE_IMU_NANOV2,
                 3,
-                ACC_COMPONENTS_Nano
+                ACC_COMPONENTS_NanoV2
         },
         {
                 "GYROSCOPE",
-                IMU_GYROSCOPE_NANO,
-                MODULE_IMU_NANO,
+                IMU_GYROSCOPE_NANOV2,
+                MODULE_IMU_NANOV2,
                 3,
-                GYRO_COMPONENTS_Nano
+                GYRO_COMPONENTS_NanoV2
         },
         {
                 "MAGNETOMETER",
-                IMU_MAGNET_NANO,
-                MODULE_IMU_NANO,
+                IMU_MAGNET_NANOV2,
+                MODULE_IMU_NANOV2,
                 3,
-                MAG_COMPONENTS_Nano
+                MAG_COMPONENTS_NanoV2
         },
         {
                 "THERMOMETER",
-                HTS_TEMP_NANO,
-                MODULE_HTS_NANO,
+                HTS_TEMP_NANOV2,
+                MODULE_HTS_NANOV2,
                 1,
-                TEMP_COMPONENTS_Nano
+                TEMP_COMPONENTS_NanoV2
         },
         {
                 "HYGROMETER",
-                HTS_HUM_NANO,
-                MODULE_HTS_NANO,
+                HTS_HUM_NANOV2,
+                MODULE_HTS_NANOV2,
                 1,
-                HUM_COMPONENTS_Nano
+                HUM_COMPONENTS_NanoV2
         },
         {
                 "BAROMETER",
-                BARO_PRESS_NANO,
-                MODULE_BARO_NANO,
+                BARO_PRESS_NANOV2,
+                MODULE_BARO_NANOV2,
                 1,
-                BARO_COMPONENTS_Nano
+                BARO_COMPONENTS_NanoV2
         },
         {
                 "COLOR",
-                APDS_COLOUR_NANO,
-                MODULE_APDS_NANO,
+                APDS_COLOUR_NANOV2,
+                MODULE_APDS_NANOV2,
                 3,
-                COLOR_COMPONENTS_Nano
+                COLOR_COMPONENTS_NanoV2
         },
         {
                 "BRIGHTNESS",
-                APDS_BRIGHT_NANO,
-                MODULE_APDS_NANO,
+                APDS_BRIGHT_NANOV2,
+                MODULE_APDS_NANOV2,
                 1,
-                BRIGHT_COMPONENTS_Nano
+                BRIGHT_COMPONENTS_NanoV2
         },
         {
                 "PROXIMITY",
-                APDS_PROX_NANO,
-                MODULE_APDS_NANO,
+                APDS_PROX_NANOV2,
+                MODULE_APDS_NANOV2,
                 1,
-                PROX_COMPONENTS_Nano
+                PROX_COMPONENTS_NanoV2
         },
         {
                 "GESTURE",
-                APDS_GEST_NANO,
-                MODULE_APDS_NANO,
+                APDS_GEST_NANOV2,
+                MODULE_APDS_NANOV2,
                 1,
-                GEST_COMPONENTS_Nano
+                GEST_COMPONENTS_NanoV2
         }
 };
 
 #endif
-#endif //SENSORID_H_NANO
+#endif //SENSORID_H_NANOV2

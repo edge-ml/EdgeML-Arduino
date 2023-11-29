@@ -1,5 +1,5 @@
-#ifndef APDS_Sensor_H_NANO
-#define APDS_Sensor_H_NANO
+#ifndef APDS_Sensor_H_NANOV2
+#define APDS_Sensor_H_NANOV2
 
 #include "config/flags.h"
 #if defined NORMAL_BOARD
@@ -29,4 +29,4 @@ private:
 };
 
 #endif
-#endif //APDS_Sensor_H_NANO
+#endif //APDS_Sensor_H_NANOV2

@@ -17,10 +17,10 @@ void HTS_Sensor_NanoV2::end() {
 void HTS_Sensor_NanoV2::get_data(int sensorID, byte *data) {
     float value;
     switch (sensorID) {
-        case HTS_TEMP_NANO:
+        case HTS_TEMP_NANOV2:
             value = get_temperature();
             break;
-        case HTS_HUM_NANO:
+        case HTS_HUM_NANOV2:
             value = get_humidity();
             break;
         default:

@@ -1,5 +1,5 @@
-#ifndef SENSORMANAGER_H_NANO
-#define SENSORMANAGER_H_NANO
+#ifndef SENSORMANAGER_H_NANOV2
+#define SENSORMANAGER_H_NANOV2
 
 #include "config/flags.h"
 #if defined NORMAL_BOARD
@@ -22,4 +22,4 @@ public:
 };
 
 #endif
-#endif //SENSORMANAGER_H_NANO
+#endif //SENSORMANAGER_H_NANOV2

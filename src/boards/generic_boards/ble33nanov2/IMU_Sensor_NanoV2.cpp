@@ -16,20 +16,19 @@ void IMU_Sensor_NanoV2::end() {
     if (!available) {
         return;
     }
-    // IMU.end();
     available = false;
 }
 
 void IMU_Sensor_NanoV2::get_data(int sensorID, byte *data) {
     float x, y, z;
     switch (sensorID) {
-        case IMU_ACCELERATION_NANO:
+        case IMU_ACCELERATION_NANOV2:
             IMU.readAcceleration(x,y,z);
             break;
-        case IMU_GYROSCOPE_NANO:
+        case IMU_GYROSCOPE_NANOV2:
             IMU.readGyroscope(x,y,z);
             break;
-        case IMU_MAGNET_NANO:
+        case IMU_MAGNET_NANOV2:
             IMU.readMagneticField(x,y,z);
             break;
         default:

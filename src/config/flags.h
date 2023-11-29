@@ -1,9 +1,7 @@
 #define USE_SPECIAL_BOARD 1  // 1 => Use special board / 0 => Provide custom board for a special board
 
-#if defined(BLE33_NANO_SENSE_V2)
-    #pragma message("Using BLE33_NANO_SENSE_V2")
 
-#elif defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA)
     #define NICLA_FLAG
     #warning "Using Nicla Sense ME"
 

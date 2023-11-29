@@ -16,7 +16,7 @@ void APDS_Sensor_NanoV2::end() {
 
 void APDS_Sensor_NanoV2::get_data(int sensorID, byte *data) {
     switch (sensorID) {
-        case APDS_COLOUR_NANO: {
+        case APDS_COLOUR_NANOV2: {
             int r, g, b;
             get_color(r, g, b);
             uint16_t * arr = (uint16_t*)data;
@@ -25,17 +25,17 @@ void APDS_Sensor_NanoV2::get_data(int sensorID, byte *data) {
             arr[2] = (uint16_t)b;
             break;
         }
-        case APDS_BRIGHT_NANO: {
+        case APDS_BRIGHT_NANOV2: {
             uint16_t * arr = (uint16_t*)data;
             arr[0] = get_light();
             break;
         }
-        case APDS_PROX_NANO: {
+        case APDS_PROX_NANOV2: {
             uint16_t * arr = (uint16_t*)data;
             arr[0] = get_proximity();
             break;
         }
-        case APDS_GEST_NANO: {
+        case APDS_GEST_NANOV2: {
             int8_t * arr = (int8_t*)data;
             arr[0] = get_gesture();
             break;

@@ -1,5 +1,5 @@
-#ifndef BARO_SENSOR_H_NANO
-#define BARO_SENSOR_H_NANO
+#ifndef BARO_SENSOR_H_NANOV2
+#define BARO_SENSOR_H_NANOV2
 
 #include "config/flags.h"
 #if defined NORMAL_BOARD
@@ -25,4 +25,4 @@ private:
 };
 
 #endif
-#endif //BARO_SENSOR_H_NANO
+#endif //BARO_SENSOR_H_NANOv

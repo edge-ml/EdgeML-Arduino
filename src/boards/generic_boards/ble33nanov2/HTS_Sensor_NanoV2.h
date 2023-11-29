@@ -1,10 +1,14 @@
-#ifndef HTS_SENSOR_H_NANO
-#define HTS_SENSOR_H_NANO
+#ifndef HTS_SENSOR_H_NANOV2
+#define HTS_SENSOR_H_NANOV2
 
 #include "config/flags.h"
 #if defined NORMAL_BOARD
 
+#define CELSIUS CELSIUS_WRAP
+#define FAHRENHEIT FAHRENHEIT_WRAP
 #include <Arduino_HS300x.h>
+#undef CELSIUS
+#undef FAHRENHEIT
 #include <boards/generic_boards/SensorInterface.h>
 #include "SensorID_NanoV2.h"
 
@@ -26,4 +30,4 @@ private:
 };
 
 #endif
-#endif //HTS_SENSOR_H_NANO
+#endif //HTS_SENSOR_H_NANOV2
