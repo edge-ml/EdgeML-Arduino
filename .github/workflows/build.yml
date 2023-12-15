@@ -44,8 +44,8 @@ jobs:
           arduino-cli lib install Arduino_LPS22HB
           arduino-cli lib install Arduino_HTS221
           arduino-cli lib install Arduino_LSM9DS1
-          arduino_cli lib install Arduino Arduino_BMI270_BMM150
-          arduino_cli lib install Arduino_HS300x
+          arduino-cli lib install Arduino Arduino_BMI270_BMM150
+          arduino-cli lib install Arduino_HS300x
 
           arduino-cli lib install EdgeML-Arduino
 
