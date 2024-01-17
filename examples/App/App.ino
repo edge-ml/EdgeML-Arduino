@@ -3,8 +3,8 @@
  * 
  * app.edge-ml.org
  * 
- * Firmware-version: 1.1.2
- * Release-date: 09.02.2022
+ * Firmware-version: 1.3.6
+ * Release-date: 17.01.2024
 */
 
 #include "Arduino.h"
