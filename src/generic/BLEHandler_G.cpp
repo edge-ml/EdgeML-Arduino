@@ -103,7 +103,7 @@ bool BLEHandler_G::begin() {
     deviceParseSchemeC_G->writeValue(_scheme_buffer, _scheme_length);
 
     // Advertise
-    if (!manual_advertise) BLE.advertise(); // if manual advertise is set, BLE.advertise() HAS to be called manually!!!
+    BLE.advertise();
     return true;
 }
 
