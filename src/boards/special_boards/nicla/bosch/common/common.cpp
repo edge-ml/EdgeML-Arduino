@@ -36,6 +36,8 @@
  *
  */
 
+#if defined(ARDUINO_NICLA) && __has_include(<mbed.h>)
+
 #include "common.h"
 
 #include <stdio.h>
@@ -635,3 +637,5 @@ char* get_sensor_name(uint8_t sensor_id)
 
     return ret;
 }
+
+#endif // defined(ARDUINO_NICLA) && __has_include(<mbed.h>)

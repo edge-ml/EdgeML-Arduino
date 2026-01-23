@@ -5,11 +5,26 @@
 #if defined NORMAL_BOARD
 
 #include "Arduino.h"
-#include "ArduinoBLE.h"
 #include "Debug.h"
 
 #include <config/ble_config.h>
 #include <boards/generic_boards/BLEPackets.h>
+
+#ifndef EDGEML_BLE_BACKEND_BLUEFRUIT
+  #if defined(ARDUINO_NRF52_ADAFRUIT)
+    #define EDGEML_BLE_BACKEND_BLUEFRUIT 1
+  #elif defined(__has_include)
+    #if __has_include(<bluefruit.h>)
+      #define EDGEML_BLE_BACKEND_BLUEFRUIT 1
+    #endif
+  #endif
+#endif
+
+#if defined(EDGEML_BLE_BACKEND_BLUEFRUIT)
+  #include <bluefruit.h>
+#else
+  #include "ArduinoBLE.h"
+#endif
 
 class BLEHandler_G : public Debug {
 public:
@@ -57,7 +72,11 @@ private:
     int _names_length = 0;
     byte * _names_buffer = nullptr;
 
-    void static receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
+#if defined(EDGEML_BLE_BACKEND_BLUEFRUIT)
+    static void receivedSensorConfig(uint16_t conn_hdl, BLECharacteristic* chr, uint8_t* data, uint16_t len);
+#else
+    static void receivedSensorConfig(BLEDevice central, BLECharacteristic characteristic);
+#endif
     void check_scheme();
     void check_sensor_names();
 };

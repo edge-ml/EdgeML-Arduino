@@ -3,15 +3,21 @@
 
 #if defined(ARDUINO_NICLA)
     #define NICLA_FLAG
-    #warning "Using Nicla Sense ME"
+    #if defined(EDGEML_DIAGNOSTIC_FLAGS)
+        #warning "Using Nicla Sense ME"
+    #endif
 
-#elif defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
+#elif defined(ARDUINO_Seeed_XIAO_nRF52840_Sense) || defined(ARDUINO_SEEED_XIAO_NRF52840_SENSE) || defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
     #define XIAO_SEEED_FLAG
-    #warning "Using Seeed XIAO NRF52840 SENSE"
+    #if defined(EDGEML_DIAGNOSTIC_FLAGS)
+        #warning "Using Seeed XIAO NRF52840 SENSE"
+    #endif
 
 #else
     #define BLE33NANO_FLAG
-    #warning "Using Ble33Nano"
+    #if defined(EDGEML_DIAGNOSTIC_FLAGS)
+        #warning "Using Ble33Nano"
+    #endif
 #endif
 
 

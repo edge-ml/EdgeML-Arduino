@@ -36,6 +36,8 @@
  *
  */
 
+#if defined(ARDUINO_NICLA)
+
 #include "bhy2.h"
 #include "bhy2_hif.h"
 
@@ -1533,3 +1535,5 @@ static int8_t parse_fifo(enum bhy2_fifo_type source, struct bhy2_fifo_buffer *fi
 
     return rslt;
 }
+
+#endif /* defined(ARDUINO_NICLA) */

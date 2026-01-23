@@ -36,6 +36,8 @@
  *
  */
 
+#if defined(ARDUINO_NICLA)
+
 #include "bhy2_hif.h"
 
 /*! Mask definitions for SPI read/write address */
@@ -1729,3 +1731,5 @@ int8_t bhy2_hif_inject_data(const uint8_t *payload, uint32_t payload_len, struct
 {
     return bhy2_hif_exec_cmd(BHY2_CMD_INJECT_DATA, payload, payload_len, hif);
 }
+
+#endif /* defined(ARDUINO_NICLA) */
