@@ -38,6 +38,7 @@
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
+#ifdef NICLA_FLAG
 
 #include <stdbool.h>
 #include <mbed.h>
@@ -59,3 +60,4 @@ void bhy2_delay_us(uint32_t us, void *private_data);
 bool get_interrupt_status(void);
 
 #endif /* _COMMON_H_ */
+#endif

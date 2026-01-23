@@ -38,6 +38,7 @@
 
 #ifndef __BHY2_H__
 #define __BHY2_H__
+#ifdef NICLA_FLAG
 
 #ifdef __cplusplus
 extern "C" {
@@ -582,3 +583,4 @@ void bhy2_get_callback_info_delegate(uint8_t sensor_id,
 #endif /*__cplusplus */
 
 #endif /* __BHY2_H__ */
+#endif

@@ -5,7 +5,7 @@
     #define NICLA_FLAG
     #warning "Using Nicla Sense ME"
 
-#elif defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
+#elif defined(ARDUINO_Seeed_XIAO_nRF52840_Sense) || defined(TARGET_SEEED_XIAO_NRF52840_SENSE)
     #define XIAO_SEEED_FLAG
     #warning "Using Seeed XIAO NRF52840 SENSE"
 

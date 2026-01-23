@@ -36,6 +36,8 @@
  *
  */
 
+#ifdef NICLA_FLAG
+
 #include "bhy2.h"
 #include "bhy2_parse.h"
 
@@ -89,3 +91,5 @@ void bhy2_parse_orientation(const uint8_t *data, struct bhy2_data_orientation *o
     orientation->pitch = BHY2_LE2S16(data + 2);
     orientation->roll = BHY2_LE2S16(data + 4);
 }
+
+#endif

@@ -38,6 +38,7 @@
 
 #ifndef __BHY2_DEFS_H__
 #define __BHY2_DEFS_H__
+#ifdef NICLA_FLAG
 
 #ifdef __cplusplus
 extern "C" {
@@ -732,3 +733,4 @@ enum bhy2_data_inj_mode {
 #endif /*__cplusplus */
 
 #endif /* __BHY2_DEFS_H__ */
+#endif

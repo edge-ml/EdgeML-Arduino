@@ -38,6 +38,7 @@
 
 #ifndef __BHY2_HIF_H__
 #define __BHY2_HIF_H__
+#ifdef NICLA_FLAG
 
 /* Start of CPP guard */
 #ifdef __cplusplus
@@ -550,3 +551,4 @@ int8_t bhy2_hif_inject_data(const uint8_t *payload, uint32_t payload_len, struct
 /* End of CPP guard */
 
 #endif /* __BHY2_HIF_H__ */
+#endif

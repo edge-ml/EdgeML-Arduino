@@ -1,4 +1,4 @@
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 
 #include "Edge_ML_Nicla.h"
 

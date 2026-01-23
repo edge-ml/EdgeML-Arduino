@@ -12,7 +12,7 @@
     #include <boards/generic_boards/ble33nano/SensorID_Nano.h>
 
 
-#elif XIAO_SEEED_FLAG
+#elif defined(XIAO_SEEED_FLAG)
     #include <boards/generic_boards/xiaoblesense/SensorManager_Seeed.h>
     #include <boards/generic_boards/xiaoblesense/SensorID_Seeed.h>
 

@@ -36,6 +36,8 @@
  *
  */
 
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
+
 #include "common.h"
 
 #include <stdio.h>
@@ -49,21 +51,21 @@
 #define BHA260_SHUTTLE_ID 0x139
 #define BHI260_SHUTTLE_ID 0x119
 
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 mbed::DigitalOut BHY260_CS_PIN(SPI_PSELSS0, 1);
 mbed::DigitalIn BHY260_INT_PIN(INT_BHI260);
 #endif
 
 bool get_interrupt_status(void)
 {
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
     return BHY260_INT_PIN;
 #endif
 }
 
 char* get_api_error(int8_t error_code)
 {
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
     char *ret = " ";
 
     switch (error_code)
@@ -118,7 +120,7 @@ void close_interfaces(void)
 
 int8_t bhy2_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t length, void *intf_ptr)
 {
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
     (void)intf_ptr;
 
     BHY260_CS_PIN = 0;
@@ -132,7 +134,7 @@ int8_t bhy2_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t length, void 
 
 int8_t bhy2_spi_write(uint8_t reg_addr, const uint8_t *reg_data, uint32_t length, void *intf_ptr)
 {
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
     (void)intf_ptr;
     BHY260_CS_PIN = 0;
     spi.write(reg_addr);
@@ -635,3 +637,5 @@ char* get_sensor_name(uint8_t sensor_id)
 
     return ret;
 }
+
+#endif

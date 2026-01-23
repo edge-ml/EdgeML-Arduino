@@ -1,4 +1,4 @@
-#if defined(ARDUINO_NICLA)
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 
 #include "BoschParser.h"
 
@@ -169,4 +169,3 @@ SensorDataPacket BoschParser::convert_unit(SensorDataPacket *data) {
 
 
 #endif
-

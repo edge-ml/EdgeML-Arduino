@@ -37,6 +37,7 @@
  */
 #ifndef __BHY2_PARSE_H__
 #define __BHY2_PARSE_H__
+#ifdef NICLA_FLAG
 
 #ifdef __cplusplus
 extern "C" {
@@ -98,3 +99,4 @@ void bhy2_parse_xyz(const uint8_t *data, struct bhy2_data_xyz *vector);
 #endif /*__cplusplus */
 
 #endif /* __BHY2_PARSE_H__ */
+#endif
