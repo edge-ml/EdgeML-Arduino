@@ -38,7 +38,7 @@
 
 #ifndef __BHY2_DEFS_H__
 #define __BHY2_DEFS_H__
-#ifdef NICLA_FLAG
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 
 #ifdef __cplusplus
 extern "C" {

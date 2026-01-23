@@ -36,7 +36,7 @@
  *
  */
 
-#ifdef NICLA_FLAG
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 
 #include "bhy2.h"
 #include "bhy2_parse.h"

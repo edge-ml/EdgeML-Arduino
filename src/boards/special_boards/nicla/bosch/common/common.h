@@ -38,7 +38,7 @@
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
-#ifdef NICLA_FLAG
+#if defined(ARDUINO_NICLA) || defined(NICLA_FLAG)
 
 #include <stdbool.h>
 #include <mbed.h>
